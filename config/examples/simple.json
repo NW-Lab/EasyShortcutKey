@@ -1,0 +1,20 @@
+[
+  {
+    "program": "VS Code",
+    "order": 1,
+    "groups": [
+      {
+        "groupName": "GitHub Copilot",
+        "order": 1,
+        "shortcuts": [
+          {
+            "action": "承諾",
+            "keys": ["Tab"],
+            "description": "Copilotの提案を承諾",
+            "os": ["windows", "mac", "linux"]
+          }
+        ]
+      }
+    ]
+  }
+]
