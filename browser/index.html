@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShortcutKeyViewer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 ShortcutKeyViewer</h1>
+            <p>様々なアプリケーションのショートカットキーを表示します</p>
+            
+            <div class="controls">
+                <div class="file-input">
+                    <label for="config-file">設定ファイル:</label>
+                    <input type="file" id="config-file" accept=".json">
+                    <button id="load-default">デフォルト設定を読み込み</button>
+                </div>
+                
+                <div class="filters">
+                    <label for="os-filter">OS:</label>
+                    <select id="os-filter">
+                        <option value="all">すべて</option>
+                        <option value="windows">Windows</option>
+                        <option value="mac">Mac</option>
+                        <option value="linux">Linux</option>
+                    </select>
+                    
+                    <label for="program-filter">プログラム:</label>
+                    <select id="program-filter">
+                        <option value="all">すべて</option>
+                    </select>
+                    
+                    <input type="text" id="search-input" placeholder="検索...">
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div id="loading" class="loading">設定ファイルを読み込んでください</div>
+            <div id="error" class="error" style="display: none;"></div>
+            <div id="programs-container"></div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

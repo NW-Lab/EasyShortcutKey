@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ShortcutKeyViewer Configuration",
+  "description": "Configuration schema for multi-device shortcut key viewer",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "program": {
+        "type": "string",
+        "description": "Name of the application or program"
+      },
+      "order": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Display order for programs"
+      },
+      "icon": {
+        "type": "string",
+        "description": "Path to icon file (optional)"
+      },
+      "version": {
+        "type": "string",
+        "description": "Supported version range (optional)"
+      },
+      "groups": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "groupName": {
+              "type": "string",
+              "description": "Name of the shortcut group"
+            },
+            "order": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Display order within the program"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the group (optional)"
+            },
+            "shortcuts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "description": "Name of the action (Japanese allowed)"
+                  },
+                  "keys": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "description": "Array of keys in order (modifiers first)"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Detailed description of the action"
+                  },
+                  "os": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["windows", "mac", "linux", "ios", "android"]
+                    },
+                    "description": "Supported operating systems"
+                  },
+                  "context": {
+                    "type": "string",
+                    "description": "Specific context where this shortcut applies (optional)"
+                  }
+                },
+                "required": ["action", "keys", "description", "os"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": ["groupName", "order", "shortcuts"],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": ["program", "order", "groups"],
+    "additionalProperties": false
+  }
+}

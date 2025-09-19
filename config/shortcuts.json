@@ -1,0 +1,203 @@
+[
+  {
+    "program": "VS Code",
+    "order": 1,
+    "icon": "icons/vscode.png",
+    "version": "1.80+",
+    "groups": [
+      {
+        "groupName": "GitHub Copilot",
+        "order": 1,
+        "description": "AI-powered code suggestions and completions",
+        "shortcuts": [
+          {
+            "action": "承諾",
+            "keys": ["Tab"],
+            "description": "Copilotの提案を承諾する",
+            "os": ["windows", "mac", "linux"]
+          },
+          {
+            "action": "次の提案",
+            "keys": ["Alt", "]"],
+            "description": "次のCopilot提案を表示",
+            "os": ["windows", "linux"]
+          },
+          {
+            "action": "次の提案",
+            "keys": ["Option", "]"],
+            "description": "次のCopilot提案を表示",
+            "os": ["mac"]
+          },
+          {
+            "action": "前の提案",
+            "keys": ["Alt", "["],
+            "description": "前のCopilot提案を表示",
+            "os": ["windows", "linux"]
+          },
+          {
+            "action": "前の提案",
+            "keys": ["Option", "["],
+            "description": "前のCopilot提案を表示",
+            "os": ["mac"]
+          },
+          {
+            "action": "インライン提案を表示",
+            "keys": ["Ctrl", "Space"],
+            "description": "手動でCopilot提案を呼び出す",
+            "os": ["windows", "linux"]
+          },
+          {
+            "action": "インライン提案を表示",
+            "keys": ["Cmd", "Space"],
+            "description": "手動でCopilot提案を呼び出す",
+            "os": ["mac"]
+          }
+        ]
+      },
+      {
+        "groupName": "編集",
+        "order": 2,
+        "description": "基本的な編集操作",
+        "shortcuts": [
+          {
+            "action": "コピー",
+            "keys": ["Ctrl", "C"],
+            "description": "選択したテキストをコピー",
+            "os": ["windows", "linux"]
+          },
+          {
+            "action": "コピー",
+            "keys": ["Cmd", "C"],
+            "description": "選択したテキストをコピー",
+            "os": ["mac"]
+          },
+          {
+            "action": "貼り付け",
+            "keys": ["Ctrl", "V"],
+            "description": "クリップボードの内容を貼り付け",
+            "os": ["windows", "linux"]
+          },
+          {
+            "action": "貼り付け",
+            "keys": ["Cmd", "V"],
+            "description": "クリップボードの内容を貼り付け",
+            "os": ["mac"]
+          },
+          {
+            "action": "取り消し",
+            "keys": ["Ctrl", "Z"],
+            "description": "最後の操作を取り消し",
+            "os": ["windows", "linux"]
+          },
+          {
+            "action": "取り消し",
+            "keys": ["Cmd", "Z"],
+            "description": "最後の操作を取り消し",
+            "os": ["mac"]
+          }
+        ]
+      },
+      {
+        "groupName": "ナビゲーション",
+        "order": 3,
+        "description": "ファイルやコード間の移動",
+        "shortcuts": [
+          {
+            "action": "ファイルを開く",
+            "keys": ["Ctrl", "P"],
+            "description": "ファイルをクイックオープン",
+            "os": ["windows", "linux"]
+          },
+          {
+            "action": "ファイルを開く",
+            "keys": ["Cmd", "P"],
+            "description": "ファイルをクイックオープン",
+            "os": ["mac"]
+          },
+          {
+            "action": "シンボルに移動",
+            "keys": ["Ctrl", "Shift", "O"],
+            "description": "ファイル内のシンボル（関数、クラス等）に移動",
+            "os": ["windows", "linux"]
+          },
+          {
+            "action": "シンボルに移動",
+            "keys": ["Cmd", "Shift", "O"],
+            "description": "ファイル内のシンボル（関数、クラス等）に移動",
+            "os": ["mac"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "program": "Photoshop",
+    "order": 2,
+    "icon": "icons/photoshop.png",
+    "version": "2023+",
+    "groups": [
+      {
+        "groupName": "ツール選択",
+        "order": 1,
+        "description": "よく使うツールの選択",
+        "shortcuts": [
+          {
+            "action": "移動ツール",
+            "keys": ["V"],
+            "description": "移動ツールを選択",
+            "os": ["windows", "mac"]
+          },
+          {
+            "action": "ブラシツール",
+            "keys": ["B"],
+            "description": "ブラシツールを選択",
+            "os": ["windows", "mac"]
+          },
+          {
+            "action": "消しゴムツール",
+            "keys": ["E"],
+            "description": "消しゴムツールを選択",
+            "os": ["windows", "mac"]
+          },
+          {
+            "action": "テキストツール",
+            "keys": ["T"],
+            "description": "テキストツールを選択",
+            "os": ["windows", "mac"]
+          }
+        ]
+      },
+      {
+        "groupName": "レイヤー操作",
+        "order": 2,
+        "description": "レイヤーの作成と管理",
+        "shortcuts": [
+          {
+            "action": "新規レイヤー",
+            "keys": ["Ctrl", "Shift", "N"],
+            "description": "新しいレイヤーを作成",
+            "os": ["windows"]
+          },
+          {
+            "action": "新規レイヤー",
+            "keys": ["Cmd", "Shift", "N"],
+            "description": "新しいレイヤーを作成",
+            "os": ["mac"]
+          },
+          {
+            "action": "レイヤー複製",
+            "keys": ["Ctrl", "J"],
+            "description": "現在のレイヤーを複製",
+            "os": ["windows"]
+          },
+          {
+            "action": "レイヤー複製",
+            "keys": ["Cmd", "J"],
+            "description": "現在のレイヤーを複製",
+            "os": ["mac"]
+          }
+        ]
+      }
+    ]
+  }
+]
