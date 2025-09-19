@@ -9,8 +9,20 @@
         "shortcuts": [
           {
             "action": "承諾",
-            "keys": ["Tab"],
+            "keys": ["@TAB"],
             "description": "Copilotの提案を承諾",
+            "os": ["windows", "mac", "linux"]
+          },
+          {
+            "action": "二段階提案確認",
+            "keys": ["@CTRL+@SHIFT+P,Tab"],
+            "description": "コマンドパレットを開いて、Tabで承諾する二段階操作の例",
+            "os": ["windows", "linux"]
+          },
+          {
+            "action": "エスケープキーのテスト",
+            "keys": ["@@", "@,"],
+            "description": "@キーと,キーを実際に使用する例（エスケープシーケンス）",
             "os": ["windows", "mac", "linux"]
           }
         ]

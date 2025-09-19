@@ -53,10 +53,11 @@
                   "keys": {
                     "type": "array",
                     "items": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[^,]*(?:,[^,]*)*$"
                     },
                     "minItems": 1,
-                    "description": "Array of keys in order (modifiers first)"
+                    "description": "Array of keys. Special keys prefixed with @ (e.g., @CTRL). Multi-step sequences separated by commas. Escape sequences: @@ for @, @, for comma"
                   },
                   "description": {
                     "type": "string",

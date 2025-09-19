@@ -325,12 +325,76 @@ class ShortcutKeyViewer {
     }
     
     /**
+     * Parse escape sequences in key strings
+     * @@ -> @
+     * @, -> ,
+     */
+    parseKeyEscapes(key) {
+        return key.replace(/@@/g, '@').replace(/@,/g, ',');
+    }
+    
+    /**
+     * Check if a key is a special key (starts with @)
+     */
+    isSpecialKey(key) {
+        return key.startsWith('@') && !key.startsWith('@@') && !key.startsWith('@,');
+    }
+    
+    /**
+     * Render a single key with proper styling
+     */
+    renderKey(key) {
+        const parsedKey = this.parseKeyEscapes(key);
+        const isSpecial = this.isSpecialKey(key);
+        const keyClass = isSpecial ? 'key special-key' : 'key';
+        const displayKey = isSpecial ? parsedKey.substring(1) : parsedKey; // Remove @ prefix for display
+        
+        return `<span class="${keyClass}">${this.escapeHtml(displayKey)}</span>`;
+    }
+    
+    /**
+     * Parse and render key sequences with comma separators
+     */
+    renderKeySequences(keys) {
+        // First, check if the entire keys array represents a comma-separated sequence
+        // For backward compatibility, keys can be an array of strings where each string might contain commas
+        const processedKeys = [];
+        
+        for (const keyItem of keys) {
+            if (typeof keyItem === 'string' && keyItem.includes(',')) {
+                // This is a comma-separated sequence string
+                const steps = keyItem.split(',').map(step => step.trim());
+                const renderedSteps = steps.map(step => {
+                    // Each step might have multiple keys (with + separator)
+                    if (step.includes('+')) {
+                        const simultaneousKeys = step.split('+').map(k => k.trim());
+                        return simultaneousKeys.map(key => this.renderKey(key)).join('<span class="key-separator">+</span>');
+                    } else {
+                        return this.renderKey(step);
+                    }
+                });
+                processedKeys.push(renderedSteps.join('<span class="key-separator">→</span>'));
+            } else {
+                // Regular key - add to the current simultaneous combination
+                processedKeys.push(this.renderKey(keyItem));
+            }
+        }
+        
+        // Join all processed keys - if there were no comma sequences, use + separator
+        // If there were comma sequences mixed with regular keys, use "then" separator
+        const hasSequences = keys.some(key => typeof key === 'string' && key.includes(','));
+        if (hasSequences && processedKeys.length > 1) {
+            return processedKeys.join('<span class="sequence-separator">then</span>');
+        } else {
+            return processedKeys.join('<span class="key-separator">+</span>');
+        }
+    }
+    
+    /**
      * Render a single shortcut
      */
     renderShortcut(shortcut) {
-        const keys = shortcut.keys
-            .map(key => `<span class="key">${this.escapeHtml(key)}</span>`)
-            .join('<span class="key-separator">+</span>');
+        const keys = this.renderKeySequences(shortcut.keys);
         
         const osTags = shortcut.os
             .map(os => `<span class="os-tag ${os}">${os.toUpperCase()}</span>`)

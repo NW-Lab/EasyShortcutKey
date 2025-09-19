@@ -45,19 +45,19 @@
         "shortcuts": [
           {
             "action": "承諾",
-            "keys": ["Tab"],
+            "keys": ["@TAB"],
             "description": "Copilotの提案を承諾",
             "os": ["windows", "mac", "linux"]
           },
           {
             "action": "次の提案",
-            "keys": ["Alt", "]"],
+            "keys": ["@ALT", "]"],
             "description": "次のCopilot提案を表示",
             "os": ["windows", "linux"]
           },
           {
             "action": "次の提案",
-            "keys": ["Option", "]"],
+            "keys": ["@OPTION", "]"],
             "description": "次のCopilot提案を表示",
             "os": ["mac"]
           }
@@ -83,7 +83,12 @@
 
 #### Shortcut（ショートカット）
 - `action`: アクション名（日本語可）
-- `keys`: キーの配列（修飾キー + 通常キーの順）
+- `keys`: キーの配列（拡張フォーマット対応）
+  - **特殊キー**: `@`プレフィックス付き（例: `@CTRL`, `@SHIFT`）
+  - **通常キー**: プレフィックスなし（例: `A`, `Space`）
+  - **同時押し**: `+`区切り（例: `@CTRL+@SHIFT+P`）
+  - **段階的操作**: カンマ区切り（例: `@CTRL+F, 検索語, @ENTER`）
+  - **エスケープ**: `@@` → `@`、`@,` → `,`
 - `description`: 詳細説明
 - `os`: 対応OS（"windows", "mac", "linux", "ios", "android"）
 - `context`: 使用コンテキスト（オプション）

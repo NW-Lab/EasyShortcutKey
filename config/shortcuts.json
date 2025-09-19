@@ -12,43 +12,43 @@
         "shortcuts": [
           {
             "action": "承諾",
-            "keys": ["Tab"],
+            "keys": ["@TAB"],
             "description": "Copilotの提案を承諾する",
             "os": ["windows", "mac", "linux"]
           },
           {
             "action": "次の提案",
-            "keys": ["Alt", "]"],
+            "keys": ["@ALT", "]"],
             "description": "次のCopilot提案を表示",
             "os": ["windows", "linux"]
           },
           {
             "action": "次の提案",
-            "keys": ["Option", "]"],
+            "keys": ["@OPTION", "]"],
             "description": "次のCopilot提案を表示",
             "os": ["mac"]
           },
           {
             "action": "前の提案",
-            "keys": ["Alt", "["],
+            "keys": ["@ALT", "["],
             "description": "前のCopilot提案を表示",
             "os": ["windows", "linux"]
           },
           {
             "action": "前の提案",
-            "keys": ["Option", "["],
+            "keys": ["@OPTION", "["],
             "description": "前のCopilot提案を表示",
             "os": ["mac"]
           },
           {
             "action": "インライン提案を表示",
-            "keys": ["Ctrl", "Space"],
+            "keys": ["@CTRL", "@SPACE"],
             "description": "手動でCopilot提案を呼び出す",
             "os": ["windows", "linux"]
           },
           {
             "action": "インライン提案を表示",
-            "keys": ["Cmd", "Space"],
+            "keys": ["@CMD", "@SPACE"],
             "description": "手動でCopilot提案を呼び出す",
             "os": ["mac"]
           }
@@ -61,39 +61,51 @@
         "shortcuts": [
           {
             "action": "コピー",
-            "keys": ["Ctrl", "C"],
+            "keys": ["@CTRL", "C"],
             "description": "選択したテキストをコピー",
             "os": ["windows", "linux"]
           },
           {
             "action": "コピー",
-            "keys": ["Cmd", "C"],
+            "keys": ["@CMD", "C"],
             "description": "選択したテキストをコピー",
             "os": ["mac"]
           },
           {
             "action": "貼り付け",
-            "keys": ["Ctrl", "V"],
+            "keys": ["@CTRL", "V"],
             "description": "クリップボードの内容を貼り付け",
             "os": ["windows", "linux"]
           },
           {
             "action": "貼り付け",
-            "keys": ["Cmd", "V"],
+            "keys": ["@CMD", "V"],
             "description": "クリップボードの内容を貼り付け",
             "os": ["mac"]
           },
           {
             "action": "取り消し",
-            "keys": ["Ctrl", "Z"],
+            "keys": ["@CTRL", "Z"],
             "description": "最後の操作を取り消し",
             "os": ["windows", "linux"]
           },
           {
             "action": "取り消し",
-            "keys": ["Cmd", "Z"],
+            "keys": ["@CMD", "Z"],
             "description": "最後の操作を取り消し",
             "os": ["mac"]
+          },
+          {
+            "action": "二段階検索",
+            "keys": ["@CTRL+F, type query, @ENTER"],
+            "description": "検索ボックスを開き、クエリを入力してEnterで実行する",
+            "os": ["windows", "linux"]
+          },
+          {
+            "action": "エスケープキーのテスト",
+            "keys": ["@@", "@,"],
+            "description": "@キーと,キーのリテラル使用例",
+            "os": ["windows", "mac", "linux"]
           }
         ]
       },
@@ -104,25 +116,25 @@
         "shortcuts": [
           {
             "action": "ファイルを開く",
-            "keys": ["Ctrl", "P"],
+            "keys": ["@CTRL", "P"],
             "description": "ファイルをクイックオープン",
             "os": ["windows", "linux"]
           },
           {
             "action": "ファイルを開く",
-            "keys": ["Cmd", "P"],
+            "keys": ["@CMD", "P"],
             "description": "ファイルをクイックオープン",
             "os": ["mac"]
           },
           {
             "action": "シンボルに移動",
-            "keys": ["Ctrl", "Shift", "O"],
+            "keys": ["@CTRL", "@SHIFT", "O"],
             "description": "ファイル内のシンボル（関数、クラス等）に移動",
             "os": ["windows", "linux"]
           },
           {
             "action": "シンボルに移動",
-            "keys": ["Cmd", "Shift", "O"],
+            "keys": ["@CMD", "@SHIFT", "O"],
             "description": "ファイル内のシンボル（関数、クラス等）に移動",
             "os": ["mac"]
           }
@@ -174,25 +186,25 @@
         "shortcuts": [
           {
             "action": "新規レイヤー",
-            "keys": ["Ctrl", "Shift", "N"],
+            "keys": ["@CTRL", "@SHIFT", "N"],
             "description": "新しいレイヤーを作成",
             "os": ["windows"]
           },
           {
             "action": "新規レイヤー",
-            "keys": ["Cmd", "Shift", "N"],
+            "keys": ["@CMD", "@SHIFT", "N"],
             "description": "新しいレイヤーを作成",
             "os": ["mac"]
           },
           {
             "action": "レイヤー複製",
-            "keys": ["Ctrl", "J"],
+            "keys": ["@CTRL", "J"],
             "description": "現在のレイヤーを複製",
             "os": ["windows"]
           },
           {
             "action": "レイヤー複製",
-            "keys": ["Cmd", "J"],
+            "keys": ["@CMD", "J"],
             "description": "現在のレイヤーを複製",
             "os": ["mac"]
           }
