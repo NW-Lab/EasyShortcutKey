@@ -516,7 +516,7 @@ class ShortcutKeyViewer {
     const expandBtnHtml = `<button class="group-expand ${expanded ? 'active' : ''}" title="展開/折畳">${expanded ? '▾' : '▸'}</button>`;
 
         return `
-            <div class="program compact">
+            <div class="program compact ${expanded ? 'expanded' : ''}">
                 <div class="group-tabs-wrap">${expandBtnHtml}<div class="group-tabs">${groupTabsHtml}</div></div>
                 <div class="program-content">
                     ${contentHtml}
