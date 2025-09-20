@@ -34,6 +34,28 @@
 
   ※ file://（ローカルでダブルクリック）で開いた場合、ブラウザによっては外部JSONの fetch が制限されることがあるため、`index.html` に埋め込まれたデフォルト設定がフォールバックとして使用されます（Windows/Macでの簡易利用を想定）。
 
+#### 非技術ユーザ向け: デスクトップアプリでの起動 (推奨)
+
+ブラウザの file:// 制限を回避し、PCに詳しくない人でもダブルクリックで起動できるように、Electron ラッパーを同梱している。
+
+手順（配布元や管理者が一度実行すれば良い）:
+
+1. Node.js をインストール（16+ 推奨）
+2. リポジトリのルートで依存をインストール:
+
+```bash
+npm install
+```
+
+3. アプリを起動:
+
+```bash
+npm start
+```
+
+Electron 実行時は `shortcuts.json` を preload 経由で直接読み込むため、CORS の制限を気にせず動作する。配布用にネイティブ実行ファイルを作りたい場合は `electron-packager` 等でパッケージングできる。
+
+
 3. **表示順について**
   - 表示は `config/shortcuts.json` 内の各 `program` エントリの `order` 値に従ってソートされます（小さい値から先に表示）。
   - 例: `"order": 1` が最優先で表示される。
@@ -199,7 +221,31 @@ print('✅ Valid JSON format')
 "
 ```
 
-## 📄 ライセンス
+## � 配布用ビルド (Electron)
+
+このリポジトリには簡易的な Electron ラッパーが含まれている。配布用のネイティブ実行ファイルを作るには、`electron-packager` などを使ってパッケージングするのが簡単。
+
+簡単な手順（macOS / Windows 共通）:
+
+```bash
+# 1. 依存をインストール
+npm install
+
+# 2. (必要なら) 環境変数で NODE_ENV を設定しておく
+# export NODE_ENV=production
+
+# 3. パッケージ作成（例: macOS x64）
+npm run package
+```
+
+`package.json` の `package` スクリプトは `electron-packager . EasyShortcutKey --platform=darwin --arch=x64 --out=dist --overwrite` を呼ぶ設定にしてある。Windows 用にする場合は `--platform=win32 --arch=ia32` や `--platform=win32 --arch=x64` を使う。
+
+注意点:
+- 生成されるバイナリは署名や notarize（macOS）などの追加手順が必要になる場合がある。配布先によってはウィルス対策ソフトにブロックされることがあるので、正式配布前に署名などを検討する。
+- CI を使って macOS/Windows のビルドを自動化するのがおすすめ。
+
+
+## �📄 ライセンス
 
 MIT License - 自由に使用・改変・再配布可能
 

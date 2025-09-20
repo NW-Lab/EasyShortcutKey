@@ -126,21 +126,19 @@ main {
 }
 
 .program:hover {
-    transform: translateY(-4px);
+    transform: none; /* explicit no-transform to prevent layout shifts */
 }
 
-.program-header {
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    color: white;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.program.compact {
+    padding: 4px 0;
 }
 
-.program-header h2 {
-    font-size: 1.25rem;
-    margin: 0;
+.program.compact .group {
+    padding: 10px 12px;
+}
+
+.group-name {
+    font-size: 1.05rem;
 }
 
 .program-version {
@@ -152,47 +150,123 @@ main {
 }
 
 .program-content {
-    padding: 0;
+    /* small top divider and reduced padding to separate tabs from content */
+    border-top: 1px solid rgba(0,0,0,0.06);
+    padding: 8px 12px 10px 12px;
+    background: rgba(255,255,255,0.9);
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 6px;
+    margin: 0 0 6px 0; /* slightly tighter */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 2px; /* reduced vertical padding */
+    background: transparent;
+}
+
+/* Group tabs (per program) */
+.group-tabs {
+    display: flex;
+    gap: 6px;
+    margin: 6px 0; /* reduce vertical margin */
+    overflow-x: auto;
+    padding: 0px 0; /* remove extra padding */
+}
+
+.group-tab {
+    /* subtle non-active group tab (more compact) */
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.10);
+    padding: 2px 6px; /* less vertical padding */
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    color: #A0A0A0; /* user requested grey for non-active group tabs */
+    border-radius: 6px;
+    line-height: 1; /* tighten */
+}
+
+.group-tab.active {
+    color: #1f2d3d;
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 4px 10px;
+}
+
+.tab {
+    /* Simple, height-stable non-active tab */
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.10);
+    padding: 6px 10px; /* unified padding across states to avoid jumps */
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    color: #A0A0A0; /* user requested grey for non-active program tabs */
+    border-radius: 6px;
+    box-shadow: none;
+    font-size: 0.92rem;
+    line-height: 1.1; /* slightly looser for consistency */
+    transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.tab.active {
+    color: #1f2d3d;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    /* padding intentionally the same as .tab to keep height stable */
+}
+
+.settings-btn {
+    display: none;
 }
 
 /* Groups */
 .group {
     border-bottom: 1px solid #ecf0f1;
-    padding: 25px 30px;
+    padding: 18px 20px; /* reduced vertical/horizontal padding for compactness */
 }
 
 .group:last-child {
     border-bottom: none;
 }
 
-.group-header {
-    margin-bottom: 20px;
-}
-
-.group-name {
-    font-size: 1.3rem;
-    color: #2c3e50;
-    margin-bottom: 5px;
+.group-tab {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 6px 8px; /* unified padding to avoid jumps */
     font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    color: #A0A0A0;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    line-height: 1.1;
+    transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
 }
 
-.group-description {
-    color: #7f8c8d;
-    font-size: 0.95rem;
+.group-tab.active {
+    color: #1f2d3d;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    /* padding unchanged to preserve height */
 }
-
 /* Shortcuts */
 .shortcuts {
     display: grid;
-    gap: 15px;
+    gap: 4px; /* tighter gap between shortcut rows */
 }
 
 .shortcut {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 0;
-    border-bottom: 1px solid #f8f9fa;
+    padding: 2px 0; /* even more compact vertical padding */
+    border-bottom: 1px solid #f6f7f8;
+    gap: 8px;
 }
 
 .shortcut:last-child {
@@ -200,52 +274,62 @@ main {
 }
 
 .shortcut-info {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0; /* allow text to truncate/shrink when keys overflow */
 }
 
 .shortcut-action {
     font-weight: 600;
     color: #2c3e50;
-    margin-bottom: 4px;
-    font-size: 1.1rem;
+    margin-bottom: 2px;
+    font-size: 0.98rem; /* slightly smaller */
 }
 
 .shortcut-description {
     color: #7f8c8d;
-    font-size: 0.9rem;
+    font-size: 0.82rem; /* reduce description size */
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* keep description on one line to save vertical space */
 }
 
 .shortcut-keys {
     display: flex;
     gap: 6px;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* prevent wrapping */
+    overflow-x: auto; /* allow horizontal scroll when narrow */
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+    max-width: 45%; /* keep keys area limited so description can use remaining space */
 }
 
 .key {
-    background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+    background: linear-gradient(145deg, #f8f9fa, #eef0f2);
     border: 1px solid #dee2e6;
-    border-radius: 6px;
-    padding: 6px 12px;
+    border-radius: 5px;
+    padding: 4px 8px; /* smaller keys */
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: #495057;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    min-width: 32px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    min-width: 22px;
     text-align: center;
+    white-space: nowrap;
 }
 
 .key-separator {
-    color: #adb5bd;
-    font-weight: bold;
+    color: #b6bcc2;
+    font-weight: 700;
     margin: 0 4px;
 }
 
 .shortcut-os {
     display: flex;
-    gap: 4px;
-    margin-top: 8px;
+    gap: 6px;
+    margin-top: 4px;
 }
 
 .os-tag {
@@ -253,7 +337,7 @@ main {
     color: #6c757d;
     padding: 2px 8px;
     border-radius: 12px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 500;
 }
 
@@ -272,11 +356,11 @@ main {
     }
     
     header h1 {
-        font-size: 2rem;
+        font-size: 1.6rem;
     }
     
     .controls {
-        gap: 15px;
+        gap: 12px;
     }
     
     .file-input,
@@ -286,30 +370,37 @@ main {
     }
     
     .program {
-        margin-bottom: 20px;
+        margin-bottom: 16px;
     }
     
     .program-header {
-        padding: 15px 20px;
+        padding: 12px 14px;
     }
     
     .program-header h2 {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
     }
     
     .group {
-        padding: 20px;
+        padding: 12px;
     }
     
+    /* Keep shortcuts in a single row on narrow screens; keys will scroll horizontally */
     .shortcut {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
     }
     
     .shortcut-keys {
-        align-self: flex-end;
+        max-width: 50%;
+        align-self: center;
     }
+}
+
+/* Hide embedded JSON script content so the raw text doesn't appear in the page */
+script[type="application/json"] {
+    display: none !important;
 }
 
 /* Print Styles */
