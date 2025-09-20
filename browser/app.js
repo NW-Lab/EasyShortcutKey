@@ -466,28 +466,32 @@ class ShortcutKeyViewer {
         const active = this.filteredShortcuts[this.activeProgramIndex] || this.filteredShortcuts[0];
         container.innerHTML = this.renderProgram(active);
 
-        // Attach group tab handlers (per-program)
+        // Attach group tab and expand handlers (per-program)
         const programIndex = this.activeProgramIndex;
-        const groupTabs = container.querySelectorAll('.group-tab');
-        Array.from(groupTabs).forEach(btn => {
+        const groupTabButtons = container.querySelectorAll('.group-tab');
+        Array.from(groupTabButtons).forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const gidx = parseInt(e.currentTarget.getAttribute('data-gidx'), 10);
-                if (!isNaN(gidx)) {
-                    this.activeGroupIndexMap[programIndex] = gidx;
+                const isExpand = btn.classList.contains('group-expand');
+                if (isExpand) {
+                    // Toggle expanded state
+                    const cur = !!this.activeGroupExpandedMap[programIndex];
+                    this.activeGroupExpandedMap[programIndex] = !cur;
                     this.render();
+                    return;
+                }
+
+                const gidxAttr = btn.getAttribute('data-gidx');
+                if (gidxAttr != null) {
+                    const gidx = parseInt(gidxAttr, 10);
+                    if (!isNaN(gidx)) {
+                        // Clicking a group tab should cancel expanded mode and select that group
+                        this.activeGroupExpandedMap[programIndex] = false;
+                        this.activeGroupIndexMap[programIndex] = gidx;
+                        this.render();
+                    }
                 }
             });
         });
-
-        // Attach expand-toggle handler (per-program)
-        const expandBtn = container.querySelector('.group-expand');
-        if (expandBtn) {
-            expandBtn.addEventListener('click', (e) => {
-                const cur = !!this.activeGroupExpandedMap[programIndex];
-                this.activeGroupExpandedMap[programIndex] = !cur;
-                this.render();
-            });
-        }
     }
     
     /**

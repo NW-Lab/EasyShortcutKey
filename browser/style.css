@@ -186,14 +186,23 @@ main {
 }
 
 .group-expand {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
-    color: #A0A0A0;
-    padding: 4px 6px;
-    border-radius: 6px;
+    /* visually match .group-tab */
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 6px 8px;
+    font-weight: 500;
     cursor: pointer;
-    font-weight: 600;
-    line-height: 1;
+    white-space: nowrap;
+    color: #A0A0A0;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    line-height: 1.1;
+}
+
+.group-expand.active {
+    color: #1f2d3d;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
 }
 
 .group-expand:hover {
