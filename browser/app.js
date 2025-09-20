@@ -529,9 +529,11 @@ class ShortcutKeyViewer {
      * Render a single group
      */
     renderGroup(group) {
-        // Do not render group header in the content area — group is represented by tabs
+        // Render group header and its shortcuts. When used in expanded view, the header
+        // helps identify which group the shortcuts belong to.
         return `
             <div class="group">
+                <div class="group-header">${this.escapeHtml(group.groupName)}</div>
                 <div class="shortcuts">
                     ${group.shortcuts.map(shortcut => this.renderShortcut(shortcut)).join('')}
                 </div>
