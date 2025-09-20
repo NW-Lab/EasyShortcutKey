@@ -1,4 +1,4 @@
-# ShortcutKeyViewer 要件定義書
+# Easy Shortcut Key 要件定義書
 
 ## 概要
 ショートカットキーが覚えられないため、様々なデバイスで統一された設定を使ってショートカットキーを表示するシステムを構築する。
@@ -129,7 +129,7 @@
 
 ### ファイル構成
 ```
-ShortcutKeyViewer/
+EasyShortcutKey/
 ├── config/
 │   ├── shortcuts.json          # メイン設定ファイル
 │   ├── schema.json            # JSON スキーマ

@@ -1,5 +1,5 @@
 /**
- * ShortcutKeyViewer Browser Application
+ * Easy Shortcut Key - Browser Application
  * Multi-device shortcut key viewer with JSON configuration
  */
 
@@ -7,8 +7,6 @@ class ShortcutKeyViewer {
     constructor() {
         this.shortcuts = [];
         this.filteredShortcuts = [];
-        this.currentOS = this.detectOS();
-        
         this.init();
     }
     
@@ -17,30 +15,13 @@ class ShortcutKeyViewer {
      */
     init() {
         this.setupEventListeners();
-        this.setDefaultOSFilter();
         this.showLoading('設定ファイルを読み込んでください');
+        // Automatically load default configuration on startup so the page shows content immediately
+        // This will try external ../config/shortcuts.json first and fall back to embedded default-config
+        this.loadDefaultConfig();
     }
     
-    /**
-     * Detect the current operating system
-     */
-    detectOS() {
-        const userAgent = navigator.userAgent.toLowerCase();
-        
-        if (userAgent.includes('mac')) {
-            return 'mac';
-        } else if (userAgent.includes('win')) {
-            return 'windows';
-        } else if (userAgent.includes('linux')) {
-            return 'linux';
-        } else if (userAgent.includes('iphone') || userAgent.includes('ipad')) {
-            return 'ios';
-        } else if (userAgent.includes('android')) {
-            return 'android';
-        }
-        
-        return 'windows'; // Default fallback
-    }
+    // OS自動判定は廃止したため関連メソッドは削除
     
     /**
      * Set up event listeners
@@ -55,14 +36,7 @@ class ShortcutKeyViewer {
         loadDefaultBtn.addEventListener('click', () => this.loadDefaultConfig());
         
         // Filters
-        const osFilter = document.getElementById('os-filter');
-        osFilter.addEventListener('change', () => this.applyFilters());
-        
-        const programFilter = document.getElementById('program-filter');
-        programFilter.addEventListener('change', () => this.applyFilters());
-        
-        const searchInput = document.getElementById('search-input');
-        searchInput.addEventListener('input', () => this.applyFilters());
+    // No filters or search in simplified UI
         
         // Drag and drop support
         document.addEventListener('dragover', (e) => {
@@ -80,15 +54,7 @@ class ShortcutKeyViewer {
         });
     }
     
-    /**
-     * Set default OS filter to current OS
-     */
-    setDefaultOSFilter() {
-        const osFilter = document.getElementById('os-filter');
-        if (osFilter.querySelector(`option[value="${this.currentOS}"]`)) {
-            osFilter.value = this.currentOS;
-        }
-    }
+    // OSフィルタはUIから削除したため、このメソッドは不要
     
     /**
      * Handle file input change
@@ -132,10 +98,26 @@ class ShortcutKeyViewer {
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
-            
             const config = await response.json();
             this.loadConfig(config);
         } catch (error) {
+            // If fetching the external config fails (e.g., file:// restrictions),
+            // try to read embedded default JSON from the HTML page.
+            try {
+                const embedded = document.getElementById('default-config');
+                if (embedded && embedded.textContent.trim()) {
+                    const parsed = JSON.parse(embedded.textContent);
+                    if (Array.isArray(parsed)) {
+                        this.loadConfig(parsed);
+                    } else {
+                        this.loadConfig([parsed]);
+                    }
+                    return;
+                }
+            } catch (err2) {
+                // fallthrough to show error
+            }
+
             this.showError('デフォルト設定の読み込みに失敗しました: ' + error.message);
         }
     }
@@ -149,17 +131,47 @@ class ShortcutKeyViewer {
                 throw new Error('設定は配列である必要があります');
             }
             
-            // Validate and sort configuration
-            this.shortcuts = config
-                .filter(program => this.validateProgram(program))
-                .sort((a, b) => (a.order || 999) - (b.order || 999));
-            
-            // Sort groups within each program
-            this.shortcuts.forEach(program => {
-                if (program.groups) {
-                    program.groups.sort((a, b) => (a.order || 999) - (b.order || 999));
+            // Validate configuration and preserve original array order when `order` is missing.
+            const validated = config.filter(program => this.validateProgram(program));
+
+            // Helper comparator that respects numeric `order` when present,
+            // otherwise falls back to the original index captured on each item.
+            const makeComparator = (indexKey) => (a, b) => {
+                const aHas = typeof a.order === 'number' && isFinite(a.order);
+                const bHas = typeof b.order === 'number' && isFinite(b.order);
+                if (aHas && bHas) return a.order - b.order;
+                if (aHas && !bHas) return -1;
+                if (!aHas && bHas) return 1;
+                // neither has order -> preserve original array order
+                return (a[indexKey] || 0) - (b[indexKey] || 0);
+            };
+
+            // Tag original indices for top-level programs
+            validated.forEach((p, idx) => { p.__origIndex = idx; });
+            validated.sort(makeComparator('__origIndex'));
+
+            // Now sort groups and shortcuts within each program while preserving original order if `order` is missing
+            validated.forEach(program => {
+                if (program.groups && Array.isArray(program.groups)) {
+                    program.groups.forEach((g, gi) => { g.__origIndex = gi; });
+                    program.groups.sort(makeComparator('__origIndex'));
+
+                    program.groups.forEach(group => {
+                        if (group.shortcuts && Array.isArray(group.shortcuts)) {
+                            group.shortcuts.forEach((s, si) => { s.__origIndex = si; });
+                            group.shortcuts.sort(makeComparator('__origIndex'));
+                            // clean up temporary shortcut indices
+                            group.shortcuts.forEach(s => { delete s.__origIndex; });
+                        }
+                        // clean up temporary group index
+                        delete group.__origIndex;
+                    });
                 }
+                // clean up temporary program index
+                delete program.__origIndex;
             });
+
+            this.shortcuts = validated;
             
             this.updateProgramFilter();
             this.applyFilters();
@@ -188,10 +200,16 @@ class ShortcutKeyViewer {
             
             // Validate shortcuts
             group.shortcuts = group.shortcuts.filter(shortcut => {
-                if (!shortcut.action || !shortcut.keys || !shortcut.os) {
+                if (!shortcut.action || !shortcut.keys) {
                     console.warn('無効なショートカット設定をスキップ:', shortcut);
                     return false;
                 }
+
+                // Make os optional; ensure it's an array for later rendering
+                if (!Array.isArray(shortcut.os)) {
+                    shortcut.os = [];
+                }
+
                 return true;
             });
             
@@ -205,72 +223,15 @@ class ShortcutKeyViewer {
      * Update program filter options
      */
     updateProgramFilter() {
-        const programFilter = document.getElementById('program-filter');
-        
-        // Clear existing options except "all"
-        while (programFilter.children.length > 1) {
-            programFilter.removeChild(programFilter.lastChild);
-        }
-        
-        // Add program options
-        this.shortcuts.forEach(program => {
-            const option = document.createElement('option');
-            option.value = program.program;
-            option.textContent = program.program;
-            programFilter.appendChild(option);
-        });
+        // Program filter removed; nothing to update in the UI
     }
     
     /**
      * Apply current filters
      */
     applyFilters() {
-        const osFilter = document.getElementById('os-filter').value;
-        const programFilter = document.getElementById('program-filter').value;
-        const searchTerm = document.getElementById('search-input').value.toLowerCase();
-        
-        this.filteredShortcuts = this.shortcuts.filter(program => {
-            // Program filter
-            if (programFilter !== 'all' && program.program !== programFilter) {
-                return false;
-            }
-            
-            // Create filtered groups for this program
-            const filteredGroups = program.groups.map(group => {
-                const filteredShortcuts = group.shortcuts.filter(shortcut => {
-                    // OS filter
-                    if (osFilter !== 'all' && !shortcut.os.includes(osFilter)) {
-                        return false;
-                    }
-                    
-                    // Search filter
-                    if (searchTerm) {
-                        const searchableText = [
-                            shortcut.action,
-                            shortcut.description,
-                            shortcut.keys.join(' ')
-                        ].join(' ').toLowerCase();
-                        
-                        if (!searchableText.includes(searchTerm)) {
-                            return false;
-                        }
-                    }
-                    
-                    return true;
-                });
-                
-                return filteredShortcuts.length > 0 ? {
-                    ...group,
-                    shortcuts: filteredShortcuts
-                } : null;
-            }).filter(group => group !== null);
-            
-            return filteredGroups.length > 0 ? {
-                ...program,
-                groups: filteredGroups
-            } : null;
-        }).filter(program => program !== null);
-        
+        // Simplified: no filters/search. Just render all programs as already sorted by order.
+        this.filteredShortcuts = this.shortcuts;
         this.render();
     }
     
@@ -332,7 +293,7 @@ class ShortcutKeyViewer {
             .map(key => `<span class="key">${this.escapeHtml(key)}</span>`)
             .join('<span class="key-separator">+</span>');
         
-        const osTags = shortcut.os
+        const osTags = (Array.isArray(shortcut.os) ? shortcut.os : [])
             .map(os => `<span class="os-tag ${os}">${os.toUpperCase()}</span>`)
             .join('');
         

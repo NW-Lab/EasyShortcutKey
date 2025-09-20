@@ -10,7 +10,8 @@
           {
             "action": "承諾",
             "keys": ["Tab"],
-            "description": "Copilotの提案を承諾"
+            "description": "Copilotの提案を承諾",
+            "order": 1
           }
         ]
       }

@@ -3,40 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShortcutKeyViewer</title>
+    <title>Easy Shortcut Key</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🔧 ShortcutKeyViewer</h1>
-            <p>様々なアプリケーションのショートカットキーを表示します</p>
-            
-            <div class="controls">
-                <div class="file-input">
-                    <label for="config-file">設定ファイル:</label>
-                    <input type="file" id="config-file" accept=".json">
-                    <button id="load-default">デフォルト設定を読み込み</button>
-                </div>
-                
-                <div class="filters">
-                    <label for="os-filter">OS:</label>
-                    <select id="os-filter">
-                        <option value="all">すべて</option>
-                        <option value="windows">Windows</option>
-                        <option value="mac">Mac</option>
-                        <option value="linux">Linux</option>
-                    </select>
-                    
-                    <label for="program-filter">プログラム:</label>
-                    <select id="program-filter">
-                        <option value="all">すべて</option>
-                    </select>
-                    
-                    <input type="text" id="search-input" placeholder="検索...">
-                </div>
+        <!-- Minimal UI: hide title/description per user request. Keep controls and content only. -->
+        <div class="controls minimal">
+            <div class="file-input">
+                <input type="file" id="config-file" accept=".json" title="設定ファイルを選択">
+                <button id="load-default">デフォルト設定を読み込み</button>
             </div>
-        </header>
+        </div>
 
         <main>
             <div id="loading" class="loading">設定ファイルを読み込んでください</div>
@@ -45,6 +23,60 @@
         </main>
     </div>
 
-    <script src="app.js"></script>
+        <!-- Embedded default config so index.html works when opened via file:// (double-click) -->
+                <script id="default-config" type="application/json">
+                [
+                    {
+                        "program": "VS Code (Win)",
+                        "order": 1,
+                        "groups": [
+                            {
+                                "groupName": "GitHub Copilot",
+                                "order": 1,
+                                "shortcuts": [
+                                    { "action": "承諾", "keys": ["Tab"], "description": "Copilotの提案を承諾する", "order": 1 },
+                                    { "action": "次の提案", "keys": ["Alt", "]"], "description": "次のCopilot提案を表示", "order": 2 },
+                                    { "action": "インライン提案を表示", "keys": ["Ctrl", "Space"], "description": "手動でCopilot提案を呼び出す", "order": 3 }
+                                ]
+                            },
+                            {
+                                "groupName": "編集",
+                                "order": 2,
+                                "shortcuts": [
+                                    { "action": "コピー", "keys": ["Ctrl", "C"], "description": "選択したテキストをコピー", "order": 1 },
+                                    { "action": "貼り付け", "keys": ["Ctrl", "V"], "description": "クリップボードの内容を貼り付け", "order": 2 },
+                                    { "action": "保存", "keys": ["Ctrl", "S"], "description": "ファイルを保存", "order": 3 }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "program": "VS Code (Mac)",
+                        "order": 2,
+                        "groups": [
+                            {
+                                "groupName": "GitHub Copilot",
+                                "order": 1,
+                                "shortcuts": [
+                                    { "action": "承諾", "keys": ["Tab"], "description": "Copilotの提案を承諾する", "order": 1 },
+                                    { "action": "次の提案", "keys": ["Option", "]"], "description": "次のCopilot提案を表示", "order": 2 },
+                                    { "action": "インライン提案を表示", "keys": ["Cmd", "Space"], "description": "手動でCopilot提案を呼び出す", "order": 3 }
+                                ]
+                            },
+                            {
+                                "groupName": "全体",
+                                "order": 2,
+                                "shortcuts": [
+                                    { "action": "コマンドパレットを開く", "keys": ["Ctrl", "Shift", "P"], "description": "コマンドパレットを開く（Win）", "order": 1 },
+                                    { "action": "コマンドパレットを開く", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く（Mac）", "order": 2 },
+                                    { "action": "クイックオープン", "keys": ["Ctrl", "P"], "description": "ファイルをクイックオープン", "order": 3 }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+                </script>
+
+        <script src="app.js"></script>
 </body>
 </html>

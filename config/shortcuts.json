@@ -13,37 +13,44 @@
           {
             "action": "承諾",
             "keys": ["Tab"],
-            "description": "Copilotの提案を承諾する"
+            "description": "Copilotの提案を承諾する",
+            "order": 1
           },
           {
             "action": "次の提案",
             "keys": ["Alt", "]"],
-            "description": "次のCopilot提案を表示"
+            "description": "次のCopilot提案を表示",
+            "order": 2
           },
           {
             "action": "次の提案",
             "keys": ["Option", "]"],
-            "description": "次のCopilot提案を表示"
+            "description": "次のCopilot提案を表示",
+            "order": 3
           },
           {
             "action": "前の提案",
             "keys": ["Alt", "["],
-            "description": "前のCopilot提案を表示"
+            "description": "前のCopilot提案を表示",
+            "order": 4
           },
           {
             "action": "前の提案",
             "keys": ["Option", "["],
-            "description": "前のCopilot提案を表示"
+            "description": "前のCopilot提案を表示",
+            "order": 5
           },
           {
             "action": "インライン提案を表示",
             "keys": ["Ctrl", "Space"],
-            "description": "手動でCopilot提案を呼び出す"
+            "description": "手動でCopilot提案を呼び出す",
+            "order": 6
           },
           {
             "action": "インライン提案を表示",
             "keys": ["Cmd", "Space"],
-            "description": "手動でCopilot提案を呼び出す"
+            "description": "手動でCopilot提案を呼び出す",
+            "order": 7
           }
         ]
       },
@@ -55,32 +62,38 @@
           {
             "action": "コピー",
             "keys": ["Ctrl", "C"],
-            "description": "選択したテキストをコピー"
+            "description": "選択したテキストをコピー",
+            "order": 1
           },
           {
             "action": "コピー",
             "keys": ["Cmd", "C"],
-            "description": "選択したテキストをコピー"
+            "description": "選択したテキストをコピー",
+            "order": 2
           },
           {
             "action": "貼り付け",
             "keys": ["Ctrl", "V"],
-            "description": "クリップボードの内容を貼り付け"
+            "description": "クリップボードの内容を貼り付け",
+            "order": 3
           },
           {
             "action": "貼り付け",
             "keys": ["Cmd", "V"],
-            "description": "クリップボードの内容を貼り付け"
+            "description": "クリップボードの内容を貼り付け",
+            "order": 4
           },
           {
             "action": "取り消し",
             "keys": ["Ctrl", "Z"],
-            "description": "最後の操作を取り消し"
+            "description": "最後の操作を取り消し",
+            "order": 5
           },
           {
             "action": "取り消し",
             "keys": ["Cmd", "Z"],
-            "description": "最後の操作を取り消し"
+            "description": "最後の操作を取り消し",
+            "order": 6
           }
         ]
       },
@@ -92,22 +105,26 @@
           {
             "action": "ファイルを開く",
             "keys": ["Ctrl", "P"],
-            "description": "ファイルをクイックオープン"
+            "description": "ファイルをクイックオープン",
+            "order": 1
           },
           {
             "action": "ファイルを開く",
             "keys": ["Cmd", "P"],
-            "description": "ファイルをクイックオープン"
+            "description": "ファイルをクイックオープン",
+            "order": 2
           },
           {
             "action": "シンボルに移動",
             "keys": ["Ctrl", "Shift", "O"],
-            "description": "ファイル内のシンボル（関数、クラス等）に移動"
+            "description": "ファイル内のシンボル（関数、クラス等）に移動",
+            "order": 3
           },
           {
             "action": "シンボルに移動",
             "keys": ["Cmd", "Shift", "O"],
-            "description": "ファイル内のシンボル（関数、クラス等）に移動"
+            "description": "ファイル内のシンボル（関数、クラス等）に移動",
+            "order": 4
           }
         ]
       }
@@ -127,22 +144,26 @@
           {
             "action": "移動ツール",
             "keys": ["V"],
-            "description": "移動ツールを選択"
+            "description": "移動ツールを選択",
+            "order": 1
           },
           {
             "action": "ブラシツール",
             "keys": ["B"],
-            "description": "ブラシツールを選択"
+            "description": "ブラシツールを選択",
+            "order": 2
           },
           {
             "action": "消しゴムツール",
             "keys": ["E"],
-            "description": "消しゴムツールを選択"
+            "description": "消しゴムツールを選択",
+            "order": 3
           },
           {
             "action": "テキストツール",
             "keys": ["T"],
-            "description": "テキストツールを選択"
+            "description": "テキストツールを選択",
+            "order": 4
           }
         ]
       },
@@ -154,22 +175,26 @@
           {
             "action": "新規レイヤー",
             "keys": ["Ctrl", "Shift", "N"],
-            "description": "新しいレイヤーを作成"
+            "description": "新しいレイヤーを作成",
+            "order": 1
           },
           {
             "action": "新規レイヤー",
             "keys": ["Cmd", "Shift", "N"],
-            "description": "新しいレイヤーを作成"
+            "description": "新しいレイヤーを作成",
+            "order": 2
           },
           {
             "action": "レイヤー複製",
             "keys": ["Ctrl", "J"],
-            "description": "現在のレイヤーを複製"
+            "description": "現在のレイヤーを複製",
+            "order": 3
           },
           {
             "action": "レイヤー複製",
             "keys": ["Cmd", "J"],
-            "description": "現在のレイヤーを複製"
+            "description": "現在のレイヤーを複製",
+            "order": 4
           }
         ]
       }

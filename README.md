@@ -1,4 +1,4 @@
-# ShortcutKeyViewer
+# Easy Shortcut Key
 
 🔧 **様々なデバイスでショートカットキーを表示する統一システム**
 
@@ -10,8 +10,7 @@
 - **マルチデバイス対応**: iOS、ブラウザ、M5Stack、M5Paper 対応予定
 - **軽量設計**: ブラウザ版はHTMLとJS、設定用JSONファイルのみで動作
 - **日本語対応**: 完全日本語UI・設定対応
-- **OS自動判定**: 現在のOSに適したショートカットを自動表示
-- **検索・フィルタ機能**: 必要なショートカットを素早く検索
+-- **検索・フィルタ機能**: 現在は非表示。表示はJSONの `order` キーで制御します。
 
 ## 🚀 クイックスタート
 
@@ -19,7 +18,7 @@
 
 1. **ファイルの配置**
    ```
-   ShortcutKeyViewer/
+  EasyShortcutKey/
    ├── browser/
    │   ├── index.html     # メインページ
    │   ├── app.js         # アプリケーションロジック
@@ -29,13 +28,15 @@
    ```
 
 2. **ブラウザで開く**
-   - `browser/index.html` をブラウザで開く
-   - 「デフォルト設定を読み込み」ボタンをクリック、または
-   - 独自のJSON設定ファイルをドラッグ&ドロップ
+  - `browser/index.html` をブラウザで直接開く（ダブルクリックでOK）
+  - 「デフォルト設定を読み込み」ボタンをクリック、または
+  - 独自のJSON設定ファイルをドラッグ&ドロップ
 
-3. **フィルタ・検索**
-  - プログラム: アプリケーション名でフィルタ（例: "VS Code (Win)" のようにProgramでプラットフォーム差分を管理）
-  - 検索: キーワードでショートカットを検索
+  ※ file://（ローカルでダブルクリック）で開いた場合、ブラウザによっては外部JSONの fetch が制限されることがあるため、`index.html` に埋め込まれたデフォルト設定がフォールバックとして使用されます（Windows/Macでの簡易利用を想定）。
+
+3. **表示順について**
+  - 表示は `config/shortcuts.json` 内の各 `program` エントリの `order` 値に従ってソートされます（小さい値から先に表示）。
+  - 例: `"order": 1` が最優先で表示される。
 
 ## 📋 設定ファイル形式
 
@@ -82,7 +83,8 @@
             "action": "承諾",                      // アクション名（日本語可）
             "keys": ["Tab"],                      // キーの配列
             "description": "Copilotの提案を承諾", // 詳細説明
-            "context": "エディタ内"               // 使用コンテキスト（オプション）
+            "context": "エディタ内",               // 使用コンテキスト（オプション）
+            "order": 1                              // グループ内での表示順（オプション）
           },
           {
             "action": "次の提案",
@@ -143,7 +145,7 @@
 ## 📂 プロジェクト構造
 
 ```
-ShortcutKeyViewer/
+EasyShortcutKey/
 ├── README.md              # このファイル
 ├── REQUIREMENTS.md        # 詳細要件定義
 ├── config/
@@ -174,8 +176,8 @@ ShortcutKeyViewer/
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/NW-Lab/ShortcutKeyViewer.git
-cd ShortcutKeyViewer
+git clone https://github.com/NW-Lab/EasyShortcutKey.git
+cd EasyShortcutKey
 
 # ブラウザでテスト
 # browser/index.html をブラウザで開く
@@ -218,4 +220,4 @@ MIT License - 自由に使用・改変・再配布可能
 
 ---
 
-**ShortcutKeyViewer** - いつでもどこでも、ショートカットキーを忘れない 🔧✨
+**Easy Shortcut Key** - いつでもどこでも、ショートカットキーを忘れない 🔧✨

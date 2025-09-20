@@ -1,4 +1,4 @@
-/* ShortcutKeyViewer Styles */
+/* Easy Shortcut Key Styles */
 
 * {
     box-sizing: border-box;
@@ -15,56 +15,36 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 12px;
 }
 
-/* Header */
-header {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 12px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-}
-
-header h1 {
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 10px;
-    font-size: 2.5rem;
-}
-
-header p {
-    text-align: center;
-    color: #7f8c8d;
-    margin-bottom: 30px;
-    font-size: 1.1rem;
+/* Compact controls for minimal UI */
+.controls.minimal {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
 }
 
 /* Controls */
 .controls {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
 }
 
 .file-input {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
-.file-input label {
-    font-weight: 600;
-    color: #2c3e50;
-}
-
 .file-input input[type="file"] {
-    padding: 8px;
+    padding: 6px;
     border: 2px solid #e0e0e0;
     border-radius: 6px;
     background: white;
@@ -115,17 +95,17 @@ button:hover {
 
 /* Main Content */
 main {
-    min-height: 400px;
+    min-height: 300px;
 }
 
 .loading,
 .error {
     text-align: center;
-    padding: 60px 20px;
+    padding: 28px 14px;
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    font-size: 1.2rem;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    font-size: 1rem;
     color: #7f8c8d;
 }
 
@@ -138,12 +118,11 @@ main {
 /* Program Cards */
 .program {
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 12px;
-    margin-bottom: 30px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    margin-bottom: 18px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
     overflow: hidden;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
 .program:hover {
@@ -153,14 +132,14 @@ main {
 .program-header {
     background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
-    padding: 20px 30px;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .program-header h2 {
-    font-size: 1.8rem;
+    font-size: 1.25rem;
     margin: 0;
 }
 
