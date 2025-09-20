@@ -34,9 +34,8 @@
    - 独自のJSON設定ファイルをドラッグ&ドロップ
 
 3. **フィルタ・検索**
-   - OS: Windows/Mac/Linux に自動適応
-   - プログラム: 特定のアプリケーションでフィルタ
-   - 検索: キーワードでショートカットを検索
+  - プログラム: アプリケーション名でフィルタ（例: "VS Code (Win)" のようにProgramでプラットフォーム差分を管理）
+  - 検索: キーワードでショートカットを検索
 
 ## 📋 設定ファイル形式
 
@@ -55,8 +54,7 @@
           {
             "action": "承諾",
             "keys": ["Tab"],
-            "description": "Copilotの提案を承諾",
-            "os": ["windows", "mac", "linux"]
+            "description": "Copilotの提案を承諾"
           }
         ]
       }
@@ -84,20 +82,17 @@
             "action": "承諾",                      // アクション名（日本語可）
             "keys": ["Tab"],                      // キーの配列
             "description": "Copilotの提案を承諾", // 詳細説明
-            "os": ["windows", "mac", "linux"],    // 対応OS
             "context": "エディタ内"               // 使用コンテキスト（オプション）
           },
           {
             "action": "次の提案",
             "keys": ["Alt", "]"],                 // 修飾キー + 通常キー
-            "description": "次の提案を表示",
-            "os": ["windows", "linux"]            // Windows/Linux用
+            "description": "次の提案を表示"            // Program名でWindows/Linux向けの別エントリとして管理
           },
           {
             "action": "次の提案", 
             "keys": ["Option", "]"],              // Mac用の別設定
-            "description": "次の提案を表示",
-            "os": ["mac"]                         // Mac専用
+            "description": "次の提案を表示"         // Program名でMac向けの別エントリとして管理
           }
         ]
       }
