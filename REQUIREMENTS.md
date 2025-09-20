@@ -36,7 +36,7 @@
 ```json
 [
   {
-    "program": "VS Code",
+    "appName": "VS Code",
     "order": 1,
     "groups": [
       {

@@ -6,7 +6,7 @@
   "items": {
     "type": "object",
     "properties": {
-      "program": {
+      "appName": {
         "type": "string",
         "description": "Name of the application or program"
       },
@@ -95,7 +95,7 @@
         }
       }
     },
-    "required": ["program", "order", "groups"],
+  "required": ["appName", "order", "groups"],
     "additionalProperties": false
   }
 }

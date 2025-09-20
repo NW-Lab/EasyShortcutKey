@@ -387,10 +387,10 @@ class ShortcutKeyViewer {
      * Validate program configuration
      */
     validateProgram(program) {
-        if (!program.program || !program.groups) {
-            console.warn('無効なプログラム設定をスキップ:', program);
-            return false;
-        }
+            if (!program.appName || !program.groups) {
+                console.warn('無効なプログラム設定をスキップ:', program);
+                return false;
+            }
         
         // Validate groups
         program.groups = program.groups.filter(group => {
@@ -454,9 +454,8 @@ class ShortcutKeyViewer {
             return;
         }
 
-        // Render tabs
-        tabsContainer.innerHTML = this.filteredShortcuts
-            .map((program, idx) => `\n                <button class="tab ${idx === this.activeProgramIndex ? 'active' : ''}" data-idx="${idx}">${this.escapeHtml(program.program)}</button>\n            `)
+            tabsContainer.innerHTML = this.filteredShortcuts
+                .map((program, idx) => `\n                <button class="tab ${idx === this.activeProgramIndex ? 'active' : ''}" data-idx="${idx}">${this.escapeHtml(program.appName)}</button>\n            `)
             .join('');
 
         // Attach click handlers for tabs

@@ -84,7 +84,7 @@ Electron 実行時は `shortcuts.json` を preload 経由で直接読み込む�
 ```json
 [
   {
-    "program": "VS Code",
+    "appName": "VS Code",
     "order": 1,
     "groups": [
       {
@@ -108,7 +108,7 @@ Electron 実行時は `shortcuts.json` を preload 経由で直接読み込む�
 ```json
 [
   {
-    "program": "VS Code",           // アプリケーション名
+    "appName": "VS Code",           // アプリケーション名
     "order": 1,                     // 表示順序
     "icon": "icons/vscode.png",     // アイコンパス（オプション）
     "version": "1.80+",             // 対応バージョン（オプション）
@@ -144,20 +144,20 @@ Electron 実行時は `shortcuts.json` を preload 経由で直接読み込む�
 
 ### 一時的に表示を消す（disEnable）
 
-`disEnable` ブールを使うと、program / group / shortcut のいずれのレベルでも一時的に表示をオフにできます。テンプレート編集時や公開前の調整で便利。
+`disEnable` ブールを使うと、appName / group / shortcut のいずれのレベルでも一時的に表示をオフにできます。テンプレート編集時や公開前の調整で便利。
 
 例:
 
 ```json
 [
   {
-    "program": "VS Code",
+    "appName": "VS Code",
     "order": 1,
     "disEnable": true, // この program は UI に表示されなくなる
     "groups": []
   },
   {
-    "program": "MyApp",
+    "appName": "MyApp",
     "order": 2,
     "groups": [
       {

@@ -35,7 +35,7 @@
 
 *注: JSON内の `os` キーは任意です。`os` がある場合は画面上にタグとして表示されますが、フィルタや自動判定は行いません。*
   {
-    "program": "VS Code",
+    "appName": "VS Code",
     "order": 1,
     "groups": [
       {
@@ -60,7 +60,7 @@
 ```json
 [
   {
-    "program": "アプリ名",
+    "appName": "アプリ名",
     "order": 1,
     "icon": "icons/app.png",
     "version": "2.0+",

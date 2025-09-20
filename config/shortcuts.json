@@ -1,6 +1,6 @@
 [
   {
-    "program": "VS Code",
+    "appName": "VS Code",
     "order": 1,
     "icon": "icons/vscode.png",
     "version": "1.80+",
@@ -131,7 +131,7 @@
     ]
   },
   {
-    "program": "Photoshop",
+    "appName": "Photoshop",
     "order": 2,
     "icon": "icons/photoshop.png",
     "version": "2023+",
