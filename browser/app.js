@@ -468,7 +468,8 @@ class ShortcutKeyViewer {
 
         // Attach group tab and expand handlers (per-program)
         const programIndex = this.activeProgramIndex;
-        const groupTabButtons = container.querySelectorAll('.group-tab');
+    // include expand control as part of the tab-like buttons so it receives the same handling
+    const groupTabButtons = container.querySelectorAll('.group-tab, .group-expand');
         Array.from(groupTabButtons).forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const isExpand = btn.classList.contains('group-expand');
@@ -502,8 +503,9 @@ class ShortcutKeyViewer {
         const progIdx = this.activeProgramIndex;
         const groups = Array.isArray(program.groups) ? program.groups : [];
         const activeGroupIndex = (this.activeGroupIndexMap[progIdx] != null) ? this.activeGroupIndexMap[progIdx] : 0;
-        const groupTabsHtml = groups.map((g, gi) => `\n                <button class="group-tab ${gi === activeGroupIndex ? 'active' : ''}" data-gidx="${gi}">${this.escapeHtml(g.groupName)}</button>\n            `).join('');
-        const expanded = !!this.activeGroupExpandedMap[progIdx];
+    const expanded = !!this.activeGroupExpandedMap[progIdx];
+    // when expanded, no individual group-tab should be shown as active
+    const groupTabsHtml = groups.map((g, gi) => `\n                <button class="group-tab ${(!expanded && gi === activeGroupIndex) ? 'active' : ''}" data-gidx="${gi}">${this.escapeHtml(g.groupName)}</button>\n            `).join('');
 
         // When expanded, render all groups' contents; otherwise render only active group
         const contentHtml = expanded
@@ -511,7 +513,7 @@ class ShortcutKeyViewer {
             : (groups[activeGroupIndex] ? this.renderGroup(groups[activeGroupIndex]) : '');
 
         // Expand button placed to the left of group tabs
-        const expandBtnHtml = `<button class="group-expand" title="展開/折畳">${expanded ? '▾' : '▸'}</button>`;
+    const expandBtnHtml = `<button class="group-expand ${expanded ? 'active' : ''}" title="展開/折畳">${expanded ? '▾' : '▸'}</button>`;
 
         return `
             <div class="program compact">
