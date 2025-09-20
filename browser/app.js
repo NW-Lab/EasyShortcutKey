@@ -9,6 +9,7 @@ class ShortcutKeyViewer {
         this.filteredShortcuts = [];
         this.activeProgramIndex = 0;
         this.activeGroupIndexMap = {}; // key: program index -> active group index
+        this.activeGroupExpandedMap = {}; // key: program index -> boolean (show all groups)
         this.init();
     }
     
@@ -477,6 +478,16 @@ class ShortcutKeyViewer {
                 }
             });
         });
+
+        // Attach expand-toggle handler (per-program)
+        const expandBtn = container.querySelector('.group-expand');
+        if (expandBtn) {
+            expandBtn.addEventListener('click', (e) => {
+                const cur = !!this.activeGroupExpandedMap[programIndex];
+                this.activeGroupExpandedMap[programIndex] = !cur;
+                this.render();
+            });
+        }
     }
     
     /**
@@ -488,13 +499,21 @@ class ShortcutKeyViewer {
         const groups = Array.isArray(program.groups) ? program.groups : [];
         const activeGroupIndex = (this.activeGroupIndexMap[progIdx] != null) ? this.activeGroupIndexMap[progIdx] : 0;
         const groupTabsHtml = groups.map((g, gi) => `\n                <button class="group-tab ${gi === activeGroupIndex ? 'active' : ''}" data-gidx="${gi}">${this.escapeHtml(g.groupName)}</button>\n            `).join('');
-        const activeGroup = groups[activeGroupIndex] || groups[0] || null;
+        const expanded = !!this.activeGroupExpandedMap[progIdx];
+
+        // When expanded, render all groups' contents; otherwise render only active group
+        const contentHtml = expanded
+            ? groups.map(g => this.renderGroup(g)).join('')
+            : (groups[activeGroupIndex] ? this.renderGroup(groups[activeGroupIndex]) : '');
+
+        // Expand button placed to the left of group tabs
+        const expandBtnHtml = `<button class="group-expand" title="展開/折畳">${expanded ? '▾' : '▸'}</button>`;
 
         return `
             <div class="program compact">
-                <div class="group-tabs">${groupTabsHtml}</div>
+                <div class="group-tabs-wrap">${expandBtnHtml}<div class="group-tabs">${groupTabsHtml}</div></div>
                 <div class="program-content">
-                    ${activeGroup ? this.renderGroup(activeGroup) : ''}
+                    ${contentHtml}
                 </div>
             </div>
         `;

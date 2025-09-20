@@ -179,6 +179,27 @@ main {
     padding: 0px 0; /* remove extra padding */
 }
 
+.group-tabs-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.group-expand {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #A0A0A0;
+    padding: 4px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.group-expand:hover {
+    background: rgba(255,255,255,0.12);
+}
+
 .group-tab {
     /* subtle non-active group tab (more compact) */
     background: rgba(255,255,255,0.08);
