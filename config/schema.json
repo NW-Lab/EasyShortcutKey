@@ -70,6 +70,29 @@
                     "minItems": 1,
                     "description": "Array of keys in order (modifiers first)"
                   },
+                  "steps": {
+                    "type": "array",
+                    "description": "Optional multi-step instructions for this shortcut",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": ["keys", "input", "ui", "wait", "macroRef"]
+                        },
+                        "keys": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        },
+                        "action": { "type": "string" },
+                        "description": { "type": "string" },
+                        "os": { "type": "array", "items": { "type": "string" } },
+                        "duration": { "type": "integer", "minimum": 0 }
+                      },
+                      "required": ["description"],
+                      "additionalProperties": false
+                    }
+                  },
                   "description": {
                     "type": "string",
                     "description": "Detailed description of the action"

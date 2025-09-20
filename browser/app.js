@@ -376,6 +376,12 @@ class ShortcutKeyViewer {
             
             this.updateProgramFilter();
             this.applyFilters();
+            // If a notable shortcut exists (like Open Chat), auto-open its program/group so it's visible
+            try {
+                this.openFirstMatchingShortcut && this.openFirstMatchingShortcut('Open Chat');
+            } catch (e) {
+                // ignore
+            }
             this.hideLoading();
             
         } catch (error) {
@@ -406,7 +412,8 @@ class ShortcutKeyViewer {
             // honor shortcut-level disEnable flag: skip if true
             group.shortcuts = group.shortcuts.filter(shortcut => {
                 if (shortcut && shortcut.disEnable === true) return false;
-                if (!shortcut.action || !shortcut.keys) {
+                // Allow shortcuts that have either keys (legacy) or structured steps
+                if (!shortcut.action || (!shortcut.keys && !Array.isArray(shortcut.steps))) {
                     console.warn('無効なショートカット設定をスキップ:', shortcut);
                     return false;
                 }
@@ -552,14 +559,33 @@ class ShortcutKeyViewer {
      * Render a single shortcut
      */
     renderShortcut(shortcut) {
-        const keys = shortcut.keys
-            .map(key => `<span class="key">${this.escapeHtml(key)}</span>`)
-            .join('<span class="key-separator">+</span>');
-        
+        // Render keys if present (legacy/simple case)
+        const keys = Array.isArray(shortcut.keys) ?
+            shortcut.keys.map(key => `<span class="key">${this.escapeHtml(key)}</span>`)
+                .join('<span class="key-separator">+</span>') : '';
+
         const osTags = (Array.isArray(shortcut.os) ? shortcut.os : [])
             .map(os => `<span class="os-tag ${os}">${os.toUpperCase()}</span>`)
             .join('');
-        
+
+        // Render structured steps if present
+        let stepsHtml = '';
+        if (Array.isArray(shortcut.steps) && shortcut.steps.length > 0) {
+            stepsHtml = '<ol class="shortcut-steps">' +
+                shortcut.steps.map((s, i) => {
+                    const stepKeys = Array.isArray(s.keys) ? s.keys.map(k => `<span class="key">${this.escapeHtml(k)}</span>`).join('<span class="key-separator">+</span>') : '';
+                    // Prefer explicit description; if missing, use action only when it's not a generic 'Seq' label
+                    let stepDesc = '';
+                    if (s.description) stepDesc = this.escapeHtml(s.description);
+                    else if (s.action && typeof s.action === 'string') {
+                        const a = s.action.trim();
+                        if (a.toLowerCase() !== 'seq') stepDesc = this.escapeHtml(a);
+                    }
+                    // For browser UI we only show the step keys to keep the UI compact; descriptions are kept in JSON
+                    return `<li class="shortcut-step"><div class="step-keys">${stepKeys}</div></li>`;
+                }).join('') + '</ol>';
+        }
+
         return `
             <div class="shortcut">
                 <div class="shortcut-info">
@@ -568,6 +594,7 @@ class ShortcutKeyViewer {
                     <div class="shortcut-os">${osTags}</div>
                 </div>
                 <div class="shortcut-keys">${keys}</div>
+                ${stepsHtml}
             </div>
         `;
     }
@@ -615,6 +642,32 @@ class ShortcutKeyViewer {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+    /**
+     * Find the first shortcut whose action contains the provided substring and make it visible
+     */
+    openFirstMatchingShortcut(substring) {
+        if (!substring || !Array.isArray(this.shortcuts)) return false;
+        for (let pi = 0; pi < this.shortcuts.length; pi++) {
+            const prog = this.shortcuts[pi];
+            if (!prog || !Array.isArray(prog.groups)) continue;
+            for (let gi = 0; gi < prog.groups.length; gi++) {
+                const grp = prog.groups[gi];
+                if (!grp || !Array.isArray(grp.shortcuts)) continue;
+                for (let si = 0; si < grp.shortcuts.length; si++) {
+                    const s = grp.shortcuts[si];
+                    if (s && s.action && typeof s.action === 'string' && s.action.indexOf(substring) !== -1) {
+                        this.activeProgramIndex = pi;
+                        this.activeGroupIndexMap[pi] = gi;
+                        this.activeGroupExpandedMap[pi] = false;
+                        // re-render to reflect selection
+                        try { this.render(); } catch (e) {}
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
 

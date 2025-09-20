@@ -126,6 +126,16 @@
             "description": "ファイル内のシンボル（関数、クラス等）に移動",
             "order": 4
           }
+          ,
+          {
+            "action": "Open Chat (via Command Palette)",
+            "description": "コマンドパレット経由で Chat を起動",
+            "steps": [
+              { "type": "keys", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く", "os": ["mac"] },
+              { "type": "keys", "keys": ["Ctrl", "Cmd", "I"], "description": "Chat を実行", "os": ["mac","win"] }
+            ],
+            "order": 5
+          }
         ]
       }
     ]

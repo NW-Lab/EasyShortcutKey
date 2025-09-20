@@ -17,10 +17,122 @@
         </main>
     </div>
 
-    <!-- Keep the source template's default-config block here as a placeholder -->
-    <script id="default-config" type="application/json">
-    <!-- default config is intentionally left empty in the source template; use build script to inject -->
-    </script>
+        <!-- Keep the source template's default-config block here as a placeholder -->
+                        <script id="default-config" type="application/json">
+[
+    {
+        "appName": "VS Code (Win)",
+        "order": 1,
+        "icon": "icons/vscode.png",
+        "version": "1.80+",
+        "groups": [
+            {
+                "groupName": "GitHub Copilot",
+                "order": 1,
+                "description": "AI-powered code suggestions and completions",
+                "shortcuts": [
+                    { "action": "承諾", "keys": ["Tab"], "description": "Copilotの提案を承諾する", "order": 1 },
+                    { "action": "次の提案", "keys": ["Alt", "]"], "description": "次のCopilot提案を表示", "order": 2 },
+                    { "action": "前の提案", "keys": ["Alt", "["], "description": "前のCopilot提案を表示", "order": 3 },
+                    { "action": "インライン提案を表示", "keys": ["Ctrl", "Space"], "description": "手動でCopilot提案を呼び出す", "order": 4 }
+                ]
+            },
+            {
+                "groupName": "編集",
+                "order": 2,
+                "description": "基本的な編集操作",
+                "shortcuts": [
+                    { "action": "コピー", "keys": ["Ctrl", "C"], "description": "選択したテキストをコピー", "order": 1 },
+                    { "action": "貼り付け", "keys": ["Ctrl", "V"], "description": "クリップボードの内容を貼り付け", "order": 2 },
+                    { "action": "取り消し", "keys": ["Ctrl", "Z"], "description": "最後の操作を取り消し", "order": 3 },
+                    { "action": "保存", "keys": ["Ctrl", "S"], "description": "ファイルを保存", "order": 4 }
+                ]
+            },
+            {
+                "groupName": "全体",
+                "order": 3,
+                "description": "ファイルやコマンド系のショートカット",
+                "shortcuts": [
+                    { "action": "コマンドパレットを開く", "keys": ["Ctrl", "Shift", "P"], "description": "コマンドパレットを開く", "order": 1 },
+                    { "action": "クイックオープン", "keys": ["Ctrl", "P"], "description": "ファイルをクイックオープン", "order": 2 },
+                    { "action": "ファイル内シンボルに移動", "keys": ["Ctrl", "Shift", "O"], "description": "ファイル内のシンボルに移動", "order": 3 }
+                ]
+            }
+        ]
+    },
+    {
+        "appName": "VS Code (Mac)",
+        "order": 2,
+        "icon": "icons/vscode.png",
+        "version": "1.80+",
+        "groups": [
+            {
+                "groupName": "GitHub Copilot",
+                "order": 1,
+                "description": "AI-powered code suggestions and completions",
+                "shortcuts": [
+                    { "action": "承諾", "keys": ["Tab"], "description": "Copilotの提案を承諾する", "order": 1 },
+                    { "action": "次の提案", "keys": ["Option", "]"], "description": "次のCopilot提案を表示", "order": 2 },
+                    { "action": "前の提案", "keys": ["Option", "["], "description": "前のCopilot提案を表示", "order": 3 },
+                    { "action": "インライン提案を表示", "keys": ["Cmd", "Space"], "description": "手動でCopilot提案を呼び出す", "order": 4 }
+                ]
+            },
+            {
+                "groupName": "編集",
+                "order": 2,
+                "description": "基本的な編集操作",
+                "shortcuts": [
+                    { "action": "コピー", "keys": ["Cmd", "C"], "description": "選択したテキストをコピー", "order": 1 },
+                    { "action": "貼り付け", "keys": ["Cmd", "V"], "description": "クリップボードの内容を貼り付け", "order": 2 },
+                    { "action": "取り消し", "keys": ["Cmd", "Z"], "description": "最後の操作を取り消し", "order": 3 },
+                    { "action": "保存", "keys": ["Cmd", "S"], "description": "ファイルを保存", "order": 4 }
+                ]
+            },
+            {
+                "groupName": "全体",
+                "order": 3,
+                "description": "ファイルやコマンド系のショートカット",
+                "shortcuts": [
+                    { "action": "コマンドパレットを開く", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く", "order": 1 },
+                    { "action": "クイックオープン", "keys": ["Cmd", "P"], "description": "ファイルをクイックオープン", "order": 2 },
+                    { "action": "ファイル内シンボルに移動", "keys": ["Cmd", "Shift", "O"], "description": "ファイル内のシンボルに移動", "order": 3 },
+                    { "action": "Open Chat (via Command Palette)", "description": "コマンドパレット経由で Chat を起動", "steps": [ { "type": "keys", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く", "os": ["mac"] }, { "type": "keys", "keys": ["Ctrl", "Cmd", "I"], "description": "Chat を実行", "os": ["mac","win"] } ], "order": 4 }
+                ]
+            }
+        ]
+    },
+    {
+        "appName": "Photoshop",
+        "order": 3,
+        "icon": "icons/photoshop.png",
+        "version": "2023+",
+        "groups": [
+            {
+                "groupName": "ツール選択",
+                "order": 1,
+                "description": "よく使うツールの選択",
+                "shortcuts": [
+                    { "action": "移動ツール", "keys": ["V"], "description": "移動ツールを選択", "order": 1 },
+                    { "action": "ブラシツール", "keys": ["B"], "description": "ブラシツールを選択", "order": 2 },
+                    { "action": "消しゴムツール", "keys": ["E"], "description": "消しゴムツールを選択", "order": 3 },
+                    { "action": "テキストツール", "keys": ["T"], "description": "テキストツールを選択", "order": 4 }
+                ]
+            },
+            {
+                "groupName": "レイヤー操作",
+                "order": 2,
+                "description": "レイヤーの作成と管理",
+                "shortcuts": [
+                    { "action": "新規レイヤー", "keys": ["Ctrl", "Shift", "N"], "description": "新しいレイヤーを作成", "order": 1 },
+                    { "action": "新規レイヤー", "keys": ["Cmd", "Shift", "N"], "description": "新しいレイヤーを作成", "order": 2 },
+                    { "action": "レイヤー複製", "keys": ["Ctrl", "J"], "description": "現在のレイヤーを複製", "order": 3 },
+                    { "action": "レイヤー複製", "keys": ["Cmd", "J"], "description": "現在のレイヤーを複製", "order": 4 }
+                ]
+            }
+        ]
+    }
+]
+                        </script>
     <script src="app.js"></script>
 </body>
 </html>

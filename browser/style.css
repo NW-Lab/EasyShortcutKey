@@ -399,6 +399,24 @@ main {
     margin-top: 4px;
 }
 
+/* Steps styling: show keys only (descriptions hidden) and add spacing between steps */
+.shortcut-steps {
+    list-style: decimal inside;
+    margin: 2px 0 2px 0; /* tighter outer margins: top 2px, bottom 2px */
+    padding-left: 18px; /* align numbers */
+}
+.shortcut-step {
+    margin: 6px 0; /* spacing between steps */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.shortcut-step .step-keys {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
 .os-tag {
     background: #e9ecef;
     color: #6c757d;
