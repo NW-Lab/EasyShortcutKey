@@ -154,7 +154,7 @@ main {
 .program-content {
     /* small top divider and reduced padding to separate tabs from content */
     border-top: 1px solid rgba(0,0,0,0.06);
-    padding: 8px 12px 10px 12px;
+    padding: 4px 12px 8px 12px; /* reduced top padding to bring first line closer to tabs */
     background: rgba(255,255,255,0.9);
 }
 
@@ -162,7 +162,7 @@ main {
 .tabs {
     display: flex;
     gap: 6px;
-    margin: 0 0 6px 0; /* slightly tighter */
+    margin: 0 0 2px 0; /* reduced bottom margin to tighten spacing to content */
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -229,7 +229,7 @@ main {
 /* Groups */
 .group {
     border-bottom: 1px solid #ecf0f1;
-    padding: 18px 20px; /* reduced vertical/horizontal padding for compactness */
+    padding: 12px 16px; /* tightened top padding so first shortcut is closer to tabs */
 }
 
 .group:last-child {
