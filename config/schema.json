@@ -10,6 +10,10 @@
         "type": "string",
         "description": "Name of the application or program"
       },
+      "disEnable": {
+        "type": "boolean",
+        "description": "If true the element is temporarily hidden from the UI. Can be used on program, group, or shortcut."
+      },
       "order": {
         "type": "integer",
         "minimum": 1,
@@ -32,6 +36,10 @@
               "type": "string",
               "description": "Name of the shortcut group"
             },
+              "disEnable": {
+                "type": "boolean",
+                "description": "If true the group is temporarily hidden from the UI"
+              },
             "order": {
               "type": "integer",
               "minimum": 1,
@@ -49,6 +57,10 @@
                   "action": {
                     "type": "string",
                     "description": "Name of the action (Japanese allowed)"
+                  },
+                  "disEnable": {
+                    "type": "boolean",
+                    "description": "If true the shortcut is temporarily hidden from the UI"
                   },
                   "keys": {
                     "type": "array",

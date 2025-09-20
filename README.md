@@ -142,6 +142,47 @@ Electron 実行時は `shortcuts.json` を preload 経由で直接読み込む�
 ]
 ```
 
+### 一時的に表示を消す（disEnable）
+
+`disEnable` ブールを使うと、program / group / shortcut のいずれのレベルでも一時的に表示をオフにできます。テンプレート編集時や公開前の調整で便利。
+
+例:
+
+```json
+[
+  {
+    "program": "VS Code",
+    "order": 1,
+    "disEnable": true, // この program は UI に表示されなくなる
+    "groups": []
+  },
+  {
+    "program": "MyApp",
+    "order": 2,
+    "groups": [
+      {
+        "groupName": "Advanced",
+        "order": 1,
+        "disEnable": true, // この group は表示されない
+        "shortcuts": []
+      },
+      {
+        "groupName": "Common",
+        "order": 2,
+        "shortcuts": [
+          {
+            "action": "隠し機能",
+            "keys": ["Ctrl","H"],
+            "description": "普段は非表示",
+            "disEnable": true // このショートカットのみ非表示
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
 ## 🛠️ カスタマイズ
 
 ### 独自設定ファイルの作成

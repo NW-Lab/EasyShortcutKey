@@ -330,7 +330,10 @@ class ShortcutKeyViewer {
             }
             
             // Validate configuration and preserve original array order when `order` is missing.
-            const validated = config.filter(program => this.validateProgram(program));
+            // Also honor `disEnable` at program level: skip programs where disEnable === true
+            const validated = config
+                .filter(program => !(program && program.disEnable === true))
+                .filter(program => this.validateProgram(program));
 
             // Helper comparator that respects numeric `order` when present,
             // otherwise falls back to the original index captured on each item.
@@ -391,13 +394,18 @@ class ShortcutKeyViewer {
         
         // Validate groups
         program.groups = program.groups.filter(group => {
+            // honor group-level disEnable flag: skip if true
+            if (group && group.disEnable === true) return false;
+
             if (!group.groupName || !group.shortcuts) {
                 console.warn('無効なグループ設定をスキップ:', group);
                 return false;
             }
-            
+
             // Validate shortcuts
+            // honor shortcut-level disEnable flag: skip if true
             group.shortcuts = group.shortcuts.filter(shortcut => {
+                if (shortcut && shortcut.disEnable === true) return false;
                 if (!shortcut.action || !shortcut.keys) {
                     console.warn('無効なショートカット設定をスキップ:', shortcut);
                     return false;
@@ -410,7 +418,7 @@ class ShortcutKeyViewer {
 
                 return true;
             });
-            
+
             return group.shortcuts.length > 0;
         });
         
