@@ -8,6 +8,8 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px; /* slightly smaller base font */
+    font-weight: 400; /* make overall text a bit lighter */
     line-height: 1.6;
     color: #333;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -58,7 +60,7 @@ body {
 }
 
 .filters label {
-    font-weight: 600;
+    font-weight: 500;
     color: #2c3e50;
 }
 
@@ -82,8 +84,8 @@ button {
     padding: 10px 20px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 500;
     transition: all 0.3s ease;
 }
 
@@ -138,14 +140,14 @@ main {
 }
 
 .group-name {
-    font-size: 1.05rem;
+    font-size: 1rem;
 }
 
 .program-version {
     background: rgba(255, 255, 255, 0.2);
     padding: 4px 12px;
     border-radius: 20px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     margin-left: auto;
 }
 
@@ -182,7 +184,7 @@ main {
     background: rgba(255,255,255,0.08);
     border: 1px solid rgba(255,255,255,0.10);
     padding: 2px 6px; /* less vertical padding */
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
     color: #A0A0A0; /* user requested grey for non-active group tabs */
@@ -202,13 +204,13 @@ main {
     background: rgba(255,255,255,0.10);
     border: 1px solid rgba(255,255,255,0.10);
     padding: 6px 10px; /* unified padding across states to avoid jumps */
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
     color: #A0A0A0; /* user requested grey for non-active program tabs */
     border-radius: 6px;
     box-shadow: none;
-    font-size: 0.92rem;
+    font-size: 0.86rem;
     line-height: 1.1; /* slightly looser for consistency */
     transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
 }
@@ -238,12 +240,12 @@ main {
     background: rgba(255,255,255,0.08);
     border: 1px solid rgba(255,255,255,0.06);
     padding: 6px 8px; /* unified padding to avoid jumps */
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
     color: #A0A0A0;
     border-radius: 6px;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     line-height: 1.1;
     transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
 }
@@ -279,10 +281,10 @@ main {
 }
 
 .shortcut-action {
-    font-weight: 600;
+    font-weight: 500;
     color: #2c3e50;
     margin-bottom: 2px;
-    font-size: 0.98rem; /* slightly smaller */
+    font-size: 0.95rem; /* slightly smaller */
 }
 
 .shortcut-description {
@@ -309,10 +311,10 @@ main {
     background: linear-gradient(145deg, #f8f9fa, #eef0f2);
     border: 1px solid #dee2e6;
     border-radius: 5px;
-    padding: 4px 8px; /* smaller keys */
+    padding: 3px 7px; /* slightly smaller keys */
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    font-size: 0.82rem;
-    font-weight: 600;
+    font-size: 0.78rem;
+    font-weight: 500;
     color: #495057;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
     min-width: 22px;
