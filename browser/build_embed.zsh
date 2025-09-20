@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 # browser/build_embed.zsh
-# Same as scripts/build_embed.zsh but placed inside browser/ for distribution convenience.
+# Simpler, robust implementation using awk/sed to avoid complex quoting.
 
 set -euo pipefail
 
@@ -18,17 +18,24 @@ if [[ ! -f "$JSON" ]]; then
   exit 1
 fi
 
-perl -0777 -e '
-  use strict; use warnings;
-  my $template_file = shift @ARGV;
-  my $json_file = shift @ARGV;
-  open my $t, "<:raw", $template_file or die "cannot open template: $template_file";
-  local $/; my $tpl = <$t>;
-  open my $j, "<:raw", $json_file or die "cannot open json: $json_file";
-  my $json = <$j>;
-  $tpl =~ s{(<script[^>]*id=["\']default-config["\'][^>]*type=["\']application/json["\'][^>]*>).*?(</script>)}{$1 . "\n" . $json . "\n" . $2}gsi;
-  print $tpl;
-' "$TEMPLATE" "$JSON" > "$OUT"
+# find start and end lines of the default-config script block
+start=$(awk 'match($0, /<script[^>]*id=[^>]*default-config[^>]*>/){print NR; exit}' "$TEMPLATE") || true
+if [[ -z "$start" ]]; then
+  echo "default-config script block not found in $TEMPLATE"
+  exit 1
+fi
+end=$(awk 'c && /<\/script>/{print NR; exit} /<script[^>]*id=[^>]*default-config[^>]*>/{c=1}' "$TEMPLATE") || true
+if [[ -z "$end" ]]; then
+  echo "closing </script> not found in $TEMPLATE"
+  exit 1
+fi
+
+# assemble output: header, opening tag, raw JSON, closing tag, tail
+sed -n "1,$((start-1))p" "$TEMPLATE" > "$OUT"
+printf '<script id="default-config" type="application/json">\n' >> "$OUT"
+cat "$JSON" >> "$OUT"
+printf '\n</script>\n' >> "$OUT"
+sed -n "$((end+1)),\$p" "$TEMPLATE" >> "$OUT"
 
 echo "生成しました: $OUT"
 open "$OUT"

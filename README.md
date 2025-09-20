@@ -34,6 +34,25 @@
 
   ※ file://（ローカルでダブルクリック）で開いた場合、ブラウザによっては外部JSONの fetch が制限されることがあるため、`index.html` に埋め込まれたデフォルト設定がフォールバックとして使用されます（Windows/Macでの簡易利用を想定）。
 
+#### 配布用 HTML を簡単に作る（ノード不要）
+
+開発者や配布担当者が `shortcuts.json` を `index.html` に埋め込んだ単一ファイルを作りたい場合、`browser/` にシェルスクリプトを用意しているので Node.js を使わずにビルドできます。
+
+- macOS / Linux (zsh) : `browser/build_embed.zsh`
+- Windows (PowerShell) : `browser/build_embed.ps1`
+
+実行方法（macOS の例）:
+
+```bash
+cd browser
+./build_embed.zsh
+```
+
+実行すると `browser/index.built.html` が生成され、既定のブラウザで自動的に開きます。生成された `index.built.html` はそのまま配布可能な単一HTMLファイルです。
+
+オプション:
+- `build_embed.zsh` は現在シンプル実装のため `--inplace` や `--no-open` のオプションは無いが、必要なら追加可能。提案してね。
+
 #### 非技術ユーザ向け: デスクトップアプリでの起動 (推奨)
 
 ブラウザの file:// 制限を回避し、PCに詳しくない人でもダブルクリックで起動できるように、Electron ラッパーを同梱している。
