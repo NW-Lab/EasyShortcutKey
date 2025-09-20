@@ -5,9 +5,17 @@
 set -euo pipefail
 
 ROOT_DIR=$(cd "$(dirname "${0}")" && pwd)
-TEMPLATE="$ROOT_DIR/index.html"
+TEMPLATE="$ROOT_DIR/index.source.html"
 JSON="$ROOT_DIR/shortcuts.json"
-OUT="$ROOT_DIR/index.built.html"
+OUT="$ROOT_DIR/index.html"
+
+# simple flag parsing
+NO_OPEN=0
+for arg in "$@"; do
+  if [[ "$arg" == "--no-open" ]]; then
+    NO_OPEN=1
+  fi
+done
 
 if [[ ! -f "$TEMPLATE" ]]; then
   echo "テンプレート $TEMPLATE が見つかりません。"
@@ -38,4 +46,6 @@ printf '\n</script>\n' >> "$OUT"
 sed -n "$((end+1)),\$p" "$TEMPLATE" >> "$OUT"
 
 echo "生成しました: $OUT"
-open "$OUT"
+if [[ "$NO_OPEN" -eq 0 ]]; then
+  open "$OUT"
+fi

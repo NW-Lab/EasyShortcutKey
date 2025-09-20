@@ -34,9 +34,9 @@
 
   ※ file://（ローカルでダブルクリック）で開いた場合、ブラウザによっては外部JSONの fetch が制限されることがあるため、`index.html` に埋め込まれたデフォルト設定がフォールバックとして使用されます（Windows/Macでの簡易利用を想定）。
 
-#### 配布用 HTML を簡単に作る（ノード不要）
+#### 配布用 HTML を簡単に作る（ソース→ビルドワークフロー）
 
-開発者や配布担当者が `shortcuts.json` を `index.html` に埋め込んだ単一ファイルを作りたい場合、`browser/` にシェルスクリプトを用意しているので Node.js を使わずにビルドできます。
+ブラウザ向けのソーステンプレートは `browser/index.source.html` に置いてある。テンプレートを編集してから、以下のコマンドで `browser/index.html` を再生成して配布用HTMLを作れる。
 
 - macOS / Linux (zsh) : `browser/build_embed.zsh`
 - Windows (PowerShell) : `browser/build_embed.ps1`
@@ -45,13 +45,11 @@
 
 ```bash
 cd browser
-./build_embed.zsh
+./build_embed.zsh        # デフォルトで生成後に既定ブラウザを開く
+./build_embed.zsh --no-open   # 生成のみでブラウザは開かない
 ```
 
-実行すると `browser/index.built.html` が生成され、既定のブラウザで自動的に開きます。生成された `index.built.html` はそのまま配布可能な単一HTMLファイルです。
-
-オプション:
-- `build_embed.zsh` は現在シンプル実装のため `--inplace` や `--no-open` のオプションは無いが、必要なら追加可能。提案してね。
+この操作は `index.source.html` をテンプレートとして `index.html` を上書きする（生成物は直接 `browser/index.html`）。配布前にテンプレートを編集してからビルドしてね。
 
 #### 非技術ユーザ向け: デスクトップアプリでの起動 (推奨)
 
