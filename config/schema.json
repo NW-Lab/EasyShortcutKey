@@ -62,20 +62,12 @@
                     "type": "string",
                     "description": "Detailed description of the action"
                   },
-                  "os": {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "enum": ["windows", "mac", "linux", "ios", "android"]
-                    },
-                    "description": "Supported operating systems"
-                  },
                   "context": {
                     "type": "string",
                     "description": "Specific context where this shortcut applies (optional)"
                   }
                 },
-                "required": ["action", "keys", "description", "os"],
+                "required": ["action", "keys", "description"],
                 "additionalProperties": false
               }
             }

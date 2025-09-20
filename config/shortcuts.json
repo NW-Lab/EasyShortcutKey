@@ -13,44 +13,37 @@
           {
             "action": "承諾",
             "keys": ["Tab"],
-            "description": "Copilotの提案を承諾する",
-            "os": ["windows", "mac", "linux"]
+            "description": "Copilotの提案を承諾する"
           },
           {
             "action": "次の提案",
             "keys": ["Alt", "]"],
-            "description": "次のCopilot提案を表示",
-            "os": ["windows", "linux"]
+            "description": "次のCopilot提案を表示"
           },
           {
             "action": "次の提案",
             "keys": ["Option", "]"],
-            "description": "次のCopilot提案を表示",
-            "os": ["mac"]
+            "description": "次のCopilot提案を表示"
           },
           {
             "action": "前の提案",
             "keys": ["Alt", "["],
-            "description": "前のCopilot提案を表示",
-            "os": ["windows", "linux"]
+            "description": "前のCopilot提案を表示"
           },
           {
             "action": "前の提案",
             "keys": ["Option", "["],
-            "description": "前のCopilot提案を表示",
-            "os": ["mac"]
+            "description": "前のCopilot提案を表示"
           },
           {
             "action": "インライン提案を表示",
             "keys": ["Ctrl", "Space"],
-            "description": "手動でCopilot提案を呼び出す",
-            "os": ["windows", "linux"]
+            "description": "手動でCopilot提案を呼び出す"
           },
           {
             "action": "インライン提案を表示",
             "keys": ["Cmd", "Space"],
-            "description": "手動でCopilot提案を呼び出す",
-            "os": ["mac"]
+            "description": "手動でCopilot提案を呼び出す"
           }
         ]
       },
@@ -62,38 +55,32 @@
           {
             "action": "コピー",
             "keys": ["Ctrl", "C"],
-            "description": "選択したテキストをコピー",
-            "os": ["windows", "linux"]
+            "description": "選択したテキストをコピー"
           },
           {
             "action": "コピー",
             "keys": ["Cmd", "C"],
-            "description": "選択したテキストをコピー",
-            "os": ["mac"]
+            "description": "選択したテキストをコピー"
           },
           {
             "action": "貼り付け",
             "keys": ["Ctrl", "V"],
-            "description": "クリップボードの内容を貼り付け",
-            "os": ["windows", "linux"]
+            "description": "クリップボードの内容を貼り付け"
           },
           {
             "action": "貼り付け",
             "keys": ["Cmd", "V"],
-            "description": "クリップボードの内容を貼り付け",
-            "os": ["mac"]
+            "description": "クリップボードの内容を貼り付け"
           },
           {
             "action": "取り消し",
             "keys": ["Ctrl", "Z"],
-            "description": "最後の操作を取り消し",
-            "os": ["windows", "linux"]
+            "description": "最後の操作を取り消し"
           },
           {
             "action": "取り消し",
             "keys": ["Cmd", "Z"],
-            "description": "最後の操作を取り消し",
-            "os": ["mac"]
+            "description": "最後の操作を取り消し"
           }
         ]
       },
@@ -105,26 +92,22 @@
           {
             "action": "ファイルを開く",
             "keys": ["Ctrl", "P"],
-            "description": "ファイルをクイックオープン",
-            "os": ["windows", "linux"]
+            "description": "ファイルをクイックオープン"
           },
           {
             "action": "ファイルを開く",
             "keys": ["Cmd", "P"],
-            "description": "ファイルをクイックオープン",
-            "os": ["mac"]
+            "description": "ファイルをクイックオープン"
           },
           {
             "action": "シンボルに移動",
             "keys": ["Ctrl", "Shift", "O"],
-            "description": "ファイル内のシンボル（関数、クラス等）に移動",
-            "os": ["windows", "linux"]
+            "description": "ファイル内のシンボル（関数、クラス等）に移動"
           },
           {
             "action": "シンボルに移動",
             "keys": ["Cmd", "Shift", "O"],
-            "description": "ファイル内のシンボル（関数、クラス等）に移動",
-            "os": ["mac"]
+            "description": "ファイル内のシンボル（関数、クラス等）に移動"
           }
         ]
       }
@@ -144,26 +127,22 @@
           {
             "action": "移動ツール",
             "keys": ["V"],
-            "description": "移動ツールを選択",
-            "os": ["windows", "mac"]
+            "description": "移動ツールを選択"
           },
           {
             "action": "ブラシツール",
             "keys": ["B"],
-            "description": "ブラシツールを選択",
-            "os": ["windows", "mac"]
+            "description": "ブラシツールを選択"
           },
           {
             "action": "消しゴムツール",
             "keys": ["E"],
-            "description": "消しゴムツールを選択",
-            "os": ["windows", "mac"]
+            "description": "消しゴムツールを選択"
           },
           {
             "action": "テキストツール",
             "keys": ["T"],
-            "description": "テキストツールを選択",
-            "os": ["windows", "mac"]
+            "description": "テキストツールを選択"
           }
         ]
       },
@@ -175,26 +154,22 @@
           {
             "action": "新規レイヤー",
             "keys": ["Ctrl", "Shift", "N"],
-            "description": "新しいレイヤーを作成",
-            "os": ["windows"]
+            "description": "新しいレイヤーを作成"
           },
           {
             "action": "新規レイヤー",
             "keys": ["Cmd", "Shift", "N"],
-            "description": "新しいレイヤーを作成",
-            "os": ["mac"]
+            "description": "新しいレイヤーを作成"
           },
           {
             "action": "レイヤー複製",
             "keys": ["Ctrl", "J"],
-            "description": "現在のレイヤーを複製",
-            "os": ["windows"]
+            "description": "現在のレイヤーを複製"
           },
           {
             "action": "レイヤー複製",
             "keys": ["Cmd", "J"],
-            "description": "現在のレイヤーを複製",
-            "os": ["mac"]
+            "description": "現在のレイヤーを複製"
           }
         ]
       }

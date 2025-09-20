@@ -10,8 +10,7 @@
           {
             "action": "承諾",
             "keys": ["Tab"],
-            "description": "Copilotの提案を承諾",
-            "os": ["windows", "mac", "linux"]
+            "description": "Copilotの提案を承諾"
           }
         ]
       }
