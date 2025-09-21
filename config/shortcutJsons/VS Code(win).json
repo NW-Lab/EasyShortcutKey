@@ -16,7 +16,7 @@
         { "action": "コードの生成", "keys": ["Ctrl", "Enter"], "description": "コメントに従ってコードの生成を行う", "order": 5 },
         { "action": "インラインChat", "keys": ["Ctrl", "I"], "description": "インラインChatを呼び出す", "order": 6 },
         { "action": "Open Chat (via Command Palette)", "description": "コマンドパレット経由で Chat を起動", "steps": [ { "type": "keys", "keys": ["Ctrl", "Shift", "P"] }, { "type": "keys", "keys": ["Ctrl", "Cmd", "I"] } ], "order": 7 }
-      ]
+      ] 
     },
     {
       "groupName": "編集",
