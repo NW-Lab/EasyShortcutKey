@@ -91,6 +91,15 @@ Step オブジェクト（`steps` 配列の要素、例）:
 { "type": "keys", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く" }
 ```
 
+### 一意性の担保（UUID の導入）
+- 各 program（アプリ）/ group / shortcut には、一意な `id` を持てるようにした（推奨: UUID v4）。
+- `id` は UI の差分更新やマージ時の追跡に使うため、重複しないことが重要。
+- 既存データで `id` が無い場合はスクリプトで自動付与できる。
+  - スクリプト: `scripts/assign_ids.py`
+  - ドライラン: `python3 scripts/assign_ids.py --dry-run`
+  - 反映: `python3 scripts/assign_ids.py --apply`
+  - 対象フォルダ指定: `--dir config/shortcutJsons`
+
 主な `type` 値（現行実装で扱う）:
 - `keys`: キー列を示す
 - `input`: 文字列入力を表す（実行はしないが手順として表示）

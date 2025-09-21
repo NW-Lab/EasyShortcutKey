@@ -1,0 +1,59 @@
+name: UUID Guard
+
+on:
+  pull_request:
+    paths:
+      - 'config/**.json'
+      - 'scripts/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'config/**.json'
+      - 'scripts/**'
+
+jobs:
+  check-and-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Dry-run assign IDs (report)
+        run: |
+          python3 scripts/assign_ids.py --dir config/shortcutJsons --dry-run || true
+
+      - name: Validate IDs
+        run: |
+          python3 scripts/validate_ids.py --dir config/shortcutJsons || exit 1
+
+      - name: Compare IDs vs base (PR only)
+        if: github.event_name == 'pull_request'
+        run: |
+          # Fetch base branch file to /tmp for comparison if exists
+          set -e
+          git fetch --no-tags --prune --depth=1 origin "${{ github.base_ref }}"
+          # Try to read base version of a canonical file if present
+          if git show "origin/${{ github.base_ref }}:config/shortcuts.json" > /tmp/base.json 2>/dev/null; then
+            python3 scripts/compare_ids.py --old-file /tmp/base.json --new-file config/shortcuts.json || true
+          else
+            echo "No canonical config/shortcuts.json in base; skipping compare." || true
+          fi
+
+      - name: On push to main, auto-assign missing IDs and commit
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          set -e
+          python3 scripts/assign_ids.py --dir config/shortcutJsons --apply || true
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore: auto-assign missing UUIDs"
+            git push
+          fi

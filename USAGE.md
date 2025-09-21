@@ -54,6 +54,14 @@
 
   参考: `config/schema.json` にスキーマ定義あり。
 
+   ### ここも追記: 一意な `id`（UUID）について
+   - 各レベル（program / group / shortcut）に一意な `id` を付与できるようにした（推奨: UUID v4）。
+   - すでにJSONに `id` が付いていない場合は、スクリプトで自動付与できる。
+      - スクリプト: `scripts/assign_ids.py`
+      - ドライラン: `python3 scripts/assign_ids.py --dry-run`
+      - 反映: `python3 scripts/assign_ids.py --apply`
+      - 対象フォルダを変える場合: `--dir config/shortcutJsons`
+
   ## ビルド（配布用 HTML の作成）
 
   テンプレートは `browser/index.source.html`。デフォルト設定を埋め込みたい場合、以下のスクリプトで `browser/index.html` を生成してください（`index.html` を上書きします）。
