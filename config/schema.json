@@ -17,7 +17,7 @@
       "order": {
         "type": "integer",
         "minimum": 1,
-        "description": "Display order for programs"
+        "description": "Display order for programs (optional). If omitted, array order is preserved."
       },
       "icon": {
         "type": "string",
@@ -36,14 +36,14 @@
               "type": "string",
               "description": "Name of the shortcut group"
             },
-              "disEnable": {
-                "type": "boolean",
-                "description": "If true the group is temporarily hidden from the UI"
-              },
+            "disEnable": {
+              "type": "boolean",
+              "description": "If true the group is temporarily hidden from the UI"
+            },
             "order": {
               "type": "integer",
               "minimum": 1,
-              "description": "Display order within the program"
+              "description": "Display order within the program (optional). If omitted, array order is preserved."
             },
             "description": {
               "type": "string",
@@ -100,25 +100,28 @@
                   "context": {
                     "type": "string",
                     "description": "Specific context where this shortcut applies (optional)"
-                  }
-                  ,
+                  },
                   "order": {
                     "type": "integer",
                     "minimum": 1,
                     "description": "Display order within the group (optional)"
                   }
                 },
-                "required": ["action", "keys", "description"],
+                "required": ["action", "description"],
+                "oneOf": [
+                  { "required": ["keys"] },
+                  { "required": ["steps"] }
+                ],
                 "additionalProperties": false
               }
             }
           },
-          "required": ["groupName", "order", "shortcuts"],
+          "required": ["groupName", "shortcuts"],
           "additionalProperties": false
         }
       }
     },
-  "required": ["appName", "order", "groups"],
+    "required": ["appName", "groups"],
     "additionalProperties": false
   }
 }

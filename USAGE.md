@@ -15,103 +15,71 @@
    - 「デフォルト設定を読み込み」ボタンをクリック
    
    **方法2: 独自設定ファイルを使用**
-   - 「設定ファイル:」の「ファイルを選択」ボタンをクリック
-   - JSONファイルを選択
-   
-   **方法3: ドラッグ&ドロップ**
-   - JSONファイルをブラウザ画面にドラッグ&ドロップ
+  # 使用方法ガイド
 
-### フィルタ機能
-- **Mac**: Mac用ショートカットのみ  
-- **Linux**: Linux用ショートカットのみ
-  #### プラットフォーム差分の扱い
-  - Program名でプラットフォーム差分を管理します。OS専用のキー配置がある場合は、Program名にプラットフォーム識別子を付けて別エントリとして登録してください（例: `"VS Code (Win)"`, `"VS Code (Mac)"`）。
+  このドキュメントはブラウザ版 Easy Shortcut Key の使い方と、現在の設定フォーマットについての簡潔な案内です。古い自動OS判定や検索UIは廃止され、シンプルな配布と表示を優先した実装になっています。
 
-  *注: JSON内の `os` キーは任意です。Program名でプラットフォーム差分を管理する運用を推奨します。*
+  ## クイックスタート
 
-### 表示順・プラットフォーム差分
-- 表示は `config/shortcuts.json` 中の各 `program` エントリの `order` 値に従ってソートされます（小さい値が先）。
-- Program 名でプラットフォーム差分を管理してください（例: `"VS Code (Win)"`, `"VS Code (Mac)"`）。
+  1. `browser/index.html` をダブルクリックしてブラウザで開く（最も簡単）
+  2. または、ローカルサーバーを立てる場合:
 
-*注: JSON内の `os` キーは任意です。`os` がある場合は画面上にタグとして表示されますが、フィルタや自動判定は行いません。*
-  {
-    "appName": "VS Code",
-    "order": 1,
-    "groups": [
-      {
-            }
-        "order": 1,
-        "shortcuts": [
-          {
-            "action": "承諾",                      // アクション名（日本語可）
-            "keys": ["Tab"],                      // キーの配列
-            "description": "Copilotの提案を承諾", // 詳細説明
-            "context": "エディタ内",               // 使用コンテキスト（オプション）
-            "order": 1                              // グループ内での表示順（オプション）
-          }
-        ]
-      }
-    ]
-  }
-]
-```
+  ```bash
+  python3 -m http.server 8000
+  # ブラウザで http://localhost:8000/browser/ にアクセス
+  ```
 
-#### フル設定例
-```json
-[
-  {
-    "appName": "アプリ名",
-    "order": 1,
-    "icon": "icons/app.png",
-    "version": "2.0+",
-    "groups": [
-      {
-              "context": "使用場面"
-        "order": 1,
-        "description": "このグループの説明",
-        "shortcuts": [
-          {
-            "action": "アクション名",
-            "keys": ["修飾キー", "通常キー"],
-            "description": "詳細な説明",
-            "os": ["windows", "mac", "linux"],
-            "context": "使用場面"
-          }
-        ]
-      }
-    ]
-  }
-]
-```
+  ## 設定ファイルの読み込み
 
-### 印刷機能
+  - 埋め込みデフォルト: `index.html` に埋め込んだ `default-config` を優先して読み込みます（file:// 環境での互換性のため）。
+  - ローカルの `shortcuts.json` を fetch / XHR で読み込むフォールバックがありますが、ブラウザによっては file:// で制限される場合があります。
+  - ドラッグ&ドロップ: JSON ファイルを画面にドラッグ&ドロップして読み込めます。
 
-ブラウザの印刷機能（Ctrl+P / Cmd+P）で、設定やフィルタ部分を除いた
-- JSON形式が正しいか確認
-- 括弧 `[]` `{}` の対応を確認
-- カンマ `,` の位置を確認
-- 文字列は `"` で囲む
+  ## 表示と順序
 
-#### "デフォルト設定の読み込みに失敗しました"
-- `config/shortcuts.json` ファイルが存在するか確認
-- ファイルのアクセス権限を確認
-- ローカルサーバーを使用することを推奨
+  - Program（アプリ）順および Group 内の順序は `order` プロパティで制御します。`order` がない場合は配列に記載した順序を維持します。
 
-#### "該当するショートカットが見つかりませんでした"
-- フィルタやOS設定を確認
-- 検索キーワードを変更
-- 「すべて」設定に戻してみる
+  ## 現在サポートしている JSON フィールド（主なもの）
 
-### カスタマイズ
+  - `appName` (string) — 必須。表示されるプログラム名。
+  - `order` (integer) — 任意。表示順序。
+  - `icon` / `version` — 任意のメタ情報。
+  - `disEnable` (boolean) — true の場合、その program/group/shortcut を表示しない（テンポラリな非表示に便利）。
+  - `groups` — 配列。各グループは `groupName`, `order`, `description`, `shortcuts` を持ちます。
+  - `shortcuts` の各項目:
+    - `action` (string) — 表示名（例: "コピー"）
+    - `keys` (array[string]) — 典型的なキー列（legacy）。
+    - `steps` (array[object]) — マルチステップを表す配列。ブラウザUIでは現在キーのみを表示する（説明はJSONに保持）。各 step は `type`, `keys`, `description`, `os` などを持ち得る。
+    - `os` (array[string]) — オプション。表示用のタグとして出るが自動判定/フィルタは行わない。
 
-#### スタイルのカスタマイズ
-`style.css` を編集することで見た目をカスタマイズ可能:
-- 色の変更
-- フォントの変更
-- レイアウトの調整
+  参考: `config/schema.json` にスキーマ定義あり。
 
-#### 機能の拡張
-`app.js` を編集することで機能を拡張可能:
-- 新しいフィルタオプション
-- エクスポート機能
-- 設定の保存機能
+  ## ビルド（配布用 HTML の作成）
+
+  テンプレートは `browser/index.source.html`。デフォルト設定を埋め込みたい場合、以下のスクリプトで `browser/index.html` を生成してください（`index.html` を上書きします）。
+
+  - macOS / Linux (zsh): `browser/build_embed.zsh`
+  - Windows (PowerShell): `browser/build_embed.ps1`
+
+  例:
+
+  ```bash
+  cd browser
+  zsh build_embed.zsh
+  ```
+
+  生成後の `index.html` は単一ファイルで配布できます。配布先でダブルクリックするだけで動く想定です。
+
+  ## トラブルシューティング
+
+  - ブラウザで古いJSを読み込んでるようなら強制リロード（Cmd/Ctrl+Shift+R）を行ってください。
+  - `default-config` の埋め込みが期待どおりでない場合は `browser/index.source.html` を編集してから再度ビルドしてください。
+
+  ## カスタマイズ
+
+  - 見た目の調整は `browser/style.css` を編集
+  - ロジックの変更は `browser/app.js` を編集
+
+  ---
+
+  詳細な設定例や運用ルール、他デバイスの情報は `config/` と `browser/README.md` を参照してください。

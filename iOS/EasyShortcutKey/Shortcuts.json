@@ -1,0 +1,21 @@
+[
+  {
+    "appName": "VS Code (Mac)",
+    "order": 1,
+    "icon": "icons/vscode.png",
+    "version": "1.80+",
+    "groups": [
+      {
+        "groupName": "GitHub Copilot",
+        "order": 1,
+        "description": "AI-powered code suggestions and completions",
+        "shortcuts": [
+          { "action": "承諾", "keys": ["Tab"], "description": "Copilotの提案を承諾する", "order": 1 },
+          { "action": "次の提案", "keys": ["Option", "]"], "description": "次のCopilot提案を表示", "order": 2 },
+          { "action": "前の提案", "keys": ["Option", "["], "description": "前のCopilot提案を表示", "order": 3 },
+          { "action": "インライン提案を表示", "keys": ["Cmd", "Space"], "description": "手動でCopilot提案を呼び出す", "order": 4 }
+        ]
+      }
+    ]
+  }
+]
