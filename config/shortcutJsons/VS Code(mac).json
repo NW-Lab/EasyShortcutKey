@@ -5,14 +5,17 @@
   "version": "1.80+",
   "groups": [
     {
-      "groupName": "GitHub Copilot",
+      "groupName": "Copilot",
       "order": 1,
       "description": "AI-powered code suggestions and completions",
       "shortcuts": [
         { "action": "承諾", "keys": ["Tab"], "description": "Copilotの提案を承諾する", "order": 1 },
-        { "action": "次の提案", "keys": ["Option", "]"], "description": "次のCopilot提案を表示", "order": 2 },
-        { "action": "前の提案", "keys": ["Option", "["], "description": "前のCopilot提案を表示", "order": 3 },
-        { "action": "インライン提案を表示", "keys": ["Cmd", "Space"], "description": "手動でCopilot提案を呼び出す", "order": 4 }
+        { "action": "部分的な承諾", "keys": ["Cmd", "→"], "description": "候補の部分的な受け入れ", "order": 2 },
+        { "action": "次の提案", "keys": ["Option", "]"], "description": "次のCopilot提案を表示", "order": 3 },
+        { "action": "前の提案", "keys": ["Option", "["], "description": "前のCopilot提案を表示", "order": 4 },
+        { "action": "コードの生成", "keys": ["Ctrl", "Enter"], "description": "コメントに従ってコードの生成を行う", "order": 5 },
+        { "action": "Open Chat (via Command Palette)", "description": "コマンドパレット経由で Chat を起動", "steps": [ { "type": "keys", "keys": ["Cmd", "Shift", "P"]}, { "type": "keys", "keys": ["Ctrl", "Cmd", "I"] } ], "order": 6 },
+        { "action": "インライン提案を表示", "keys": ["Cmd", "I"], "description": "手動でCopilot提案を呼び出す", "order": 7 }
       ]
     },
     {
@@ -34,7 +37,7 @@
         { "action": "コマンドパレットを開く", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く", "order": 1 },
         { "action": "クイックオープン", "keys": ["Cmd", "P"], "description": "ファイルをクイックオープン", "order": 2 },
         { "action": "ファイル内シンボルに移動", "keys": ["Cmd", "Shift", "O"], "description": "ファイル内のシンボルに移動", "order": 3 },
-        { "action": "Open Chat (via Command Palette)", "description": "コマンドパレット経由で Chat を起動", "steps": [ { "type": "keys", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く", "os": ["mac"] }, { "type": "keys", "keys": ["Ctrl", "Cmd", "I"], "description": "Chat を実行", "os": ["mac","win"] } ], "order": 4 }
+        { "action": "md Preview", "description": "MDファイルのプレビュー", "steps": [ { "type": "keys", "keys": ["Cmd", "K"]}, { "type": "keys", "keys": ["V"] } ], "order": 5 }
       ]
     }
   ]
