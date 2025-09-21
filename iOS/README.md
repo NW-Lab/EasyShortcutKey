@@ -12,14 +12,14 @@ KeyboardGWはマイコンで作成。
 使うプロファイルは検討中（GATT 想定）。Central 役として CoreBluetooth を使って、ペアリング済みのマイコンに接続する方針。
 
 ### マイコン（計画メモ）
-- デバイスは未定（実験用に複数でもOK）
-- できれば FW を簡単更新（ドラッグ＆ドロップで Flash Memory 書き換え、RasPi Pico のノリ）
+- デバイスは未ESP32S3のM5StackのAtomS3を利用。
+- ESPTOOLを使用して FW を簡単更新（将来的にはUF2を使用してドラッグ＆ドロップで Flash Memory 書き換え）　https://github.com/espressif/esptool/releases
 - BLE 通信ができること
 - USB Keyboard として動作（または Bluetooth Keyboard）。消費電力や安定性を考慮
 - iPhone とペアリング固定（誰にでも接続されるのはセキュリティ的にNG）。相手機器 ID を保存
 - LED/LCD などで接続状態が分かると嬉しい
 
-補足: マイコン用のフォルダは、使用デバイス決定後に `/<microcontroller>-for-iOS` のように追加する想定。
+補足: マイコン用のフォルダは、`/KeyboardGW` 
 
 ### USB/BT 側
 USB でも Bluetooth Keyboard でも OK（両対応でも可）。最終的には PC 側でショートカット入力として認識されればOK。
