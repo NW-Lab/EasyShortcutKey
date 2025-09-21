@@ -39,7 +39,6 @@
             "action": "コマンドパレットを開く",
             "keys": ["Cmd", "Shift", "P"],
             "description": "コマンドパレットを表示する",
-            "os": ["mac"],
             "order": 1
           },
           {
@@ -82,7 +81,6 @@
   - `description` (string, required): 説明（UI で必ず表示されるわけではないがメタ情報として保持）
   - `keys` (array of string, optional): 単一ステップのキー配列（修飾キー→メインキー）。既存の単純ショートカット向け。
   - `steps` (array of step objects, optional): 複雑な操作や手順を表現するための多段ステップ。`keys` を持たないショートカットを許容するために追加。
-  - `os` (array of string, optional): 対応 OS（例: `"windows"`, `"mac"`, `"linux"`, `"ios"`, `"android"`）
   - `order` (integer, optional): グループ内での表示順
 
 Step オブジェクト（`steps` 配列の要素、例）:

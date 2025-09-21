@@ -131,8 +131,8 @@
             "action": "Open Chat (via Command Palette)",
             "description": "コマンドパレット経由で Chat を起動",
             "steps": [
-              { "type": "keys", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く", "os": ["mac"] },
-              { "type": "keys", "keys": ["Ctrl", "Cmd", "I"], "description": "Chat を実行", "os": ["mac","win"] }
+              { "type": "keys", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く" },
+              { "type": "keys", "keys": ["Ctrl", "Cmd", "I"], "description": "Chat を実行" }
             ],
             "order": 5
           }

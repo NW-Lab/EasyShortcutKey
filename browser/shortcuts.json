@@ -75,7 +75,7 @@
           { "action": "コマンドパレットを開く", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く", "order": 1 },
           { "action": "クイックオープン", "keys": ["Cmd", "P"], "description": "ファイルをクイックオープン", "order": 2 },
           { "action": "ファイル内シンボルに移動", "keys": ["Cmd", "Shift", "O"], "description": "ファイル内のシンボルに移動", "order": 3 }
-          , { "action": "Open Chat (via Command Palette)", "description": "コマンドパレット経由で Chat を起動", "steps": [ { "type": "keys", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く", "os": ["mac"] }, { "type": "keys", "keys": ["Ctrl", "Cmd", "I"], "description": "Chat を実行", "os": ["mac","win"] } ], "order": 4 }
+          , { "action": "Open Chat (via Command Palette)", "description": "コマンドパレット経由で Chat を起動", "steps": [ { "type": "keys", "keys": ["Cmd", "Shift", "P"], "description": "コマンドパレットを開く" }, { "type": "keys", "keys": ["Ctrl", "Cmd", "I"], "description": "Chat を実行" } ], "order": 4 }
         ]
       }
     ]

@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		22BF698E2E8005C9000C07EA /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 22BF698D2E8005C9000C07EA /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		227EB7032E7F8E5400100809 /* EasyShortcutKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyShortcutKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		22BF698D2E8005C9000C07EA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +37,7 @@
 		227EB6FA2E7F8E5400100809 = {
 			isa = PBXGroup;
 			children = (
+				22BF698D2E8005C9000C07EA /* README.md */,
 				227EB7052E7F8E5400100809 /* EasyShortcutKey */,
 				227EB7042E7F8E5400100809 /* Products */,
 			);
@@ -86,11 +92,12 @@
 				};
 			};
 			buildConfigurationList = 227EB6FE2E7F8E5400100809 /* Build configuration list for PBXProject "EasyShortcutKey" */;
-			developmentRegion = en;
+			developmentRegion = ja;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 227EB6FA2E7F8E5400100809;
 			minimizedProjectReferenceProxies = 1;
@@ -109,6 +116,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22BF698E2E8005C9000C07EA /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +193,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -242,6 +251,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
