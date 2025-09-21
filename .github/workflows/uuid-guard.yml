@@ -42,6 +42,21 @@ jobs:
             echo "No changes from assign_ids.py"
           fi
 
+      - name: Auto-assign IDs on main push (before validate)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          set -e
+          python3 scripts/assign_ids.py --dir config/shortcutJsons --apply || true
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore: auto-assign missing UUIDs (main)"
+            git push
+          else
+            echo "No changes from assign_ids.py on main"
+          fi
+
       - name: Dry-run assign IDs (report)
         run: |
           python3 scripts/assign_ids.py --dir config/shortcutJsons --dry-run || true
@@ -82,20 +97,7 @@ jobs:
           fi
 
 
-      - name: On push to main, auto-assign missing IDs and commit
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          set -e
-          python3 scripts/assign_ids.py --dir config/shortcutJsons --apply || true
-          if ! git diff --quiet; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add -A
-            git commit -m "chore: auto-assign missing UUIDs"
-            git push
-          fi
-
-      - name: On push to main, sync shortcutJsons to iOS
+      - name: On main push, sync shortcutJsons to iOS
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           set -e
