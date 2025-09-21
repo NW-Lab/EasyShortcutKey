@@ -2,7 +2,7 @@
   "appName": "VS Code (Windows)",
   "order": 2,
   "icon": "icons/vscode.png",
-  "version": "1.80+",
+  "version": "1.80+", 
   "groups": [
     {
       "groupName": "Copilot",
