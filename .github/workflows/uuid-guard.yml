@@ -45,6 +45,22 @@ jobs:
             echo "No canonical config/shortcuts.json in base; skipping compare." || true
           fi
 
+      - name: Auto-assign IDs on PRs from same repo
+        if: github.event_name == 'pull_request' && (github.event.pull_request.head.repo.full_name == github.repository)
+        run: |
+          set -e
+          # apply missing ids directly to PR branch and push back
+          python3 scripts/assign_ids.py --dir config/shortcutJsons --apply || true
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore: auto-assign missing UUIDs (CI)"
+            git push origin "${{ github.event.pull_request.head.ref }}"
+          else
+            echo "No changes from assign_ids.py"
+          fi
+
       - name: On push to main, auto-assign missing IDs and commit
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
