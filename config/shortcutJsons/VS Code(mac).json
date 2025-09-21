@@ -28,7 +28,7 @@
         { "action": "取り消し", "keys": ["Cmd", "Z"], "description": "最後の操作を取り消し", "order": 3 },
         { "action": "保存", "keys": ["Cmd", "S"], "description": "ファイルを保存", "order": 4 }
       ]
-    },
+    }, 
     {
       "groupName": "全体",
       "order": 3,
