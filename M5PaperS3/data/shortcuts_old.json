@@ -1,0 +1,112 @@
+{
+  "appName": "EasyShortcutKey M5PaperS3",
+  "version": "1.0",
+  "description": "Default shortcuts for M5PaperS3 e-ink display device",
+  "groups": [
+    {
+      "name": "基本操作",
+      "shortcuts": [
+        {
+          "name": "コピー",
+          "keys": ["ctrl", "c"],
+          "description": "選択範囲をコピー"
+        },
+        {
+          "name": "ペースト",
+          "keys": ["ctrl", "v"],
+          "description": "クリップボードを貼り付け"
+        },
+        {
+          "name": "元に戻す",
+          "keys": ["ctrl", "z"],
+          "description": "最後の操作を元に戻す"
+        },
+        {
+          "name": "やり直し",
+          "keys": ["ctrl", "y"],
+          "description": "元に戻した操作をやり直し"
+        },
+        {
+          "name": "全て選択",
+          "keys": ["ctrl", "a"],
+          "description": "全ての内容を選択"
+        },
+        {
+          "name": "保存",
+          "keys": ["ctrl", "s"],
+          "description": "ファイルを保存"
+        }
+      ]
+    },
+    {
+      "name": "ナビゲーション",
+      "shortcuts": [
+        {
+          "name": "検索",
+          "keys": ["ctrl", "f"],
+          "description": "テキスト検索"
+        },
+        {
+          "name": "置換",
+          "keys": ["ctrl", "h"],
+          "description": "テキスト置換"
+        },
+        {
+          "name": "新しいタブ",
+          "keys": ["ctrl", "t"],
+          "description": "新しいタブを開く"
+        },
+        {
+          "name": "タブを閉じる",
+          "keys": ["ctrl", "w"],
+          "description": "現在のタブを閉じる"
+        },
+        {
+          "name": "ページ更新",
+          "keys": ["f5"],
+          "description": "ページを更新"
+        },
+        {
+          "name": "アドレスバー",
+          "keys": ["ctrl", "l"],
+          "description": "アドレスバーにフォーカス"
+        }
+      ]
+    },
+    {
+      "name": "VS Code",
+      "shortcuts": [
+        {
+          "name": "コマンドパレット",
+          "keys": ["ctrl", "shift", "p"],
+          "description": "コマンドパレットを開く"
+        },
+        {
+          "name": "ファイル検索",
+          "keys": ["ctrl", "p"],
+          "description": "ファイルを検索"
+        },
+        {
+          "name": "サイドバー表示切替",
+          "keys": ["ctrl", "b"],
+          "description": "サイドバーの表示切替"
+        },
+        {
+          "name": "ターミナル表示切替",
+          "keys": ["ctrl", "`"],
+          "description": "ターミナルの表示切替"
+        },
+        {
+          "name": "行コメント切替",
+          "keys": ["ctrl", "/"],
+          "description": "行コメントの切替"
+        },
+        {
+          "name": "フォーマット",
+          "keys": ["shift", "alt", "f"],
+          "description": "コードフォーマット"
+        }
+      ]
+    }
+  ]
+}

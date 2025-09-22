@@ -1,0 +1,134 @@
+[
+  {
+    "appName": "EasyShortcutKey M5PaperS3",
+    "order": 1,
+    "groups": [
+      {
+        "groupName": "基本操作",
+        "order": 1,
+        "shortcuts": [
+          {
+            "action": "コピー",
+            "keys": ["ctrl", "c"],
+            "description": "選択範囲をコピー",
+            "order": 1
+          },
+          {
+            "action": "ペースト",
+            "keys": ["ctrl", "v"],
+            "description": "クリップボードを貼り付け",
+            "order": 2
+          },
+          {
+            "action": "元に戻す",
+            "keys": ["ctrl", "z"],
+            "description": "最後の操作を元に戻す",
+            "order": 3
+          },
+          {
+            "action": "やり直し",
+            "keys": ["ctrl", "y"],
+            "description": "元に戻した操作をやり直し",
+            "order": 4
+          },
+          {
+            "action": "全て選択",
+            "keys": ["ctrl", "a"],
+            "description": "全ての内容を選択",
+            "order": 5
+          },
+          {
+            "action": "保存",
+            "keys": ["ctrl", "s"],
+            "description": "ファイルを保存",
+            "order": 6
+          }
+        ]
+      },
+      {
+        "groupName": "ナビゲーション",
+        "order": 2,
+        "shortcuts": [
+          {
+            "action": "検索",
+            "keys": ["ctrl", "f"],
+            "description": "テキスト検索",
+            "order": 1
+          },
+          {
+            "action": "置換",
+            "keys": ["ctrl", "h"],
+            "description": "テキスト置換",
+            "order": 2
+          },
+          {
+            "action": "新しいタブ",
+            "keys": ["ctrl", "t"],
+            "description": "新しいタブを開く",
+            "order": 3
+          },
+          {
+            "action": "タブを閉じる",
+            "keys": ["ctrl", "w"],
+            "description": "現在のタブを閉じる",
+            "order": 4
+          },
+          {
+            "action": "ページ更新",
+            "keys": ["f5"],
+            "description": "ページを更新",
+            "order": 5
+          },
+          {
+            "action": "アドレスバー",
+            "keys": ["ctrl", "l"],
+            "description": "アドレスバーにフォーカス",
+            "order": 6
+          }
+        ]
+      },
+      {
+        "groupName": "VS Code",
+        "order": 3,
+        "shortcuts": [
+          {
+            "action": "コマンドパレット",
+            "keys": ["ctrl", "shift", "p"],
+            "description": "コマンドパレットを開く",
+            "order": 1
+          },
+          {
+            "action": "ファイル検索",
+            "keys": ["ctrl", "p"],
+            "description": "ファイルを検索",
+            "order": 2
+          },
+          {
+            "action": "サイドバー表示切替",
+            "keys": ["ctrl", "b"],
+            "description": "サイドバーの表示切替",
+            "order": 3
+          },
+          {
+            "action": "ターミナル表示切替",
+            "keys": ["ctrl", "`"],
+            "description": "ターミナルの表示切替",
+            "order": 4
+          },
+          {
+            "action": "行コメント切替",
+            "keys": ["ctrl", "/"],
+            "description": "行コメントの切替",
+            "order": 5
+          },
+          {
+            "action": "フォーマット",
+            "keys": ["shift", "alt", "f"],
+            "description": "コードフォーマット",
+            "order": 6
+          }
+        ]
+      }
+    ]
+  }
+]
