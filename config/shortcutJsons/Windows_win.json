@@ -11,17 +11,26 @@
       "shortcuts": [
         {
           "action": "Copilotを開く",
-          "keys": ["Win", "C"],
+          "keys": [
+            "Win",
+            "C"
+          ],
           "description": "Windows Copilotを開く",
-          "order": 1
+          "order": 1,
+          "id": "e0a5fdbd-7a46-40d2-8c66-631d41afda44"
         },
         {
           "action": "Copilotを音声で起動",
-          "keys": ["Alt", "Space"],
+          "keys": [
+            "Alt",
+            "Space"
+          ],
           "description": "音声でCopilotを起動する",
-          "order": 2
+          "order": 2,
+          "id": "4a0366b4-5180-4c6d-9e69-c39f16d16ffe"
         }
-      ]
+      ],
+      "id": "bae01442-93cf-4572-9e48-d4ce5a070739"
     },
     {
       "groupName": "システム操作",
@@ -30,53 +39,86 @@
       "shortcuts": [
         {
           "action": "スタートメニュー",
-          "keys": ["Win"],
+          "keys": [
+            "Win"
+          ],
           "description": "スタートメニューを開く",
-          "order": 1
+          "order": 1,
+          "id": "8bda2331-5c6c-4756-965c-da7d8fe480d7"
         },
         {
           "action": "設定を開く",
-          "keys": ["Win", "I"],
+          "keys": [
+            "Win",
+            "I"
+          ],
           "description": "Windows設定を開く",
-          "order": 2
+          "order": 2,
+          "id": "8d8340d2-bbd7-4eda-88f3-6e588ce10f2c"
         },
         {
           "action": "エクスプローラーを開く",
-          "keys": ["Win", "E"],
+          "keys": [
+            "Win",
+            "E"
+          ],
           "description": "ファイルエクスプローラーを開く",
-          "order": 3
+          "order": 3,
+          "id": "46e29e17-5611-4e74-997b-db3c0c1cc5f3"
         },
         {
           "action": "ファイル名を指定して実行",
-          "keys": ["Win", "R"],
+          "keys": [
+            "Win",
+            "R"
+          ],
           "description": "「ファイル名を指定して実行」ダイアログを開く",
-          "order": 4
+          "order": 4,
+          "id": "417dbc8f-21a6-40bf-81c4-fd7552c792bc"
         },
         {
           "action": "検索",
-          "keys": ["Win", "S"],
+          "keys": [
+            "Win",
+            "S"
+          ],
           "description": "Windows検索を開く",
-          "order": 5
+          "order": 5,
+          "id": "29a24cfa-993b-4cd8-a0e8-9ccfdf620ecf"
         },
         {
           "action": "デスクトップ表示",
-          "keys": ["Win", "D"],
+          "keys": [
+            "Win",
+            "D"
+          ],
           "description": "デスクトップを表示/非表示する",
-          "order": 6
+          "order": 6,
+          "id": "085444ca-ad00-47c5-bd76-6fab2b84d2c6"
         },
         {
           "action": "PCをロック",
-          "keys": ["Win", "L"],
+          "keys": [
+            "Win",
+            "L"
+          ],
           "description": "PCをロックする",
-          "order": 7
+          "order": 7,
+          "id": "9485e2a8-6229-4450-879a-e96332366cd1"
         },
         {
           "action": "タスクマネージャー",
-          "keys": ["Ctrl", "Shift", "Esc"],
+          "keys": [
+            "Ctrl",
+            "Shift",
+            "Esc"
+          ],
           "description": "タスクマネージャーを開く",
-          "order": 8
+          "order": 8,
+          "id": "fd6b304e-c29f-4376-8b79-40ec7d294fdb"
         }
-      ]
+      ],
+      "id": "e2c7b7ec-453f-45b6-bded-7e1acf939686"
     },
     {
       "groupName": "ウィンドウ管理",
@@ -85,47 +127,78 @@
       "shortcuts": [
         {
           "action": "アプリ切り替え",
-          "keys": ["Alt", "Tab"],
+          "keys": [
+            "Alt",
+            "Tab"
+          ],
           "description": "開いているアプリケーション間を切り替える",
-          "order": 1
+          "order": 1,
+          "id": "1e43df3c-dcf7-4c1e-a5a8-2e4408f53e2e"
         },
         {
           "action": "ウィンドウを左半分にスナップ",
-          "keys": ["Win", "←"],
+          "keys": [
+            "Win",
+            "←"
+          ],
           "description": "アクティブウィンドウを画面の左半分にスナップする",
-          "order": 2
+          "order": 2,
+          "id": "1e93bd25-9397-4ff8-b777-aee56f300fc8"
         },
         {
           "action": "ウィンドウを右半分にスナップ",
-          "keys": ["Win", "→"],
+          "keys": [
+            "Win",
+            "→"
+          ],
           "description": "アクティブウィンドウを画面の右半分にスナップする",
-          "order": 3
+          "order": 3,
+          "id": "4bd6e769-2d86-4e8e-ac8e-2c65ebdb0b7d"
         },
         {
           "action": "ウィンドウを最大化",
-          "keys": ["Win", "↑"],
+          "keys": [
+            "Win",
+            "↑"
+          ],
           "description": "アクティブウィンドウを最大化する",
-          "order": 4
+          "order": 4,
+          "id": "5638a9df-6eb0-4e1a-970f-4cfaea2a2d43"
         },
         {
           "action": "ウィンドウを最小化",
-          "keys": ["Win", "↓"],
+          "keys": [
+            "Win",
+            "↓"
+          ],
           "description": "アクティブウィンドウを最小化する",
-          "order": 5
+          "order": 5,
+          "id": "9be35a5e-536d-4644-92f4-6fbc28a6f5fc"
         },
         {
           "action": "仮想デスクトップ作成",
-          "keys": ["Win", "Ctrl", "D"],
+          "keys": [
+            "Win",
+            "Ctrl",
+            "D"
+          ],
           "description": "新しい仮想デスクトップを作成する",
-          "order": 6
+          "order": 6,
+          "id": "e3b88f65-bb34-49d7-8c28-fce887de9d68"
         },
         {
           "action": "仮想デスクトップ切り替え",
-          "keys": ["Win", "Ctrl", "←"],
+          "keys": [
+            "Win",
+            "Ctrl",
+            "←"
+          ],
           "description": "前の仮想デスクトップに切り替える",
-          "order": 7
+          "order": 7,
+          "id": "d2d7d4e3-1d1f-41b3-9ea1-8a697501c936"
         }
-      ]
+      ],
+      "id": "d0680cfe-4d3a-4b48-acbd-33c7a3c0da0e"
     },
     {
       "groupName": "スクリーンショット・録画",
@@ -134,23 +207,36 @@
       "shortcuts": [
         {
           "action": "Snipping Tool",
-          "keys": ["Win", "Shift", "S"],
+          "keys": [
+            "Win",
+            "Shift",
+            "S"
+          ],
           "description": "Snipping Toolを開いて範囲選択スクリーンショットを撮る",
-          "order": 1
+          "order": 1,
+          "id": "b1f9669b-58e6-4a64-824e-bfe521f6ace0"
         },
         {
           "action": "全画面スクリーンショット",
-          "keys": ["PrtScn"],
+          "keys": [
+            "PrtScn"
+          ],
           "description": "全画面のスクリーンショットをクリップボードにコピーする",
-          "order": 2
+          "order": 2,
+          "id": "81a3b4e6-aae6-4c1b-aafb-377f81d534a1"
         },
         {
           "action": "アクティブウィンドウのスクリーンショット",
-          "keys": ["Alt", "PrtScn"],
+          "keys": [
+            "Alt",
+            "PrtScn"
+          ],
           "description": "アクティブウィンドウのスクリーンショットをクリップボードにコピーする",
-          "order": 3
+          "order": 3,
+          "id": "98cee370-c7f8-46bb-a8af-122e914f7d98"
         }
-      ]
+      ],
+      "id": "cba7f74f-431b-4503-931d-dde00f0feb65"
     },
     {
       "groupName": "基本編集",
@@ -159,41 +245,67 @@
       "shortcuts": [
         {
           "action": "コピー",
-          "keys": ["Ctrl", "C"],
+          "keys": [
+            "Ctrl",
+            "C"
+          ],
           "description": "選択したテキストをコピーする",
-          "order": 1
+          "order": 1,
+          "id": "55b7e158-feff-4c13-b276-4e98ea434b5d"
         },
         {
           "action": "貼り付け",
-          "keys": ["Ctrl", "V"],
+          "keys": [
+            "Ctrl",
+            "V"
+          ],
           "description": "クリップボードの内容を貼り付ける",
-          "order": 2
+          "order": 2,
+          "id": "bc1c5683-6397-4a5b-b643-39092113adeb"
         },
         {
           "action": "切り取り",
-          "keys": ["Ctrl", "X"],
+          "keys": [
+            "Ctrl",
+            "X"
+          ],
           "description": "選択したテキストを切り取る",
-          "order": 3
+          "order": 3,
+          "id": "93af6388-2612-46a0-9301-5c0d2c1d2351"
         },
         {
           "action": "元に戻す",
-          "keys": ["Ctrl", "Z"],
+          "keys": [
+            "Ctrl",
+            "Z"
+          ],
           "description": "最後の操作を元に戻す",
-          "order": 4
+          "order": 4,
+          "id": "a1a8f81f-c51d-4119-bf14-3890cf65e072"
         },
         {
           "action": "やり直し",
-          "keys": ["Ctrl", "Y"],
+          "keys": [
+            "Ctrl",
+            "Y"
+          ],
           "description": "元に戻した操作をやり直す",
-          "order": 5
+          "order": 5,
+          "id": "7120d497-96cc-46cd-8438-a4f12405fa0a"
         },
         {
           "action": "すべて選択",
-          "keys": ["Ctrl", "A"],
+          "keys": [
+            "Ctrl",
+            "A"
+          ],
           "description": "すべてのテキストを選択する",
-          "order": 6
+          "order": 6,
+          "id": "32a5075d-d3ad-4543-9d06-ede34a6beaa9"
         }
-      ]
+      ],
+      "id": "7fd04502-ef44-42b5-b3c8-c3b8a47aa2e9"
     }
-  ]
+  ],
+  "id": "683a672b-5bc3-4329-b507-ccc0c02bae40"
 }

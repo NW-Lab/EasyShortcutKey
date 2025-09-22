@@ -10,11 +10,15 @@
       "shortcuts": [
         {
           "action": "パネルを開く",
-          "keys": ["Copilot"],
+          "keys": [
+            "Copilot"
+          ],
           "description": "Microsoft 365 Copilotパネルを開く",
-          "order": 1
+          "order": 1,
+          "id": "67986051-1a58-467d-8f3d-99fed0fb8f60"
         }
-      ]
+      ],
+      "id": "8d3fa4ce-d728-4f19-a01d-512e99d6db67"
     },
     {
       "groupName": "基本操作",
@@ -23,35 +27,56 @@
       "shortcuts": [
         {
           "action": "新規",
-          "keys": ["Cmd", "N"],
+          "keys": [
+            "Cmd",
+            "N"
+          ],
           "description": "新しいワークブックを作成する",
-          "order": 1
+          "order": 1,
+          "id": "fc883463-0e72-4257-8d6d-ff3e76c95f3f"
         },
         {
           "action": "開く",
-          "keys": ["Cmd", "O"],
+          "keys": [
+            "Cmd",
+            "O"
+          ],
           "description": "既存のワークブックを開く",
-          "order": 2
+          "order": 2,
+          "id": "4c6ac33b-51f1-4fcd-a5ae-1f241b0f7056"
         },
         {
           "action": "保存",
-          "keys": ["Cmd", "S"],
+          "keys": [
+            "Cmd",
+            "S"
+          ],
           "description": "ワークブックを保存する",
-          "order": 3
+          "order": 3,
+          "id": "b0c098cd-835f-42f3-a1ec-4027bcb2ecd9"
         },
         {
           "action": "検索",
-          "keys": ["Cmd", "F"],
+          "keys": [
+            "Cmd",
+            "F"
+          ],
           "description": "ワークシート内でデータを検索する",
-          "order": 4
+          "order": 4,
+          "id": "325677f3-f064-4652-92fe-28a898971a56"
         },
         {
           "action": "置換",
-          "keys": ["Ctrl", "H"],
+          "keys": [
+            "Ctrl",
+            "H"
+          ],
           "description": "ワークシート内でデータを置換する",
-          "order": 5
+          "order": 5,
+          "id": "b2872f08-0e45-4263-9b66-58b3e27d5d36"
         }
-      ]
+      ],
+      "id": "5fdd0126-02eb-4aeb-8919-cf415ce4eb87"
     },
     {
       "groupName": "セル操作・編集",
@@ -60,35 +85,56 @@
       "shortcuts": [
         {
           "action": "セル編集",
-          "keys": ["F2"],
+          "keys": [
+            "F2"
+          ],
           "description": "選択したセルを編集モードにする",
-          "order": 1
+          "order": 1,
+          "id": "eaa19c76-fb56-4e21-bdb8-b91a6d53b9bb"
         },
         {
           "action": "現在の日付",
-          "keys": ["Cmd", ";"],
+          "keys": [
+            "Cmd",
+            ";"
+          ],
           "description": "現在の日付を入力する",
-          "order": 2
+          "order": 2,
+          "id": "b890ef93-c630-4a4b-9a96-d63da88daf4b"
         },
         {
           "action": "現在の時刻",
-          "keys": ["Cmd", "Shift", ";"],
+          "keys": [
+            "Cmd",
+            "Shift",
+            ";"
+          ],
           "description": "現在の時刻を入力する",
-          "order": 3
+          "order": 3,
+          "id": "36df0b79-a4f5-48f5-8476-a13a4e15b70b"
         },
         {
           "action": "セル内改行",
-          "keys": ["Option", "Enter"],
+          "keys": [
+            "Option",
+            "Enter"
+          ],
           "description": "セル内で改行する",
-          "order": 4
+          "order": 4,
+          "id": "1fd1d394-a313-47bc-b0ef-49485de4f98a"
         },
         {
           "action": "オートフィル（下方向）",
-          "keys": ["Cmd", "D"],
+          "keys": [
+            "Cmd",
+            "D"
+          ],
           "description": "上のセルの内容を下方向にコピーする",
-          "order": 5
+          "order": 5,
+          "id": "6a99552d-0807-4c35-a968-95c1748d2c33"
         }
-      ]
+      ],
+      "id": "cd0e05d3-13fe-4d0f-b9bc-24e6ab745fed"
     },
     {
       "groupName": "ナビゲーション",
@@ -97,29 +143,46 @@
       "shortcuts": [
         {
           "action": "端に移動",
-          "keys": ["Cmd", "←"],
+          "keys": [
+            "Cmd",
+            "←"
+          ],
           "description": "データ範囲の左端に移動する",
-          "order": 1
+          "order": 1,
+          "id": "81484484-bace-48e0-9742-eedcf0368c58"
         },
         {
           "action": "シートの先頭 (A1)",
-          "keys": ["Cmd", "Home"],
+          "keys": [
+            "Cmd",
+            "Home"
+          ],
           "description": "ワークシートの先頭（A1セル）に移動する",
-          "order": 2
+          "order": 2,
+          "id": "6d2f86f1-993b-49fa-b0ed-d9bed5e0eab8"
         },
         {
           "action": "最後のセル",
-          "keys": ["Cmd", "End"],
+          "keys": [
+            "Cmd",
+            "End"
+          ],
           "description": "データが入力されている最後のセルに移動する",
-          "order": 3
+          "order": 3,
+          "id": "f37388be-b195-4660-8dd6-1bf83935f5dc"
         },
         {
           "action": "ワークシート切替",
-          "keys": ["Cmd", "Page Up"],
+          "keys": [
+            "Cmd",
+            "Page Up"
+          ],
           "description": "前のワークシートに切り替える",
-          "order": 4
+          "order": 4,
+          "id": "b63b67e6-d739-406f-acde-19dbc2d195d2"
         }
-      ]
+      ],
+      "id": "7006fa18-35ce-4650-b09a-876e180d5e52"
     },
     {
       "groupName": "書式設定・表示",
@@ -128,35 +191,57 @@
       "shortcuts": [
         {
           "action": "セル書式設定",
-          "keys": ["Cmd", "1"],
+          "keys": [
+            "Cmd",
+            "1"
+          ],
           "description": "セルの書式設定ダイアログを開く",
-          "order": 1
+          "order": 1,
+          "id": "8d912e6a-ca05-4608-9b74-6b84172bf72f"
         },
         {
           "action": "太字",
-          "keys": ["Cmd", "B"],
+          "keys": [
+            "Cmd",
+            "B"
+          ],
           "description": "選択したセルのテキストを太字にする",
-          "order": 2
+          "order": 2,
+          "id": "791bca80-42ee-430b-a64f-757db4f1501e"
         },
         {
           "action": "行を非表示",
-          "keys": ["Ctrl", "9"],
+          "keys": [
+            "Ctrl",
+            "9"
+          ],
           "description": "選択した行を非表示にする",
-          "order": 3
+          "order": 3,
+          "id": "df95ee0e-ab18-4e4e-90c1-c909083a614c"
         },
         {
           "action": "列を非表示",
-          "keys": ["Ctrl", "0"],
+          "keys": [
+            "Ctrl",
+            "0"
+          ],
           "description": "選択した列を非表示にする",
-          "order": 4
+          "order": 4,
+          "id": "3be45f4e-60cc-4fb5-8637-ebaa3cfd5d91"
         },
         {
           "action": "行を挿入",
-          "keys": ["Cmd", "Shift", "+"],
+          "keys": [
+            "Cmd",
+            "Shift",
+            "+"
+          ],
           "description": "新しい行を挿入する",
-          "order": 5
+          "order": 5,
+          "id": "bbbdd098-6a47-4668-9adb-b4bac10e7d61"
         }
-      ]
+      ],
+      "id": "3053cb60-8633-4b49-aae9-ca1ec2c0d72d"
     },
     {
       "groupName": "基本編集",
@@ -165,41 +250,68 @@
       "shortcuts": [
         {
           "action": "コピー",
-          "keys": ["Cmd", "C"],
+          "keys": [
+            "Cmd",
+            "C"
+          ],
           "description": "選択したセルをコピーする",
-          "order": 1
+          "order": 1,
+          "id": "0d39c6a0-3d37-4568-a2bf-d6cdcba1f524"
         },
         {
           "action": "貼付け",
-          "keys": ["Cmd", "V"],
+          "keys": [
+            "Cmd",
+            "V"
+          ],
           "description": "クリップボードの内容を貼り付ける",
-          "order": 2
+          "order": 2,
+          "id": "2ea58e30-b1c3-4ed3-b74c-10694d93aaa1"
         },
         {
           "action": "切取り",
-          "keys": ["Cmd", "X"],
+          "keys": [
+            "Cmd",
+            "X"
+          ],
           "description": "選択したセルを切り取る",
-          "order": 3
+          "order": 3,
+          "id": "d803dc64-bb21-433b-9c3b-a4c29714e3a3"
         },
         {
           "action": "元に戻す",
-          "keys": ["Cmd", "Z"],
+          "keys": [
+            "Cmd",
+            "Z"
+          ],
           "description": "最後の操作を元に戻す",
-          "order": 4
+          "order": 4,
+          "id": "b7c1c12b-7af7-42dc-9f0a-c247e801c01b"
         },
         {
           "action": "やり直し",
-          "keys": ["Cmd", "Shift", "Z"],
+          "keys": [
+            "Cmd",
+            "Shift",
+            "Z"
+          ],
           "description": "元に戻した操作をやり直す",
-          "order": 5
+          "order": 5,
+          "id": "8aa9f32f-cdda-4de4-868c-7ae3ac7eef90"
         },
         {
           "action": "すべて選択",
-          "keys": ["Cmd", "A"],
+          "keys": [
+            "Cmd",
+            "A"
+          ],
           "description": "ワークシート内のすべてのセルを選択する",
-          "order": 6
+          "order": 6,
+          "id": "aee3edcd-8ec0-4b93-8396-cb7febe8fb58"
         }
-      ]
+      ],
+      "id": "0dc3beb6-063d-40de-a67d-3a76ca0f44f6"
     }
-  ]
+  ],
+  "id": "4a7ade5f-649c-4d24-841f-0173bede9304"
 }

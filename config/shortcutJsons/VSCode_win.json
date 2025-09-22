@@ -11,53 +11,85 @@
       "shortcuts": [
         {
           "action": "チャットビューを開く",
-          "keys": ["Ctrl", "Alt", "I"],
+          "keys": [
+            "Ctrl",
+            "Alt",
+            "I"
+          ],
           "description": "GitHub Copilotのチャットビューを開く",
-          "order": 1
+          "order": 1,
+          "id": "9bb046c2-88f7-4341-9a87-037a8cd4c6bc"
         },
         {
           "action": "インラインチャット",
-          "keys": ["Ctrl", "I"],
+          "keys": [
+            "Ctrl",
+            "I"
+          ],
           "description": "インラインでCopilotチャットを開始する",
-          "order": 2
+          "order": 2,
+          "id": "e17c9693-f3b5-4768-ad93-1a999a7fdfe6"
         },
         {
           "action": "提案を承諾",
-          "keys": ["Tab"],
+          "keys": [
+            "Tab"
+          ],
           "description": "Copilotの提案を承諾する",
-          "order": 3
+          "order": 3,
+          "id": "e695d3d2-2ca8-4022-84b3-1fcf21d36dbc"
         },
         {
           "action": "部分的な承諾",
-          "keys": ["Ctrl", "→"],
+          "keys": [
+            "Ctrl",
+            "→"
+          ],
           "description": "Copilotの提案を単語単位で承諾する",
-          "order": 4
+          "order": 4,
+          "id": "d74367f3-2ae4-4dee-9041-90fc2e1b9d19"
         },
         {
           "action": "次の提案",
-          "keys": ["Alt", "]"],
+          "keys": [
+            "Alt",
+            "]"
+          ],
           "description": "次のCopilot提案を表示する",
-          "order": 5
+          "order": 5,
+          "id": "96767a9f-caa3-47c0-ab8c-9df419b05f23"
         },
         {
           "action": "前の提案",
-          "keys": ["Alt", "["],
+          "keys": [
+            "Alt",
+            "["
+          ],
           "description": "前のCopilot提案を表示する",
-          "order": 6
+          "order": 6,
+          "id": "0cfdaba5-9be6-44da-9b6d-b38f2e45ad73"
         },
         {
           "action": "提案をトリガー",
-          "keys": ["Alt", "\\"],
+          "keys": [
+            "Alt",
+            "\\"
+          ],
           "description": "インライン提案を手動でトリガーする",
-          "order": 7
+          "order": 7,
+          "id": "f1f22436-b3ad-4071-837c-b02053240445"
         },
         {
           "action": "提案を拒否",
-          "keys": ["Esc"],
+          "keys": [
+            "Esc"
+          ],
           "description": "Copilotの提案を拒否する",
-          "order": 8
+          "order": 8,
+          "id": "79cb97ed-2f00-48e0-aaf0-18e25844e214"
         }
-      ]
+      ],
+      "id": "448ed9ba-c2cf-420d-ad3b-e129c8eb9485"
     },
     {
       "groupName": "基本操作・ナビゲーション",
@@ -66,53 +98,90 @@
       "shortcuts": [
         {
           "action": "コマンドパレット",
-          "keys": ["Ctrl", "Shift", "P"],
+          "keys": [
+            "Ctrl",
+            "Shift",
+            "P"
+          ],
           "description": "コマンドパレットを開く",
-          "order": 1
+          "order": 1,
+          "id": "e6a1589b-1ab1-4dd1-969d-f45447b77388"
         },
         {
           "action": "ファイルを開く",
-          "keys": ["Ctrl", "P"],
+          "keys": [
+            "Ctrl",
+            "P"
+          ],
           "description": "ファイルをクイックオープンする",
-          "order": 2
+          "order": 2,
+          "id": "7103e480-999e-4f13-b90a-2b1f65a8636e"
         },
         {
           "action": "ファイル内検索",
-          "keys": ["Ctrl", "F"],
+          "keys": [
+            "Ctrl",
+            "F"
+          ],
           "description": "現在のファイル内で検索する",
-          "order": 3
+          "order": 3,
+          "id": "f85322c2-4207-4f4d-aa48-a260647a7b31"
         },
         {
           "action": "ファイル内置換",
-          "keys": ["Ctrl", "H"],
+          "keys": [
+            "Ctrl",
+            "H"
+          ],
           "description": "現在のファイル内で置換する",
-          "order": 4
+          "order": 4,
+          "id": "2636111e-c224-4138-8cfa-6d3de715d01f"
         },
         {
           "action": "全体検索",
-          "keys": ["Ctrl", "Shift", "F"],
+          "keys": [
+            "Ctrl",
+            "Shift",
+            "F"
+          ],
           "description": "ワークスペース全体で検索する",
-          "order": 5
+          "order": 5,
+          "id": "e151cf1b-7b17-4673-ab3d-ffd7e3f5755b"
         },
         {
           "action": "全体置換",
-          "keys": ["Ctrl", "Shift", "H"],
+          "keys": [
+            "Ctrl",
+            "Shift",
+            "H"
+          ],
           "description": "ワークスペース全体で置換する",
-          "order": 6
+          "order": 6,
+          "id": "89b021dd-b0cd-4ef2-8e84-2fe5af4b806c"
         },
         {
           "action": "行番号に移動",
-          "keys": ["Ctrl", "G"],
+          "keys": [
+            "Ctrl",
+            "G"
+          ],
           "description": "指定した行番号に移動する",
-          "order": 7
+          "order": 7,
+          "id": "7684d947-b40b-44e4-947d-b1ddf6596de4"
         },
         {
           "action": "シンボルに移動",
-          "keys": ["Ctrl", "Shift", "O"],
+          "keys": [
+            "Ctrl",
+            "Shift",
+            "O"
+          ],
           "description": "ファイル内のシンボルに移動する",
-          "order": 8
+          "order": 8,
+          "id": "bb63fd8a-8353-4710-8e76-4df5b2cb2d99"
         }
-      ]
+      ],
+      "id": "1bf557fb-61cd-46db-b162-24029c2fe9d0"
     },
     {
       "groupName": "エディタ操作・編集",
@@ -121,53 +190,89 @@
       "shortcuts": [
         {
           "action": "行の複製",
-          "keys": ["Alt", "Shift", "↑"],
+          "keys": [
+            "Alt",
+            "Shift",
+            "↑"
+          ],
           "description": "現在の行を上に複製する",
-          "order": 1
+          "order": 1,
+          "id": "0f7ad179-2660-4909-b03f-044b20a401db"
         },
         {
           "action": "行の移動",
-          "keys": ["Alt", "↑"],
+          "keys": [
+            "Alt",
+            "↑"
+          ],
           "description": "現在の行を上に移動する",
-          "order": 2
+          "order": 2,
+          "id": "5d3ca768-f24e-459b-b63a-c755e9809e04"
         },
         {
           "action": "マルチカーソル",
-          "keys": ["Ctrl", "D"],
+          "keys": [
+            "Ctrl",
+            "D"
+          ],
           "description": "同じ単語を選択してマルチカーソルを作成する",
-          "order": 3
+          "order": 3,
+          "id": "8f689edb-870a-4c97-90fc-c4bd042f4592"
         },
         {
           "action": "全て選択してマルチカーソル",
-          "keys": ["Ctrl", "Shift", "L"],
+          "keys": [
+            "Ctrl",
+            "Shift",
+            "L"
+          ],
           "description": "選択した単語の全ての出現箇所にマルチカーソルを作成する",
-          "order": 4
+          "order": 4,
+          "id": "edaab415-4c2c-414e-bc02-5dd904f5af5a"
         },
         {
           "action": "行コメント切り替え",
-          "keys": ["Ctrl", "/"],
+          "keys": [
+            "Ctrl",
+            "/"
+          ],
           "description": "行コメントの切り替えを行う",
-          "order": 5
+          "order": 5,
+          "id": "6c0f77a6-9dbb-4054-9762-322775d20c06"
         },
         {
           "action": "ブロックコメント切り替え",
-          "keys": ["Alt", "Shift", "A"],
+          "keys": [
+            "Alt",
+            "Shift",
+            "A"
+          ],
           "description": "ブロックコメントの切り替えを行う",
-          "order": 6
+          "order": 6,
+          "id": "f2a86e07-44ef-43f9-b807-4988ea9cf8c5"
         },
         {
           "action": "インデント",
-          "keys": ["Ctrl", "]"],
+          "keys": [
+            "Ctrl",
+            "]"
+          ],
           "description": "選択した行をインデントする",
-          "order": 7
+          "order": 7,
+          "id": "dec2faf7-dc95-4d3b-b6be-8746e3b236e8"
         },
         {
           "action": "アウトデント",
-          "keys": ["Ctrl", "["],
+          "keys": [
+            "Ctrl",
+            "["
+          ],
           "description": "選択した行のインデントを減らす",
-          "order": 8
+          "order": 8,
+          "id": "14eab8cc-5196-4468-ad6c-8a5a3655712c"
         }
-      ]
+      ],
+      "id": "3bbc0f7a-5a83-4293-924a-8181af5d5af8"
     },
     {
       "groupName": "ウィンドウ・パネル管理",
@@ -176,35 +281,57 @@
       "shortcuts": [
         {
           "action": "サイドバー表示切り替え",
-          "keys": ["Ctrl", "B"],
+          "keys": [
+            "Ctrl",
+            "B"
+          ],
           "description": "サイドバーの表示/非表示を切り替える",
-          "order": 1
+          "order": 1,
+          "id": "2b88b9cc-7fb7-4e37-9ae1-d84144183420"
         },
         {
           "action": "ターミナル表示切り替え",
-          "keys": ["Ctrl", "`"],
+          "keys": [
+            "Ctrl",
+            "`"
+          ],
           "description": "ターミナルの表示/非表示を切り替える",
-          "order": 2
+          "order": 2,
+          "id": "94a63f57-83b7-4e49-9bb6-b9c28566260c"
         },
         {
           "action": "エディタ分割",
-          "keys": ["Ctrl", "\\"],
+          "keys": [
+            "Ctrl",
+            "\\"
+          ],
           "description": "エディタを分割する",
-          "order": 3
+          "order": 3,
+          "id": "df2eb56e-172f-42ae-a02f-4029d87b2699"
         },
         {
           "action": "エディタ間移動",
-          "keys": ["Ctrl", "1"],
+          "keys": [
+            "Ctrl",
+            "1"
+          ],
           "description": "1番目のエディタに移動する",
-          "order": 4
+          "order": 4,
+          "id": "5614adce-bb31-420c-9782-909b6ccb1e61"
         },
         {
           "action": "Zen Mode",
-          "keys": ["Ctrl", "K", "Z"],
+          "keys": [
+            "Ctrl",
+            "K",
+            "Z"
+          ],
           "description": "集中モード（Zen Mode）に切り替える",
-          "order": 5
+          "order": 5,
+          "id": "c5db9342-7414-4142-bfba-eec4e4aec9c3"
         }
-      ]
+      ],
+      "id": "58635c86-17af-4b73-9078-197ee600b695"
     },
     {
       "groupName": "基本編集",
@@ -213,47 +340,77 @@
       "shortcuts": [
         {
           "action": "コピー",
-          "keys": ["Ctrl", "C"],
+          "keys": [
+            "Ctrl",
+            "C"
+          ],
           "description": "選択したテキストをコピーする",
-          "order": 1
+          "order": 1,
+          "id": "98383294-1e35-4b52-aab8-b51e32b5c3af"
         },
         {
           "action": "貼り付け",
-          "keys": ["Ctrl", "V"],
+          "keys": [
+            "Ctrl",
+            "V"
+          ],
           "description": "クリップボードの内容を貼り付ける",
-          "order": 2
+          "order": 2,
+          "id": "4354163e-5959-4b70-af28-daf5b244bee1"
         },
         {
           "action": "切り取り",
-          "keys": ["Ctrl", "X"],
+          "keys": [
+            "Ctrl",
+            "X"
+          ],
           "description": "選択したテキストを切り取る",
-          "order": 3
+          "order": 3,
+          "id": "1b3b05aa-7c95-46a6-8709-031a8a571344"
         },
         {
           "action": "元に戻す",
-          "keys": ["Ctrl", "Z"],
+          "keys": [
+            "Ctrl",
+            "Z"
+          ],
           "description": "最後の操作を元に戻す",
-          "order": 4
+          "order": 4,
+          "id": "a1df3069-deb2-4c57-adc6-999d8b41f63a"
         },
         {
           "action": "やり直し",
-          "keys": ["Ctrl", "Y"],
+          "keys": [
+            "Ctrl",
+            "Y"
+          ],
           "description": "元に戻した操作をやり直す",
-          "order": 5
+          "order": 5,
+          "id": "2683dd87-a448-4777-bef8-360b5e84d04f"
         },
         {
           "action": "すべて選択",
-          "keys": ["Ctrl", "A"],
+          "keys": [
+            "Ctrl",
+            "A"
+          ],
           "description": "すべてのテキストを選択する",
-          "order": 6
+          "order": 6,
+          "id": "81fb5f9f-ef37-4c9f-9aed-a2cc5cb41de5"
         },
         {
           "action": "保存",
-          "keys": ["Ctrl", "S"],
+          "keys": [
+            "Ctrl",
+            "S"
+          ],
           "description": "ファイルを保存する",
-          "order": 7
+          "order": 7,
+          "id": "67173cec-cabd-4705-bd85-6c6b4f5e7732"
         }
-      ]
+      ],
+      "id": "799184bc-f172-4e28-ade1-afde2548716e"
     }
-  ]
+  ],
+  "id": "72fc1b9f-2ba6-4ed7-ba07-cbc09d043f1d"
 }
