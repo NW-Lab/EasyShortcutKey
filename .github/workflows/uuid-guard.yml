@@ -177,6 +177,30 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
+      - name: Debug sync information
+        run: |
+          echo "=== Debug Info ==="
+          echo "Event: ${{ github.event_name }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Head repo (PR): ${{ github.event.pull_request.head.repo.full_name || 'N/A' }}"
+          echo ""
+          echo "=== Directory Contents ==="
+          echo "config/shortcutJsons:"
+          ls -la config/shortcutJsons/ || echo "Directory not found"
+          echo ""
+          echo "config/ShotycutJsons_en:"
+          ls -la config/ShotycutJsons_en/ || echo "Directory not found"
+          echo ""
+          echo "iOS/EasyShortcutKey/shortcutJsons:"
+          ls -la iOS/EasyShortcutKey/shortcutJsons/ || echo "Directory not found"
+          echo ""
+          echo "iOS/EasyShortcutKey/shortcutJsons_en:"
+          ls -la iOS/EasyShortcutKey/shortcutJsons_en/ || echo "Directory not found"
+          echo ""
+          echo "=== Git Status ==="
+          git status --porcelain || echo "No changes detected"
+
       - name: On main push, sync shortcutJsons to iOS
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
