@@ -1,0 +1,199 @@
+{
+  "appName": "Windows 11",
+  "order": 2,
+  "icon": "icons/windows.png",
+  "version": "11",
+  "groups": [
+    {
+      "groupName": "AI機能 (Windows Copilot)",
+      "order": 1,
+      "description": "AI支援によるシステム操作とサポート",
+      "shortcuts": [
+        {
+          "action": "Copilotを開く",
+          "keys": ["Win", "C"],
+          "description": "Windows Copilotを開く",
+          "order": 1
+        },
+        {
+          "action": "Copilotを音声で起動",
+          "keys": ["Alt", "Space"],
+          "description": "音声でCopilotを起動する",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "groupName": "システム操作",
+      "order": 2,
+      "description": "基本的なシステム操作",
+      "shortcuts": [
+        {
+          "action": "スタートメニュー",
+          "keys": ["Win"],
+          "description": "スタートメニューを開く",
+          "order": 1
+        },
+        {
+          "action": "設定を開く",
+          "keys": ["Win", "I"],
+          "description": "Windows設定を開く",
+          "order": 2
+        },
+        {
+          "action": "エクスプローラーを開く",
+          "keys": ["Win", "E"],
+          "description": "ファイルエクスプローラーを開く",
+          "order": 3
+        },
+        {
+          "action": "ファイル名を指定して実行",
+          "keys": ["Win", "R"],
+          "description": "「ファイル名を指定して実行」ダイアログを開く",
+          "order": 4
+        },
+        {
+          "action": "検索",
+          "keys": ["Win", "S"],
+          "description": "Windows検索を開く",
+          "order": 5
+        },
+        {
+          "action": "デスクトップ表示",
+          "keys": ["Win", "D"],
+          "description": "デスクトップを表示/非表示する",
+          "order": 6
+        },
+        {
+          "action": "PCをロック",
+          "keys": ["Win", "L"],
+          "description": "PCをロックする",
+          "order": 7
+        },
+        {
+          "action": "タスクマネージャー",
+          "keys": ["Ctrl", "Shift", "Esc"],
+          "description": "タスクマネージャーを開く",
+          "order": 8
+        }
+      ]
+    },
+    {
+      "groupName": "ウィンドウ管理",
+      "order": 3,
+      "description": "ウィンドウの配置と管理",
+      "shortcuts": [
+        {
+          "action": "アプリ切り替え",
+          "keys": ["Alt", "Tab"],
+          "description": "開いているアプリケーション間を切り替える",
+          "order": 1
+        },
+        {
+          "action": "ウィンドウを左半分にスナップ",
+          "keys": ["Win", "←"],
+          "description": "アクティブウィンドウを画面の左半分にスナップする",
+          "order": 2
+        },
+        {
+          "action": "ウィンドウを右半分にスナップ",
+          "keys": ["Win", "→"],
+          "description": "アクティブウィンドウを画面の右半分にスナップする",
+          "order": 3
+        },
+        {
+          "action": "ウィンドウを最大化",
+          "keys": ["Win", "↑"],
+          "description": "アクティブウィンドウを最大化する",
+          "order": 4
+        },
+        {
+          "action": "ウィンドウを最小化",
+          "keys": ["Win", "↓"],
+          "description": "アクティブウィンドウを最小化する",
+          "order": 5
+        },
+        {
+          "action": "仮想デスクトップ作成",
+          "keys": ["Win", "Ctrl", "D"],
+          "description": "新しい仮想デスクトップを作成する",
+          "order": 6
+        },
+        {
+          "action": "仮想デスクトップ切り替え",
+          "keys": ["Win", "Ctrl", "←"],
+          "description": "前の仮想デスクトップに切り替える",
+          "order": 7
+        }
+      ]
+    },
+    {
+      "groupName": "スクリーンショット・録画",
+      "order": 4,
+      "description": "画面キャプチャ機能",
+      "shortcuts": [
+        {
+          "action": "Snipping Tool",
+          "keys": ["Win", "Shift", "S"],
+          "description": "Snipping Toolを開いて範囲選択スクリーンショットを撮る",
+          "order": 1
+        },
+        {
+          "action": "全画面スクリーンショット",
+          "keys": ["PrtScn"],
+          "description": "全画面のスクリーンショットをクリップボードにコピーする",
+          "order": 2
+        },
+        {
+          "action": "アクティブウィンドウのスクリーンショット",
+          "keys": ["Alt", "PrtScn"],
+          "description": "アクティブウィンドウのスクリーンショットをクリップボードにコピーする",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "groupName": "基本編集",
+      "order": 5,
+      "description": "基本的な編集操作",
+      "shortcuts": [
+        {
+          "action": "コピー",
+          "keys": ["Ctrl", "C"],
+          "description": "選択したテキストをコピーする",
+          "order": 1
+        },
+        {
+          "action": "貼り付け",
+          "keys": ["Ctrl", "V"],
+          "description": "クリップボードの内容を貼り付ける",
+          "order": 2
+        },
+        {
+          "action": "切り取り",
+          "keys": ["Ctrl", "X"],
+          "description": "選択したテキストを切り取る",
+          "order": 3
+        },
+        {
+          "action": "元に戻す",
+          "keys": ["Ctrl", "Z"],
+          "description": "最後の操作を元に戻す",
+          "order": 4
+        },
+        {
+          "action": "やり直し",
+          "keys": ["Ctrl", "Y"],
+          "description": "元に戻した操作をやり直す",
+          "order": 5
+        },
+        {
+          "action": "すべて選択",
+          "keys": ["Ctrl", "A"],
+          "description": "すべてのテキストを選択する",
+          "order": 6
+        }
+      ]
+    }
+  ]
+}

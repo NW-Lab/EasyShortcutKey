@@ -1,0 +1,205 @@
+{
+  "appName": "Excel(mac)",
+  "order": 4,
+  "icon": "icons/excel.png",
+  "groups": [
+    {
+      "groupName": "AI機能(Copilot)",
+      "order": 1,
+      "description": "AI支援によるデータ分析と数式作成",
+      "shortcuts": [
+        {
+          "action": "パネルを開く",
+          "keys": ["Copilot"],
+          "description": "Microsoft 365 Copilotパネルを開く",
+          "order": 1
+        }
+      ]
+    },
+    {
+      "groupName": "基本操作",
+      "order": 2,
+      "description": "ファイル操作と基本機能",
+      "shortcuts": [
+        {
+          "action": "新規",
+          "keys": ["Cmd", "N"],
+          "description": "新しいワークブックを作成する",
+          "order": 1
+        },
+        {
+          "action": "開く",
+          "keys": ["Cmd", "O"],
+          "description": "既存のワークブックを開く",
+          "order": 2
+        },
+        {
+          "action": "保存",
+          "keys": ["Cmd", "S"],
+          "description": "ワークブックを保存する",
+          "order": 3
+        },
+        {
+          "action": "検索",
+          "keys": ["Cmd", "F"],
+          "description": "ワークシート内でデータを検索する",
+          "order": 4
+        },
+        {
+          "action": "置換",
+          "keys": ["Ctrl", "H"],
+          "description": "ワークシート内でデータを置換する",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "groupName": "セル操作・編集",
+      "order": 3,
+      "description": "データ入力と編集",
+      "shortcuts": [
+        {
+          "action": "セル編集",
+          "keys": ["F2"],
+          "description": "選択したセルを編集モードにする",
+          "order": 1
+        },
+        {
+          "action": "現在の日付",
+          "keys": ["Cmd", ";"],
+          "description": "現在の日付を入力する",
+          "order": 2
+        },
+        {
+          "action": "現在の時刻",
+          "keys": ["Cmd", "Shift", ";"],
+          "description": "現在の時刻を入力する",
+          "order": 3
+        },
+        {
+          "action": "セル内改行",
+          "keys": ["Option", "Enter"],
+          "description": "セル内で改行する",
+          "order": 4
+        },
+        {
+          "action": "オートフィル（下方向）",
+          "keys": ["Cmd", "D"],
+          "description": "上のセルの内容を下方向にコピーする",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "groupName": "ナビゲーション",
+      "order": 4,
+      "description": "ワークシート内の移動",
+      "shortcuts": [
+        {
+          "action": "端に移動",
+          "keys": ["Cmd", "←"],
+          "description": "データ範囲の左端に移動する",
+          "order": 1
+        },
+        {
+          "action": "シートの先頭 (A1)",
+          "keys": ["Cmd", "Home"],
+          "description": "ワークシートの先頭（A1セル）に移動する",
+          "order": 2
+        },
+        {
+          "action": "最後のセル",
+          "keys": ["Cmd", "End"],
+          "description": "データが入力されている最後のセルに移動する",
+          "order": 3
+        },
+        {
+          "action": "ワークシート切替",
+          "keys": ["Cmd", "Page Up"],
+          "description": "前のワークシートに切り替える",
+          "order": 4
+        }
+      ]
+    },
+    {
+      "groupName": "書式設定・表示",
+      "order": 5,
+      "description": "データの見た目と表示調整",
+      "shortcuts": [
+        {
+          "action": "セル書式設定",
+          "keys": ["Cmd", "1"],
+          "description": "セルの書式設定ダイアログを開く",
+          "order": 1
+        },
+        {
+          "action": "太字",
+          "keys": ["Cmd", "B"],
+          "description": "選択したセルのテキストを太字にする",
+          "order": 2
+        },
+        {
+          "action": "行を非表示",
+          "keys": ["Ctrl", "9"],
+          "description": "選択した行を非表示にする",
+          "order": 3
+        },
+        {
+          "action": "列を非表示",
+          "keys": ["Ctrl", "0"],
+          "description": "選択した列を非表示にする",
+          "order": 4
+        },
+        {
+          "action": "行を挿入",
+          "keys": ["Cmd", "Shift", "+"],
+          "description": "新しい行を挿入する",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "groupName": "基本編集",
+      "order": 6,
+      "description": "基本的な編集操作",
+      "shortcuts": [
+        {
+          "action": "コピー",
+          "keys": ["Cmd", "C"],
+          "description": "選択したセルをコピーする",
+          "order": 1
+        },
+        {
+          "action": "貼付け",
+          "keys": ["Cmd", "V"],
+          "description": "クリップボードの内容を貼り付ける",
+          "order": 2
+        },
+        {
+          "action": "切取り",
+          "keys": ["Cmd", "X"],
+          "description": "選択したセルを切り取る",
+          "order": 3
+        },
+        {
+          "action": "元に戻す",
+          "keys": ["Cmd", "Z"],
+          "description": "最後の操作を元に戻す",
+          "order": 4
+        },
+        {
+          "action": "やり直し",
+          "keys": ["Cmd", "Shift", "Z"],
+          "description": "元に戻した操作をやり直す",
+          "order": 5
+        },
+        {
+          "action": "すべて選択",
+          "keys": ["Cmd", "A"],
+          "description": "ワークシート内のすべてのセルを選択する",
+          "order": 6
+        }
+      ]
+    }
+  ]
+}

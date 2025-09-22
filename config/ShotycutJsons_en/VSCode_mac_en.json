@@ -1,0 +1,259 @@
+{
+  "appName": "VS Code (macOS)",
+  "order": 1,
+  "icon": "icons/vscode.png",
+  "version": "1.80+",
+  "groups": [
+    {
+      "groupName": "AI Features (GitHub Copilot)",
+      "order": 1,
+      "description": "AI-powered code suggestions and completions",
+      "shortcuts": [
+        {
+          "action": "Open Chat View",
+          "keys": ["Ctrl", "Cmd", "I"],
+          "description": "Open GitHub Copilot chat view",
+          "order": 1
+        },
+        {
+          "action": "Inline Chat",
+          "keys": ["Cmd", "I"],
+          "description": "Start inline Copilot chat",
+          "order": 2
+        },
+        {
+          "action": "Accept Suggestion",
+          "keys": ["Tab"],
+          "description": "Accept Copilot suggestion",
+          "order": 3
+        },
+        {
+          "action": "Partial Accept",
+          "keys": ["Cmd", "→"],
+          "description": "Accept Copilot suggestion word by word",
+          "order": 4
+        },
+        {
+          "action": "Next Suggestion",
+          "keys": ["Option", "]"],
+          "description": "Show next Copilot suggestion",
+          "order": 5
+        },
+        {
+          "action": "Previous Suggestion",
+          "keys": ["Option", "["],
+          "description": "Show previous Copilot suggestion",
+          "order": 6
+        },
+        {
+          "action": "Trigger Suggestion",
+          "keys": ["Option", "\\"],
+          "description": "Manually trigger inline suggestion",
+          "order": 7
+        },
+        {
+          "action": "Dismiss Suggestion",
+          "keys": ["Esc"],
+          "description": "Dismiss Copilot suggestion",
+          "order": 8
+        }
+      ]
+    },
+    {
+      "groupName": "Basic Operations & Navigation",
+      "order": 2,
+      "description": "File operations and navigation",
+      "shortcuts": [
+        {
+          "action": "Command Palette",
+          "keys": ["Cmd", "Shift", "P"],
+          "description": "Open command palette",
+          "order": 1
+        },
+        {
+          "action": "Quick Open",
+          "keys": ["Cmd", "P"],
+          "description": "Quick open files",
+          "order": 2
+        },
+        {
+          "action": "Find in File",
+          "keys": ["Cmd", "F"],
+          "description": "Search in current file",
+          "order": 3
+        },
+        {
+          "action": "Replace in File",
+          "keys": ["Cmd", "Option", "F"],
+          "description": "Replace in current file",
+          "order": 4
+        },
+        {
+          "action": "Find in Files",
+          "keys": ["Cmd", "Shift", "F"],
+          "description": "Search across workspace",
+          "order": 5
+        },
+        {
+          "action": "Replace in Files",
+          "keys": ["Cmd", "Shift", "H"],
+          "description": "Replace across workspace",
+          "order": 6
+        },
+        {
+          "action": "Go to Line",
+          "keys": ["Cmd", "G"],
+          "description": "Go to specific line number",
+          "order": 7
+        },
+        {
+          "action": "Go to Symbol",
+          "keys": ["Cmd", "Shift", "O"],
+          "description": "Go to symbol in file",
+          "order": 8
+        }
+      ]
+    },
+    {
+      "groupName": "Editor Operations & Editing",
+      "order": 3,
+      "description": "Code editing and manipulation",
+      "shortcuts": [
+        {
+          "action": "Duplicate Line",
+          "keys": ["Option", "Shift", "↑"],
+          "description": "Duplicate current line above",
+          "order": 1
+        },
+        {
+          "action": "Move Line",
+          "keys": ["Option", "↑"],
+          "description": "Move current line up",
+          "order": 2
+        },
+        {
+          "action": "Multi Cursor",
+          "keys": ["Cmd", "D"],
+          "description": "Select same word and create multi cursor",
+          "order": 3
+        },
+        {
+          "action": "Select All Occurrences",
+          "keys": ["Cmd", "Shift", "L"],
+          "description": "Create multi cursor for all occurrences of selected word",
+          "order": 4
+        },
+        {
+          "action": "Toggle Line Comment",
+          "keys": ["Cmd", "/"],
+          "description": "Toggle line comment",
+          "order": 5
+        },
+        {
+          "action": "Toggle Block Comment",
+          "keys": ["Option", "Shift", "A"],
+          "description": "Toggle block comment",
+          "order": 6
+        },
+        {
+          "action": "Indent",
+          "keys": ["Cmd", "]"],
+          "description": "Indent selected lines",
+          "order": 7
+        },
+        {
+          "action": "Outdent",
+          "keys": ["Cmd", "["],
+          "description": "Outdent selected lines",
+          "order": 8
+        }
+      ]
+    },
+    {
+      "groupName": "Window & Panel Management",
+      "order": 4,
+      "description": "Workspace environment management",
+      "shortcuts": [
+        {
+          "action": "Toggle Sidebar",
+          "keys": ["Cmd", "B"],
+          "description": "Toggle sidebar visibility",
+          "order": 1
+        },
+        {
+          "action": "Toggle Terminal",
+          "keys": ["Cmd", "`"],
+          "description": "Toggle terminal visibility",
+          "order": 2
+        },
+        {
+          "action": "Split Editor",
+          "keys": ["Cmd", "\\"],
+          "description": "Split editor",
+          "order": 3
+        },
+        {
+          "action": "Focus Editor Group",
+          "keys": ["Cmd", "1"],
+          "description": "Focus first editor group",
+          "order": 4
+        },
+        {
+          "action": "Zen Mode",
+          "keys": ["Cmd", "K", "Z"],
+          "description": "Toggle Zen Mode (distraction-free mode)",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "groupName": "Basic Editing",
+      "order": 5,
+      "description": "Basic editing operations",
+      "shortcuts": [
+        {
+          "action": "Copy",
+          "keys": ["Cmd", "C"],
+          "description": "Copy selected text",
+          "order": 1
+        },
+        {
+          "action": "Paste",
+          "keys": ["Cmd", "V"],
+          "description": "Paste clipboard content",
+          "order": 2
+        },
+        {
+          "action": "Cut",
+          "keys": ["Cmd", "X"],
+          "description": "Cut selected text",
+          "order": 3
+        },
+        {
+          "action": "Undo",
+          "keys": ["Cmd", "Z"],
+          "description": "Undo last operation",
+          "order": 4
+        },
+        {
+          "action": "Redo",
+          "keys": ["Cmd", "Shift", "Z"],
+          "description": "Redo last undone operation",
+          "order": 5
+        },
+        {
+          "action": "Select All",
+          "keys": ["Cmd", "A"],
+          "description": "Select all text",
+          "order": 6
+        },
+        {
+          "action": "Save",
+          "keys": ["Cmd", "S"],
+          "description": "Save file",
+          "order": 7
+        }
+      ]
+    }
+  ]
+}

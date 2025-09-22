@@ -1,0 +1,181 @@
+{
+  "appName": "macOS",
+  "order": 2,
+  "icon": "icons/macos.png",
+  "version": "14+",
+  "groups": [
+    {
+      "groupName": "AI機能(Siri & ショートカット)",
+      "order": 1,
+      "description": "AI支援による音声操作とタスク自動化",
+      "shortcuts": [
+        {
+          "action": "Siriを起動 (音声)",
+          "keys": ["Cmd", "Space"],
+          "description": "Siriを音声で起動する（長押し）",
+          "order": 1
+        },
+        {
+          "action": "Spotlight検索",
+          "keys": ["Cmd", "Space"],
+          "description": "Spotlight検索を開く",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "groupName": "システム操作",
+      "order": 2,
+      "description": "基本的なシステム操作",
+      "shortcuts": [
+        {
+          "action": "アプリケーション切り替え",
+          "keys": ["Cmd", "Tab"],
+          "description": "開いているアプリケーション間を切り替える",
+          "order": 1
+        },
+        {
+          "action": "ウィンドウ切り替え",
+          "keys": ["Cmd", "`"],
+          "description": "同じアプリケーション内のウィンドウを切り替える",
+          "order": 2
+        },
+        {
+          "action": "Mission Control",
+          "keys": ["F3"],
+          "description": "Mission Controlを開く",
+          "order": 3
+        },
+        {
+          "action": "アプリケーションを隠す",
+          "keys": ["Cmd", "H"],
+          "description": "最前面のアプリケーションを隠す",
+          "order": 4
+        },
+        {
+          "action": "他のアプリを隠す",
+          "keys": ["Option", "Cmd", "H"],
+          "description": "最前面以外のすべてのアプリケーションを隠す",
+          "order": 5
+        },
+        {
+          "action": "強制終了",
+          "keys": ["Option", "Cmd", "Esc"],
+          "description": "アプリケーションの強制終了ダイアログを開く",
+          "order": 6
+        }
+      ]
+    },
+    {
+      "groupName": "ファイル・フォルダ操作",
+      "order": 3,
+      "description": "Finderでのファイル管理",
+      "shortcuts": [
+        {
+          "action": "新しいフォルダ",
+          "keys": ["Shift", "Cmd", "N"],
+          "description": "新しいフォルダを作成する",
+          "order": 1
+        },
+        {
+          "action": "ファイルを複製",
+          "keys": ["Cmd", "D"],
+          "description": "選択したファイルを複製する",
+          "order": 2
+        },
+        {
+          "action": "ゴミ箱に移動",
+          "keys": ["Cmd", "Delete"],
+          "description": "選択したファイルをゴミ箱に移動する",
+          "order": 3
+        },
+        {
+          "action": "ゴミ箱を空にする",
+          "keys": ["Shift", "Cmd", "Delete"],
+          "description": "ゴミ箱を空にする",
+          "order": 4
+        },
+        {
+          "action": "情報を見る",
+          "keys": ["Cmd", "I"],
+          "description": "選択したファイルの情報を表示する",
+          "order": 5
+        },
+        {
+          "action": "クイックルック",
+          "keys": ["Space"],
+          "description": "選択したファイルをクイックルックでプレビューする",
+          "order": 6
+        }
+      ]
+    },
+    {
+      "groupName": "スクリーンショット",
+      "order": 4,
+      "description": "画面キャプチャ機能",
+      "shortcuts": [
+        {
+          "action": "スクリーンショットツール",
+          "keys": ["Shift", "Cmd", "5"],
+          "description": "スクリーンショット・画面収録ツールを開く",
+          "order": 1
+        },
+        {
+          "action": "全画面スクリーンショット",
+          "keys": ["Shift", "Cmd", "3"],
+          "description": "全画面のスクリーンショットを撮る",
+          "order": 2
+        },
+        {
+          "action": "選択範囲スクリーンショット",
+          "keys": ["Shift", "Cmd", "4"],
+          "description": "選択した範囲のスクリーンショットを撮る",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "groupName": "基本編集",
+      "order": 5,
+      "description": "基本的な編集操作",
+      "shortcuts": [
+        {
+          "action": "コピー",
+          "keys": ["Cmd", "C"],
+          "description": "選択したテキストをコピーする",
+          "order": 1
+        },
+        {
+          "action": "貼付け",
+          "keys": ["Cmd", "V"],
+          "description": "クリップボードの内容を貼り付ける",
+          "order": 2
+        },
+        {
+          "action": "切取り",
+          "keys": ["Cmd", "X"],
+          "description": "選択したテキストを切り取る",
+          "order": 3
+        },
+        {
+          "action": "元に戻す",
+          "keys": ["Cmd", "Z"],
+          "description": "最後の操作を元に戻す",
+          "order": 4
+        },
+        {
+          "action": "やり直し",
+          "keys": ["Shift", "Cmd", "Z"],
+          "description": "元に戻した操作をやり直す",
+          "order": 5
+        },
+        {
+          "action": "すべて選択",
+          "keys": ["Cmd", "A"],
+          "description": "すべてのテキストを選択する",
+          "order": 6
+        }
+      ]
+    }
+  ]
+}

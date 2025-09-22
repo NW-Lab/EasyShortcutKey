@@ -1,0 +1,259 @@
+{
+  "appName": "VS Code (Windows)",
+  "order": 1,
+  "icon": "icons/vscode.png",
+  "version": "1.80+",
+  "groups": [
+    {
+      "groupName": "AI機能 (GitHub Copilot)",
+      "order": 1,
+      "description": "AI支援によるコード提案と補完",
+      "shortcuts": [
+        {
+          "action": "チャットビューを開く",
+          "keys": ["Ctrl", "Alt", "I"],
+          "description": "GitHub Copilotのチャットビューを開く",
+          "order": 1
+        },
+        {
+          "action": "インラインチャット",
+          "keys": ["Ctrl", "I"],
+          "description": "インラインでCopilotチャットを開始する",
+          "order": 2
+        },
+        {
+          "action": "提案を承諾",
+          "keys": ["Tab"],
+          "description": "Copilotの提案を承諾する",
+          "order": 3
+        },
+        {
+          "action": "部分的な承諾",
+          "keys": ["Ctrl", "→"],
+          "description": "Copilotの提案を単語単位で承諾する",
+          "order": 4
+        },
+        {
+          "action": "次の提案",
+          "keys": ["Alt", "]"],
+          "description": "次のCopilot提案を表示する",
+          "order": 5
+        },
+        {
+          "action": "前の提案",
+          "keys": ["Alt", "["],
+          "description": "前のCopilot提案を表示する",
+          "order": 6
+        },
+        {
+          "action": "提案をトリガー",
+          "keys": ["Alt", "\\"],
+          "description": "インライン提案を手動でトリガーする",
+          "order": 7
+        },
+        {
+          "action": "提案を拒否",
+          "keys": ["Esc"],
+          "description": "Copilotの提案を拒否する",
+          "order": 8
+        }
+      ]
+    },
+    {
+      "groupName": "基本操作・ナビゲーション",
+      "order": 2,
+      "description": "ファイル操作と移動",
+      "shortcuts": [
+        {
+          "action": "コマンドパレット",
+          "keys": ["Ctrl", "Shift", "P"],
+          "description": "コマンドパレットを開く",
+          "order": 1
+        },
+        {
+          "action": "ファイルを開く",
+          "keys": ["Ctrl", "P"],
+          "description": "ファイルをクイックオープンする",
+          "order": 2
+        },
+        {
+          "action": "ファイル内検索",
+          "keys": ["Ctrl", "F"],
+          "description": "現在のファイル内で検索する",
+          "order": 3
+        },
+        {
+          "action": "ファイル内置換",
+          "keys": ["Ctrl", "H"],
+          "description": "現在のファイル内で置換する",
+          "order": 4
+        },
+        {
+          "action": "全体検索",
+          "keys": ["Ctrl", "Shift", "F"],
+          "description": "ワークスペース全体で検索する",
+          "order": 5
+        },
+        {
+          "action": "全体置換",
+          "keys": ["Ctrl", "Shift", "H"],
+          "description": "ワークスペース全体で置換する",
+          "order": 6
+        },
+        {
+          "action": "行番号に移動",
+          "keys": ["Ctrl", "G"],
+          "description": "指定した行番号に移動する",
+          "order": 7
+        },
+        {
+          "action": "シンボルに移動",
+          "keys": ["Ctrl", "Shift", "O"],
+          "description": "ファイル内のシンボルに移動する",
+          "order": 8
+        }
+      ]
+    },
+    {
+      "groupName": "エディタ操作・編集",
+      "order": 3,
+      "description": "コード編集と操作",
+      "shortcuts": [
+        {
+          "action": "行の複製",
+          "keys": ["Alt", "Shift", "↑"],
+          "description": "現在の行を上に複製する",
+          "order": 1
+        },
+        {
+          "action": "行の移動",
+          "keys": ["Alt", "↑"],
+          "description": "現在の行を上に移動する",
+          "order": 2
+        },
+        {
+          "action": "マルチカーソル",
+          "keys": ["Ctrl", "D"],
+          "description": "同じ単語を選択してマルチカーソルを作成する",
+          "order": 3
+        },
+        {
+          "action": "全て選択してマルチカーソル",
+          "keys": ["Ctrl", "Shift", "L"],
+          "description": "選択した単語の全ての出現箇所にマルチカーソルを作成する",
+          "order": 4
+        },
+        {
+          "action": "行コメント切り替え",
+          "keys": ["Ctrl", "/"],
+          "description": "行コメントの切り替えを行う",
+          "order": 5
+        },
+        {
+          "action": "ブロックコメント切り替え",
+          "keys": ["Alt", "Shift", "A"],
+          "description": "ブロックコメントの切り替えを行う",
+          "order": 6
+        },
+        {
+          "action": "インデント",
+          "keys": ["Ctrl", "]"],
+          "description": "選択した行をインデントする",
+          "order": 7
+        },
+        {
+          "action": "アウトデント",
+          "keys": ["Ctrl", "["],
+          "description": "選択した行のインデントを減らす",
+          "order": 8
+        }
+      ]
+    },
+    {
+      "groupName": "ウィンドウ・パネル管理",
+      "order": 4,
+      "description": "作業環境の管理",
+      "shortcuts": [
+        {
+          "action": "サイドバー表示切り替え",
+          "keys": ["Ctrl", "B"],
+          "description": "サイドバーの表示/非表示を切り替える",
+          "order": 1
+        },
+        {
+          "action": "ターミナル表示切り替え",
+          "keys": ["Ctrl", "`"],
+          "description": "ターミナルの表示/非表示を切り替える",
+          "order": 2
+        },
+        {
+          "action": "エディタ分割",
+          "keys": ["Ctrl", "\\"],
+          "description": "エディタを分割する",
+          "order": 3
+        },
+        {
+          "action": "エディタ間移動",
+          "keys": ["Ctrl", "1"],
+          "description": "1番目のエディタに移動する",
+          "order": 4
+        },
+        {
+          "action": "Zen Mode",
+          "keys": ["Ctrl", "K", "Z"],
+          "description": "集中モード（Zen Mode）に切り替える",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "groupName": "基本編集",
+      "order": 5,
+      "description": "基本的な編集操作",
+      "shortcuts": [
+        {
+          "action": "コピー",
+          "keys": ["Ctrl", "C"],
+          "description": "選択したテキストをコピーする",
+          "order": 1
+        },
+        {
+          "action": "貼り付け",
+          "keys": ["Ctrl", "V"],
+          "description": "クリップボードの内容を貼り付ける",
+          "order": 2
+        },
+        {
+          "action": "切り取り",
+          "keys": ["Ctrl", "X"],
+          "description": "選択したテキストを切り取る",
+          "order": 3
+        },
+        {
+          "action": "元に戻す",
+          "keys": ["Ctrl", "Z"],
+          "description": "最後の操作を元に戻す",
+          "order": 4
+        },
+        {
+          "action": "やり直し",
+          "keys": ["Ctrl", "Y"],
+          "description": "元に戻した操作をやり直す",
+          "order": 5
+        },
+        {
+          "action": "すべて選択",
+          "keys": ["Ctrl", "A"],
+          "description": "すべてのテキストを選択する",
+          "order": 6
+        },
+        {
+          "action": "保存",
+          "keys": ["Ctrl", "S"],
+          "description": "ファイルを保存する",
+          "order": 7
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,211 @@
+{
+  "appName": "Microsoft Word (Windows)",
+  "order": 3,
+  "icon": "icons/word.png",
+  "version": "365",
+  "groups": [
+    {
+      "groupName": "AI機能 (Microsoft 365 Copilot)",
+      "order": 1,
+      "description": "AI支援による文書作成と編集",
+      "shortcuts": [
+        {
+          "action": "Copilotチャットペインを開く",
+          "keys": ["Alt", "H", "F", "X"],
+          "description": "Microsoft 365 Copilotのチャットペインを開く",
+          "order": 1
+        },
+        {
+          "action": "インラインでCopilotを起動",
+          "keys": ["Ctrl", "I"],
+          "description": "インラインでCopilotを起動する",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "groupName": "基本操作",
+      "order": 2,
+      "description": "ファイル操作と基本機能",
+      "shortcuts": [
+        {
+          "action": "新規文書",
+          "keys": ["Ctrl", "N"],
+          "description": "新しい文書を作成する",
+          "order": 1
+        },
+        {
+          "action": "文書を開く",
+          "keys": ["Ctrl", "O"],
+          "description": "既存の文書を開く",
+          "order": 2
+        },
+        {
+          "action": "保存",
+          "keys": ["Ctrl", "S"],
+          "description": "文書を保存する",
+          "order": 3
+        },
+        {
+          "action": "名前を付けて保存",
+          "keys": ["F12"],
+          "description": "文書に名前を付けて保存する",
+          "order": 4
+        },
+        {
+          "action": "印刷",
+          "keys": ["Ctrl", "P"],
+          "description": "文書を印刷する",
+          "order": 5
+        },
+        {
+          "action": "検索",
+          "keys": ["Ctrl", "F"],
+          "description": "文書内でテキストを検索する",
+          "order": 6
+        },
+        {
+          "action": "置換",
+          "keys": ["Ctrl", "H"],
+          "description": "文書内でテキストを置換する",
+          "order": 7
+        }
+      ]
+    },
+    {
+      "groupName": "書式設定",
+      "order": 3,
+      "description": "テキストの書式設定",
+      "shortcuts": [
+        {
+          "action": "太字",
+          "keys": ["Ctrl", "B"],
+          "description": "選択したテキストを太字にする",
+          "order": 1
+        },
+        {
+          "action": "斜体",
+          "keys": ["Ctrl", "I"],
+          "description": "選択したテキストを斜体にする",
+          "order": 2
+        },
+        {
+          "action": "下線",
+          "keys": ["Ctrl", "U"],
+          "description": "選択したテキストに下線を引く",
+          "order": 3
+        },
+        {
+          "action": "フォントサイズを大きく",
+          "keys": ["Ctrl", "]"],
+          "description": "フォントサイズを1ポイント大きくする",
+          "order": 4
+        },
+        {
+          "action": "フォントサイズを小さく",
+          "keys": ["Ctrl", "["],
+          "description": "フォントサイズを1ポイント小さくする",
+          "order": 5
+        },
+        {
+          "action": "中央揃え",
+          "keys": ["Ctrl", "E"],
+          "description": "段落を中央揃えにする",
+          "order": 6
+        },
+        {
+          "action": "左揃え",
+          "keys": ["Ctrl", "L"],
+          "description": "段落を左揃えにする",
+          "order": 7
+        },
+        {
+          "action": "右揃え",
+          "keys": ["Ctrl", "R"],
+          "description": "段落を右揃えにする",
+          "order": 8
+        }
+      ]
+    },
+    {
+      "groupName": "ナビゲーション",
+      "order": 4,
+      "description": "文書内の移動",
+      "shortcuts": [
+        {
+          "action": "文書の先頭",
+          "keys": ["Ctrl", "Home"],
+          "description": "文書の先頭に移動する",
+          "order": 1
+        },
+        {
+          "action": "文書の末尾",
+          "keys": ["Ctrl", "End"],
+          "description": "文書の末尾に移動する",
+          "order": 2
+        },
+        {
+          "action": "単語単位で移動",
+          "keys": ["Ctrl", "←"],
+          "description": "単語単位で左に移動する",
+          "order": 3
+        },
+        {
+          "action": "段落単位で移動",
+          "keys": ["Ctrl", "↑"],
+          "description": "段落単位で上に移動する",
+          "order": 4
+        },
+        {
+          "action": "ページ移動",
+          "keys": ["Ctrl", "Page Up"],
+          "description": "前のページに移動する",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "groupName": "基本編集",
+      "order": 5,
+      "description": "基本的な編集操作",
+      "shortcuts": [
+        {
+          "action": "コピー",
+          "keys": ["Ctrl", "C"],
+          "description": "選択したテキストをコピーする",
+          "order": 1
+        },
+        {
+          "action": "貼り付け",
+          "keys": ["Ctrl", "V"],
+          "description": "クリップボードの内容を貼り付ける",
+          "order": 2
+        },
+        {
+          "action": "切り取り",
+          "keys": ["Ctrl", "X"],
+          "description": "選択したテキストを切り取る",
+          "order": 3
+        },
+        {
+          "action": "元に戻す",
+          "keys": ["Ctrl", "Z"],
+          "description": "最後の操作を元に戻す",
+          "order": 4
+        },
+        {
+          "action": "やり直し",
+          "keys": ["Ctrl", "Y"],
+          "description": "元に戻した操作をやり直す",
+          "order": 5
+        },
+        {
+          "action": "すべて選択",
+          "keys": ["Ctrl", "A"],
+          "description": "文書内のすべてのテキストを選択する",
+          "order": 6
+        }
+      ]
+    }
+  ]
+}

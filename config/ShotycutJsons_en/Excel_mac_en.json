@@ -1,0 +1,206 @@
+{
+  "appName": "Microsoft Excel (macOS)",
+  "order": 4,
+  "icon": "icons/excel.png",
+  "version": "365",
+  "groups": [
+    {
+      "groupName": "Copilot",
+      "order": 1,
+      "description": "AI-powered data analysis and formula creation",
+      "shortcuts": [
+        {
+          "action": "Open Copilot Panel",
+          "keys": ["Ribbon Copilot Icon"],
+          "description": "Open Microsoft 365 Copilot panel",
+          "order": 1
+        }
+      ]
+    },
+    {
+      "groupName": "Basic Operations",
+      "order": 2,
+      "description": "File operations and basic functions",
+      "shortcuts": [
+        {
+          "action": "New Workbook",
+          "keys": ["Cmd", "N"],
+          "description": "Create new workbook",
+          "order": 1
+        },
+        {
+          "action": "Open Workbook",
+          "keys": ["Cmd", "O"],
+          "description": "Open existing workbook",
+          "order": 2
+        },
+        {
+          "action": "Save",
+          "keys": ["Cmd", "S"],
+          "description": "Save workbook",
+          "order": 3
+        },
+        {
+          "action": "Find",
+          "keys": ["Cmd", "F"],
+          "description": "Search for data in worksheet",
+          "order": 4
+        },
+        {
+          "action": "Replace",
+          "keys": ["Ctrl", "H"],
+          "description": "Replace data in worksheet",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "groupName": "Cell Operations & Editing",
+      "order": 3,
+      "description": "Data input and editing",
+      "shortcuts": [
+        {
+          "action": "Edit Cell",
+          "keys": ["F2"],
+          "description": "Enter edit mode for selected cell",
+          "order": 1
+        },
+        {
+          "action": "Insert Current Date",
+          "keys": ["Cmd", ";"],
+          "description": "Insert current date",
+          "order": 2
+        },
+        {
+          "action": "Insert Current Time",
+          "keys": ["Cmd", "Shift", ";"],
+          "description": "Insert current time",
+          "order": 3
+        },
+        {
+          "action": "Line Break in Cell",
+          "keys": ["Option", "Enter"],
+          "description": "Insert line break within cell",
+          "order": 4
+        },
+        {
+          "action": "Auto Fill Down",
+          "keys": ["Cmd", "D"],
+          "description": "Copy content from cell above downward",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "groupName": "Navigation",
+      "order": 4,
+      "description": "Worksheet navigation",
+      "shortcuts": [
+        {
+          "action": "Move to Data Edge",
+          "keys": ["Cmd", "←"],
+          "description": "Move to left edge of data range",
+          "order": 1
+        },
+        {
+          "action": "Go to Beginning (A1)",
+          "keys": ["Cmd", "Home"],
+          "description": "Go to beginning of worksheet (A1 cell)",
+          "order": 2
+        },
+        {
+          "action": "Go to Last Cell",
+          "keys": ["Cmd", "End"],
+          "description": "Go to last cell with data",
+          "order": 3
+        },
+        {
+          "action": "Switch Worksheet",
+          "keys": ["Cmd", "Page Up"],
+          "description": "Switch to previous worksheet",
+          "order": 4
+        }
+      ]
+    },
+    {
+      "groupName": "Formatting & Display",
+      "order": 5,
+      "description": "Data appearance and display adjustment",
+      "shortcuts": [
+        {
+          "action": "Format Cells",
+          "keys": ["Cmd", "1"],
+          "description": "Open Format Cells dialog",
+          "order": 1
+        },
+        {
+          "action": "Bold",
+          "keys": ["Cmd", "B"],
+          "description": "Make selected cell text bold",
+          "order": 2
+        },
+        {
+          "action": "Hide Rows",
+          "keys": ["Ctrl", "9"],
+          "description": "Hide selected rows",
+          "order": 3
+        },
+        {
+          "action": "Hide Columns",
+          "keys": ["Ctrl", "0"],
+          "description": "Hide selected columns",
+          "order": 4
+        },
+        {
+          "action": "Insert Rows",
+          "keys": ["Cmd", "Shift", "+"],
+          "description": "Insert new rows",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "groupName": "Basic Editing",
+      "order": 6,
+      "description": "Basic editing operations",
+      "shortcuts": [
+        {
+          "action": "Copy",
+          "keys": ["Cmd", "C"],
+          "description": "Copy selected cells",
+          "order": 1
+        },
+        {
+          "action": "Paste",
+          "keys": ["Cmd", "V"],
+          "description": "Paste clipboard content",
+          "order": 2
+        },
+        {
+          "action": "Cut",
+          "keys": ["Cmd", "X"],
+          "description": "Cut selected cells",
+          "order": 3
+        },
+        {
+          "action": "Undo",
+          "keys": ["Cmd", "Z"],
+          "description": "Undo last operation",
+          "order": 4
+        },
+        {
+          "action": "Redo",
+          "keys": ["Cmd", "Shift", "Z"],
+          "description": "Redo last undone operation",
+          "order": 5
+        },
+        {
+          "action": "Select All",
+          "keys": ["Cmd", "A"],
+          "description": "Select all cells in worksheet",
+          "order": 6
+        }
+      ]
+    }
+  ]
+}

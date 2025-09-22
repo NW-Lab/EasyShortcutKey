@@ -1,0 +1,181 @@
+{
+  "appName": "macOS",
+  "order": 2,
+  "icon": "icons/macos.png",
+  "version": "14+",
+  "groups": [
+    {
+      "groupName": "AI Features (Siri & Shortcuts)",
+      "order": 1,
+      "description": "AI-powered voice operations and task automation",
+      "shortcuts": [
+        {
+          "action": "Activate Siri (Voice)",
+          "keys": ["Cmd", "Space"],
+          "description": "Activate Siri with voice (hold)",
+          "order": 1
+        },
+        {
+          "action": "Spotlight Search",
+          "keys": ["Cmd", "Space"],
+          "description": "Open Spotlight search",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "groupName": "System Operations",
+      "order": 2,
+      "description": "Basic system operations",
+      "shortcuts": [
+        {
+          "action": "Switch Applications",
+          "keys": ["Cmd", "Tab"],
+          "description": "Switch between open applications",
+          "order": 1
+        },
+        {
+          "action": "Switch Windows",
+          "keys": ["Cmd", "`"],
+          "description": "Switch between windows of same application",
+          "order": 2
+        },
+        {
+          "action": "Mission Control",
+          "keys": ["F3"],
+          "description": "Open Mission Control",
+          "order": 3
+        },
+        {
+          "action": "Hide Application",
+          "keys": ["Cmd", "H"],
+          "description": "Hide frontmost application",
+          "order": 4
+        },
+        {
+          "action": "Hide Others",
+          "keys": ["Option", "Cmd", "H"],
+          "description": "Hide all applications except frontmost",
+          "order": 5
+        },
+        {
+          "action": "Force Quit",
+          "keys": ["Option", "Cmd", "Esc"],
+          "description": "Open Force Quit Applications dialog",
+          "order": 6
+        }
+      ]
+    },
+    {
+      "groupName": "File & Folder Operations",
+      "order": 3,
+      "description": "File management in Finder",
+      "shortcuts": [
+        {
+          "action": "New Folder",
+          "keys": ["Shift", "Cmd", "N"],
+          "description": "Create new folder",
+          "order": 1
+        },
+        {
+          "action": "Duplicate File",
+          "keys": ["Cmd", "D"],
+          "description": "Duplicate selected file",
+          "order": 2
+        },
+        {
+          "action": "Move to Trash",
+          "keys": ["Cmd", "Delete"],
+          "description": "Move selected file to Trash",
+          "order": 3
+        },
+        {
+          "action": "Empty Trash",
+          "keys": ["Shift", "Cmd", "Delete"],
+          "description": "Empty Trash",
+          "order": 4
+        },
+        {
+          "action": "Get Info",
+          "keys": ["Cmd", "I"],
+          "description": "Show information for selected file",
+          "order": 5
+        },
+        {
+          "action": "Quick Look",
+          "keys": ["Space"],
+          "description": "Preview selected file with Quick Look",
+          "order": 6
+        }
+      ]
+    },
+    {
+      "groupName": "Screenshot",
+      "order": 4,
+      "description": "Screen capture functionality",
+      "shortcuts": [
+        {
+          "action": "Screenshot Tool",
+          "keys": ["Shift", "Cmd", "5"],
+          "description": "Open screenshot and screen recording tool",
+          "order": 1
+        },
+        {
+          "action": "Full Screen Screenshot",
+          "keys": ["Shift", "Cmd", "3"],
+          "description": "Take full screen screenshot",
+          "order": 2
+        },
+        {
+          "action": "Selection Screenshot",
+          "keys": ["Shift", "Cmd", "4"],
+          "description": "Take screenshot of selected area",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "groupName": "Basic Editing",
+      "order": 5,
+      "description": "Basic editing operations",
+      "shortcuts": [
+        {
+          "action": "Copy",
+          "keys": ["Cmd", "C"],
+          "description": "Copy selected text",
+          "order": 1
+        },
+        {
+          "action": "Paste",
+          "keys": ["Cmd", "V"],
+          "description": "Paste clipboard content",
+          "order": 2
+        },
+        {
+          "action": "Cut",
+          "keys": ["Cmd", "X"],
+          "description": "Cut selected text",
+          "order": 3
+        },
+        {
+          "action": "Undo",
+          "keys": ["Cmd", "Z"],
+          "description": "Undo last operation",
+          "order": 4
+        },
+        {
+          "action": "Redo",
+          "keys": ["Shift", "Cmd", "Z"],
+          "description": "Redo last undone operation",
+          "order": 5
+        },
+        {
+          "action": "Select All",
+          "keys": ["Cmd", "A"],
+          "description": "Select all text",
+          "order": 6
+        }
+      ]
+    }
+  ]
+}

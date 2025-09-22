@@ -1,0 +1,205 @@
+{
+  "appName": "Microsoft Word (macOS)",
+  "order": 3,
+  "icon": "icons/word.png",
+  "version": "365",
+  "groups": [
+    {
+      "groupName": "AI Features (Microsoft 365 Copilot)",
+      "order": 1,
+      "description": "AI-powered document creation and editing",
+      "shortcuts": [
+        {
+          "action": "Inline Copilot",
+          "keys": ["Cmd", "I"],
+          "description": "Activate Copilot inline",
+          "order": 1
+        }
+      ]
+    },
+    {
+      "groupName": "Basic Operations",
+      "order": 2,
+      "description": "File operations and basic functions",
+      "shortcuts": [
+        {
+          "action": "New Document",
+          "keys": ["Cmd", "N"],
+          "description": "Create new document",
+          "order": 1
+        },
+        {
+          "action": "Open Document",
+          "keys": ["Cmd", "O"],
+          "description": "Open existing document",
+          "order": 2
+        },
+        {
+          "action": "Save",
+          "keys": ["Cmd", "S"],
+          "description": "Save document",
+          "order": 3
+        },
+        {
+          "action": "Save As",
+          "keys": ["Shift", "Cmd", "S"],
+          "description": "Save document with new name",
+          "order": 4
+        },
+        {
+          "action": "Print",
+          "keys": ["Cmd", "P"],
+          "description": "Print document",
+          "order": 5
+        },
+        {
+          "action": "Find",
+          "keys": ["Cmd", "F"],
+          "description": "Search for text in document",
+          "order": 6
+        },
+        {
+          "action": "Replace",
+          "keys": ["Ctrl", "H"],
+          "description": "Replace text in document",
+          "order": 7
+        }
+      ]
+    },
+    {
+      "groupName": "Formatting",
+      "order": 3,
+      "description": "Text formatting",
+      "shortcuts": [
+        {
+          "action": "Bold",
+          "keys": ["Cmd", "B"],
+          "description": "Make selected text bold",
+          "order": 1
+        },
+        {
+          "action": "Italic",
+          "keys": ["Cmd", "I"],
+          "description": "Make selected text italic",
+          "order": 2
+        },
+        {
+          "action": "Underline",
+          "keys": ["Cmd", "U"],
+          "description": "Underline selected text",
+          "order": 3
+        },
+        {
+          "action": "Increase Font Size",
+          "keys": ["Cmd", "]"],
+          "description": "Increase font size by 1 point",
+          "order": 4
+        },
+        {
+          "action": "Decrease Font Size",
+          "keys": ["Cmd", "["],
+          "description": "Decrease font size by 1 point",
+          "order": 5
+        },
+        {
+          "action": "Center Align",
+          "keys": ["Cmd", "E"],
+          "description": "Center align paragraph",
+          "order": 6
+        },
+        {
+          "action": "Left Align",
+          "keys": ["Cmd", "L"],
+          "description": "Left align paragraph",
+          "order": 7
+        },
+        {
+          "action": "Right Align",
+          "keys": ["Cmd", "R"],
+          "description": "Right align paragraph",
+          "order": 8
+        }
+      ]
+    },
+    {
+      "groupName": "Navigation",
+      "order": 4,
+      "description": "Document navigation",
+      "shortcuts": [
+        {
+          "action": "Beginning of Document",
+          "keys": ["Cmd", "Home"],
+          "description": "Go to beginning of document",
+          "order": 1
+        },
+        {
+          "action": "End of Document",
+          "keys": ["Cmd", "End"],
+          "description": "Go to end of document",
+          "order": 2
+        },
+        {
+          "action": "Move by Word",
+          "keys": ["Option", "←"],
+          "description": "Move left by word",
+          "order": 3
+        },
+        {
+          "action": "Move by Paragraph",
+          "keys": ["Option", "↑"],
+          "description": "Move up by paragraph",
+          "order": 4
+        },
+        {
+          "action": "Page Navigation",
+          "keys": ["Cmd", "Page Up"],
+          "description": "Go to previous page",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "groupName": "Basic Editing",
+      "order": 5,
+      "description": "Basic editing operations",
+      "shortcuts": [
+        {
+          "action": "Copy",
+          "keys": ["Cmd", "C"],
+          "description": "Copy selected text",
+          "order": 1
+        },
+        {
+          "action": "Paste",
+          "keys": ["Cmd", "V"],
+          "description": "Paste clipboard content",
+          "order": 2
+        },
+        {
+          "action": "Cut",
+          "keys": ["Cmd", "X"],
+          "description": "Cut selected text",
+          "order": 3
+        },
+        {
+          "action": "Undo",
+          "keys": ["Cmd", "Z"],
+          "description": "Undo last operation",
+          "order": 4
+        },
+        {
+          "action": "Redo",
+          "keys": ["Cmd", "Shift", "Z"],
+          "description": "Redo last undone operation",
+          "order": 5
+        },
+        {
+          "action": "Select All",
+          "keys": ["Cmd", "A"],
+          "description": "Select all text in document",
+          "order": 6
+        }
+      ]
+    }
+  ]
+}

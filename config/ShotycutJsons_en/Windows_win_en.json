@@ -1,0 +1,199 @@
+{
+  "appName": "Windows 11",
+  "order": 2,
+  "icon": "icons/windows.png",
+  "version": "11",
+  "groups": [
+    {
+      "groupName": "AI Features (Windows Copilot)",
+      "order": 1,
+      "description": "AI-powered system operations and support",
+      "shortcuts": [
+        {
+          "action": "Open Copilot",
+          "keys": ["Win", "C"],
+          "description": "Open Windows Copilot",
+          "order": 1
+        },
+        {
+          "action": "Voice Activate Copilot",
+          "keys": ["Alt", "Space"],
+          "description": "Activate Copilot with voice",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "groupName": "System Operations",
+      "order": 2,
+      "description": "Basic system operations",
+      "shortcuts": [
+        {
+          "action": "Start Menu",
+          "keys": ["Win"],
+          "description": "Open Start menu",
+          "order": 1
+        },
+        {
+          "action": "Open Settings",
+          "keys": ["Win", "I"],
+          "description": "Open Windows Settings",
+          "order": 2
+        },
+        {
+          "action": "Open File Explorer",
+          "keys": ["Win", "E"],
+          "description": "Open File Explorer",
+          "order": 3
+        },
+        {
+          "action": "Run Dialog",
+          "keys": ["Win", "R"],
+          "description": "Open Run dialog",
+          "order": 4
+        },
+        {
+          "action": "Search",
+          "keys": ["Win", "S"],
+          "description": "Open Windows Search",
+          "order": 5
+        },
+        {
+          "action": "Show Desktop",
+          "keys": ["Win", "D"],
+          "description": "Show/hide desktop",
+          "order": 6
+        },
+        {
+          "action": "Lock PC",
+          "keys": ["Win", "L"],
+          "description": "Lock the PC",
+          "order": 7
+        },
+        {
+          "action": "Task Manager",
+          "keys": ["Ctrl", "Shift", "Esc"],
+          "description": "Open Task Manager",
+          "order": 8
+        }
+      ]
+    },
+    {
+      "groupName": "Window Management",
+      "order": 3,
+      "description": "Window arrangement and management",
+      "shortcuts": [
+        {
+          "action": "Switch Apps",
+          "keys": ["Alt", "Tab"],
+          "description": "Switch between open applications",
+          "order": 1
+        },
+        {
+          "action": "Snap Window Left",
+          "keys": ["Win", "←"],
+          "description": "Snap active window to left half of screen",
+          "order": 2
+        },
+        {
+          "action": "Snap Window Right",
+          "keys": ["Win", "→"],
+          "description": "Snap active window to right half of screen",
+          "order": 3
+        },
+        {
+          "action": "Maximize Window",
+          "keys": ["Win", "↑"],
+          "description": "Maximize active window",
+          "order": 4
+        },
+        {
+          "action": "Minimize Window",
+          "keys": ["Win", "↓"],
+          "description": "Minimize active window",
+          "order": 5
+        },
+        {
+          "action": "Create Virtual Desktop",
+          "keys": ["Win", "Ctrl", "D"],
+          "description": "Create new virtual desktop",
+          "order": 6
+        },
+        {
+          "action": "Switch Virtual Desktop",
+          "keys": ["Win", "Ctrl", "←"],
+          "description": "Switch to previous virtual desktop",
+          "order": 7
+        }
+      ]
+    },
+    {
+      "groupName": "Screenshot & Recording",
+      "order": 4,
+      "description": "Screen capture functionality",
+      "shortcuts": [
+        {
+          "action": "Snipping Tool",
+          "keys": ["Win", "Shift", "S"],
+          "description": "Open Snipping Tool for area screenshot",
+          "order": 1
+        },
+        {
+          "action": "Full Screen Screenshot",
+          "keys": ["PrtScn"],
+          "description": "Copy full screen screenshot to clipboard",
+          "order": 2
+        },
+        {
+          "action": "Active Window Screenshot",
+          "keys": ["Alt", "PrtScn"],
+          "description": "Copy active window screenshot to clipboard",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "groupName": "Basic Editing",
+      "order": 5,
+      "description": "Basic editing operations",
+      "shortcuts": [
+        {
+          "action": "Copy",
+          "keys": ["Ctrl", "C"],
+          "description": "Copy selected text",
+          "order": 1
+        },
+        {
+          "action": "Paste",
+          "keys": ["Ctrl", "V"],
+          "description": "Paste clipboard content",
+          "order": 2
+        },
+        {
+          "action": "Cut",
+          "keys": ["Ctrl", "X"],
+          "description": "Cut selected text",
+          "order": 3
+        },
+        {
+          "action": "Undo",
+          "keys": ["Ctrl", "Z"],
+          "description": "Undo last operation",
+          "order": 4
+        },
+        {
+          "action": "Redo",
+          "keys": ["Ctrl", "Y"],
+          "description": "Redo last undone operation",
+          "order": 5
+        },
+        {
+          "action": "Select All",
+          "keys": ["Ctrl", "A"],
+          "description": "Select all text",
+          "order": 6
+        }
+      ]
+    }
+  ]
+}
