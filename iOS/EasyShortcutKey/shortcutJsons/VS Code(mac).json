@@ -3,6 +3,7 @@
   "order": 2,
   "icon": "icons/vscode.png",
   "version": "1.80+",
+  "lastUpdated": "2025-09-22",
   "groups": [
     {
       "groupName": "Copilot",
