@@ -1,0 +1,285 @@
+{
+  "appName": "macOS",
+  "order": 2,
+  "icon": "icons/macos.png",
+  "version": "14+",
+  "groups": [
+    {
+      "groupName": "AI機能(Siri & ショートカット)",
+      "order": 1,
+      "description": "AI支援による音声操作とタスク自動化",
+      "shortcuts": [
+        {
+          "action": "Siriを起動 (音声)",
+          "keys": [
+            "Cmd",
+            "Space"
+          ],
+          "description": "Siriを音声で起動する（長押し）",
+          "order": 1,
+          "id": "a23bd8eb-280e-42a6-a692-159899de4c39"
+        },
+        {
+          "action": "Spotlight検索",
+          "keys": [
+            "Cmd",
+            "Space"
+          ],
+          "description": "Spotlight検索を開く",
+          "order": 2,
+          "id": "b3ee94f6-2a97-4f06-a651-9b7d2f1d82af"
+        }
+      ],
+      "id": "e71663d3-9d5f-4076-bb6b-77024c97d151"
+    },
+    {
+      "groupName": "システム操作",
+      "order": 2,
+      "description": "基本的なシステム操作",
+      "shortcuts": [
+        {
+          "action": "アプリケーション切り替え",
+          "keys": [
+            "Cmd",
+            "Tab"
+          ],
+          "description": "開いているアプリケーション間を切り替える",
+          "order": 1,
+          "id": "3427ecbb-ccbf-4b4e-a7ea-80ac8006e044"
+        },
+        {
+          "action": "ウィンドウ切り替え",
+          "keys": [
+            "Cmd",
+            "`"
+          ],
+          "description": "同じアプリケーション内のウィンドウを切り替える",
+          "order": 2,
+          "id": "5ed43af2-ca04-4c0c-933c-fcca47ee0564"
+        },
+        {
+          "action": "Mission Control",
+          "keys": [
+            "F3"
+          ],
+          "description": "Mission Controlを開く",
+          "order": 3,
+          "id": "0578e965-e09b-4f0b-b3e7-64a02ee767bc"
+        },
+        {
+          "action": "アプリケーションを隠す",
+          "keys": [
+            "Cmd",
+            "H"
+          ],
+          "description": "最前面のアプリケーションを隠す",
+          "order": 4,
+          "id": "88751d51-065e-4c04-9e3a-932bd62f8feb"
+        },
+        {
+          "action": "他のアプリを隠す",
+          "keys": [
+            "Option",
+            "Cmd",
+            "H"
+          ],
+          "description": "最前面以外のすべてのアプリケーションを隠す",
+          "order": 5,
+          "id": "ed4e65d2-158c-4ee0-a463-febfa32f9900"
+        },
+        {
+          "action": "強制終了",
+          "keys": [
+            "Option",
+            "Cmd",
+            "Esc"
+          ],
+          "description": "アプリケーションの強制終了ダイアログを開く",
+          "order": 6,
+          "id": "9928a7ec-2d1a-4f05-8bc1-7ee6717c0fd1"
+        }
+      ],
+      "id": "82a08efc-b0fb-4a76-af56-7ec728e0d351"
+    },
+    {
+      "groupName": "ファイル・フォルダ操作",
+      "order": 3,
+      "description": "Finderでのファイル管理",
+      "shortcuts": [
+        {
+          "action": "新しいフォルダ",
+          "keys": [
+            "Shift",
+            "Cmd",
+            "N"
+          ],
+          "description": "新しいフォルダを作成する",
+          "order": 1,
+          "id": "5c1f2e1c-5787-42bb-a0e4-0b3217100d6b"
+        },
+        {
+          "action": "ファイルを複製",
+          "keys": [
+            "Cmd",
+            "D"
+          ],
+          "description": "選択したファイルを複製する",
+          "order": 2,
+          "id": "c5e8d36b-fe61-4f55-b3ef-f1c5997d2e2e"
+        },
+        {
+          "action": "ゴミ箱に移動",
+          "keys": [
+            "Cmd",
+            "Delete"
+          ],
+          "description": "選択したファイルをゴミ箱に移動する",
+          "order": 3,
+          "id": "92c66ce5-4986-451b-a959-57de0ff6b589"
+        },
+        {
+          "action": "ゴミ箱を空にする",
+          "keys": [
+            "Shift",
+            "Cmd",
+            "Delete"
+          ],
+          "description": "ゴミ箱を空にする",
+          "order": 4,
+          "id": "de5011f6-a463-4841-9e25-bd36eeb7a31c"
+        },
+        {
+          "action": "情報を見る",
+          "keys": [
+            "Cmd",
+            "I"
+          ],
+          "description": "選択したファイルの情報を表示する",
+          "order": 5,
+          "id": "b415f43b-5ec0-4098-aae8-e36be62f6136"
+        },
+        {
+          "action": "クイックルック",
+          "keys": [
+            "Space"
+          ],
+          "description": "選択したファイルをクイックルックでプレビューする",
+          "order": 6,
+          "id": "16bba90e-d92a-41a7-a1fd-f746af9c7bc8"
+        }
+      ],
+      "id": "fe6f0de4-78c8-4283-afda-55534cbb1e9b"
+    },
+    {
+      "groupName": "スクリーンショット",
+      "order": 4,
+      "description": "画面キャプチャ機能",
+      "shortcuts": [
+        {
+          "action": "スクリーンショットツール",
+          "keys": [
+            "Shift",
+            "Cmd",
+            "5"
+          ],
+          "description": "スクリーンショット・画面収録ツールを開く",
+          "order": 1,
+          "id": "5db95480-9577-473f-bff9-d65a90333d40"
+        },
+        {
+          "action": "全画面スクリーンショット",
+          "keys": [
+            "Shift",
+            "Cmd",
+            "3"
+          ],
+          "description": "全画面のスクリーンショットを撮る",
+          "order": 2,
+          "id": "ae78d81e-690f-454e-a963-a359b9bc4212"
+        },
+        {
+          "action": "選択範囲スクリーンショット",
+          "keys": [
+            "Shift",
+            "Cmd",
+            "4"
+          ],
+          "description": "選択した範囲のスクリーンショットを撮る",
+          "order": 3,
+          "id": "b5a000eb-b842-4344-9c6d-c87330baa561"
+        }
+      ],
+      "id": "98a2d0cb-9853-4671-b362-41dea869235d"
+    },
+    {
+      "groupName": "基本編集",
+      "order": 5,
+      "description": "基本的な編集操作",
+      "shortcuts": [
+        {
+          "action": "コピー",
+          "keys": [
+            "Cmd",
+            "C"
+          ],
+          "description": "選択したテキストをコピーする",
+          "order": 1,
+          "id": "96e39512-dfbb-4be6-9aa2-076c5b4c9150"
+        },
+        {
+          "action": "貼付け",
+          "keys": [
+            "Cmd",
+            "V"
+          ],
+          "description": "クリップボードの内容を貼り付ける",
+          "order": 2,
+          "id": "e69134bc-4e8d-41ce-9738-c909d792206d"
+        },
+        {
+          "action": "切取り",
+          "keys": [
+            "Cmd",
+            "X"
+          ],
+          "description": "選択したテキストを切り取る",
+          "order": 3,
+          "id": "e525a7b4-1ef6-450d-a01e-94a6e84b795f"
+        },
+        {
+          "action": "元に戻す",
+          "keys": [
+            "Cmd",
+            "Z"
+          ],
+          "description": "最後の操作を元に戻す",
+          "order": 4,
+          "id": "8ab7eaa5-3d1b-4ade-b032-2a16ca38e637"
+        },
+        {
+          "action": "やり直し",
+          "keys": [
+            "Shift",
+            "Cmd",
+            "Z"
+          ],
+          "description": "元に戻した操作をやり直す",
+          "order": 5,
+          "id": "f107cd75-e37e-44d6-9ef2-a9c4dea60bf6"
+        },
+        {
+          "action": "すべて選択",
+          "keys": [
+            "Cmd",
+            "A"
+          ],
+          "description": "すべてのテキストを選択する",
+          "order": 6,
+          "id": "fef30cc3-a20a-42a5-83d7-dcaf082ec40d"
+        }
+      ],
+      "id": "3a3246f3-9387-456a-a4c3-76e39726a189"
+    }
+  ],
+  "id": "f149bbaa-c204-4b5d-be52-8008a8c52493"
+}

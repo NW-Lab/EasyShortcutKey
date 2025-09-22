@@ -1,0 +1,321 @@
+{
+  "appName": "Microsoft Word (macOS)",
+  "order": 3,
+  "icon": "icons/word.png",
+  "version": "365",
+  "groups": [
+    {
+      "groupName": "AI機能 (Microsoft 365 Copilot)",
+      "order": 1,
+      "description": "AI支援による文書作成と編集",
+      "shortcuts": [
+        {
+          "action": "インラインでCopilotを起動",
+          "keys": [
+            "Cmd",
+            "I"
+          ],
+          "description": "インラインでCopilotを起動する",
+          "order": 1,
+          "id": "861e760e-a822-4a17-9758-6d6eaf9fb290"
+        }
+      ],
+      "id": "9665e9b8-947a-4da2-9f36-bce79b39ddab"
+    },
+    {
+      "groupName": "基本操作",
+      "order": 2,
+      "description": "ファイル操作と基本機能",
+      "shortcuts": [
+        {
+          "action": "新規文書",
+          "keys": [
+            "Cmd",
+            "N"
+          ],
+          "description": "新しい文書を作成する",
+          "order": 1,
+          "id": "5b44011f-bed8-4e71-a03d-ce81c24348b9"
+        },
+        {
+          "action": "文書を開く",
+          "keys": [
+            "Cmd",
+            "O"
+          ],
+          "description": "既存の文書を開く",
+          "order": 2,
+          "id": "0203913f-e62a-47e5-9032-facffb9b1815"
+        },
+        {
+          "action": "保存",
+          "keys": [
+            "Cmd",
+            "S"
+          ],
+          "description": "文書を保存する",
+          "order": 3,
+          "id": "f8cfa1d5-8754-422f-abc2-c85ff3cf9b8d"
+        },
+        {
+          "action": "名前を付けて保存",
+          "keys": [
+            "Shift",
+            "Cmd",
+            "S"
+          ],
+          "description": "文書に名前を付けて保存する",
+          "order": 4,
+          "id": "dba84bed-011a-4ffe-8371-3911a948168c"
+        },
+        {
+          "action": "印刷",
+          "keys": [
+            "Cmd",
+            "P"
+          ],
+          "description": "文書を印刷する",
+          "order": 5,
+          "id": "0e358aba-efa7-46f1-862c-c42089181bf1"
+        },
+        {
+          "action": "検索",
+          "keys": [
+            "Cmd",
+            "F"
+          ],
+          "description": "文書内でテキストを検索する",
+          "order": 6,
+          "id": "b4f0a601-4908-4b92-b3d6-7fc3ba0928d4"
+        },
+        {
+          "action": "置換",
+          "keys": [
+            "Ctrl",
+            "H"
+          ],
+          "description": "文書内でテキストを置換する",
+          "order": 7,
+          "id": "512fc07a-042c-4845-8583-b180cbc69e38"
+        }
+      ],
+      "id": "66280cc5-abad-4291-b2da-32903da73671"
+    },
+    {
+      "groupName": "書式設定",
+      "order": 3,
+      "description": "テキストの書式設定",
+      "shortcuts": [
+        {
+          "action": "太字",
+          "keys": [
+            "Cmd",
+            "B"
+          ],
+          "description": "選択したテキストを太字にする",
+          "order": 1,
+          "id": "fbc87c68-642e-4dc7-afe3-5fafb3f34624"
+        },
+        {
+          "action": "斜体",
+          "keys": [
+            "Cmd",
+            "I"
+          ],
+          "description": "選択したテキストを斜体にする",
+          "order": 2,
+          "id": "fbbd0687-1d36-446b-8971-baefb0277493"
+        },
+        {
+          "action": "下線",
+          "keys": [
+            "Cmd",
+            "U"
+          ],
+          "description": "選択したテキストに下線を引く",
+          "order": 3,
+          "id": "febfb311-ca7d-430d-8702-706e605ca131"
+        },
+        {
+          "action": "フォントサイズを大きく",
+          "keys": [
+            "Cmd",
+            "]"
+          ],
+          "description": "フォントサイズを1ポイント大きくする",
+          "order": 4,
+          "id": "21cdb73b-9fce-4a6e-8ccc-312edc6f8a60"
+        },
+        {
+          "action": "フォントサイズを小さく",
+          "keys": [
+            "Cmd",
+            "["
+          ],
+          "description": "フォントサイズを1ポイント小さくする",
+          "order": 5,
+          "id": "379b8724-54f5-4f38-87be-f4c362707028"
+        },
+        {
+          "action": "中央揃え",
+          "keys": [
+            "Cmd",
+            "E"
+          ],
+          "description": "段落を中央揃えにする",
+          "order": 6,
+          "id": "6d6a0546-9c55-4626-ae43-f5a833b41f7f"
+        },
+        {
+          "action": "左揃え",
+          "keys": [
+            "Cmd",
+            "L"
+          ],
+          "description": "段落を左揃えにする",
+          "order": 7,
+          "id": "f63dfc9c-8946-488f-afa0-271e43801867"
+        },
+        {
+          "action": "右揃え",
+          "keys": [
+            "Cmd",
+            "R"
+          ],
+          "description": "段落を右揃えにする",
+          "order": 8,
+          "id": "88eef94d-f42b-4e18-9847-47de30c7c3db"
+        }
+      ],
+      "id": "f078e9cd-7737-4117-8a87-e88c17fa0c30"
+    },
+    {
+      "groupName": "ナビゲーション",
+      "order": 4,
+      "description": "文書内の移動",
+      "shortcuts": [
+        {
+          "action": "文書の先頭",
+          "keys": [
+            "Cmd",
+            "Home"
+          ],
+          "description": "文書の先頭に移動する",
+          "order": 1,
+          "id": "007851b4-a81a-4ab3-972c-f7b8d3d53c0f"
+        },
+        {
+          "action": "文書の末尾",
+          "keys": [
+            "Cmd",
+            "End"
+          ],
+          "description": "文書の末尾に移動する",
+          "order": 2,
+          "id": "516c5ea7-e439-45b3-8eb9-86830f09fb41"
+        },
+        {
+          "action": "単語単位で移動",
+          "keys": [
+            "Option",
+            "←"
+          ],
+          "description": "単語単位で左に移動する",
+          "order": 3,
+          "id": "ce103138-2483-4ae9-a83a-7c6c226f4ac7"
+        },
+        {
+          "action": "段落単位で移動",
+          "keys": [
+            "Option",
+            "↑"
+          ],
+          "description": "段落単位で上に移動する",
+          "order": 4,
+          "id": "49739626-93e1-4f2c-b590-ec3c251d3482"
+        },
+        {
+          "action": "ページ移動",
+          "keys": [
+            "Cmd",
+            "Page Up"
+          ],
+          "description": "前のページに移動する",
+          "order": 5,
+          "id": "619aff6e-4624-42c1-b712-42529c6fe4a2"
+        }
+      ],
+      "id": "7ea0046c-8c9f-4d77-8984-2a848bdcd54e"
+    },
+    {
+      "groupName": "基本編集",
+      "order": 5,
+      "description": "基本的な編集操作",
+      "shortcuts": [
+        {
+          "action": "コピー",
+          "keys": [
+            "Cmd",
+            "C"
+          ],
+          "description": "選択したテキストをコピーする",
+          "order": 1,
+          "id": "af6ba190-c0db-4bba-b40a-d2677a34b2af"
+        },
+        {
+          "action": "貼り付け",
+          "keys": [
+            "Cmd",
+            "V"
+          ],
+          "description": "クリップボードの内容を貼り付ける",
+          "order": 2,
+          "id": "84f75f84-e1fd-4f81-bc17-26fa211a6b76"
+        },
+        {
+          "action": "切り取り",
+          "keys": [
+            "Cmd",
+            "X"
+          ],
+          "description": "選択したテキストを切り取る",
+          "order": 3,
+          "id": "aa9e14db-b92b-4744-9a74-707bd24e107f"
+        },
+        {
+          "action": "元に戻す",
+          "keys": [
+            "Cmd",
+            "Z"
+          ],
+          "description": "最後の操作を元に戻す",
+          "order": 4,
+          "id": "441adb0e-05a8-4dc1-8c74-9457337b80e3"
+        },
+        {
+          "action": "やり直し",
+          "keys": [
+            "Cmd",
+            "Shift",
+            "Z"
+          ],
+          "description": "元に戻した操作をやり直す",
+          "order": 5,
+          "id": "d233c604-5ca6-44da-a01b-bb8fa60354ea"
+        },
+        {
+          "action": "すべて選択",
+          "keys": [
+            "Cmd",
+            "A"
+          ],
+          "description": "文書内のすべてのテキストを選択する",
+          "order": 6,
+          "id": "ae9a2ccf-a90a-47d0-945d-fcf7f61412db"
+        }
+      ],
+      "id": "e371355d-4100-4651-adaf-fb82109c8ab0"
+    }
+  ],
+  "id": "13a2c530-b859-465d-bbc1-bbd11e7415fe"
+}
