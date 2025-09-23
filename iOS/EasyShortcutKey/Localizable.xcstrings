@@ -16,6 +16,12 @@
     "OK" : {
 
     },
+    "アプリが見つかりません。" : {
+
+    },
+    "アプリ管理（表示・順序）" : {
+
+    },
     "エクスポート" : {
       "localizations" : {
         "en" : {
@@ -47,6 +53,7 @@
       }
     },
     "ショートカットJSON" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -56,7 +63,11 @@
         }
       }
     },
+    "ドラッグして並び替え、トグルで表示/非表示を設定できます。" : {
+
+    },
     "利用可能なJSONが見つかりません。" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -67,6 +78,7 @@
       }
     },
     "検出数: %lld" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

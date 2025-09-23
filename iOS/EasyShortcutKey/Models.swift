@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftUI
 
 // MARK: - Step Models for multi-step shortcuts
 struct ShortcutStep: Codable, Identifiable {
@@ -132,6 +133,22 @@ class ShortcutStore: ObservableObject {
     @Published var selectedAppIndex: Int = 0
     @Published var selectedGroupIndex: [UUID: Int?] = [:]
     @Published var expandedSet: Set<UUID> = []
+    
+    // MARK: - App ordering
+    @Published var customAppOrder: [String] = [] {
+        didSet {
+            UserDefaults.standard.set(customAppOrder, forKey: "CustomAppOrder")
+            updateFilteredApps()
+        }
+    }
+    
+    // MARK: - App visibility
+    @Published var hiddenApps: Set<String> = [] {
+        didSet {
+            UserDefaults.standard.set(Array(hiddenApps), forKey: "HiddenApps")
+            updateFilteredApps()
+        }
+    }
 
     // MARK: - JSON file discovery & selection
     struct JsonFileEntry: Identifiable {
@@ -151,40 +168,26 @@ class ShortcutStore: ObservableObject {
     }
 
     init(filename: String = "Shortcuts.json") {
+        // Load custom app order from UserDefaults
+        if let savedOrder = UserDefaults.standard.stringArray(forKey: "CustomAppOrder") {
+            customAppOrder = savedOrder
+        }
+        
+        // Load hidden apps from UserDefaults
+        if let savedHiddenApps = UserDefaults.standard.stringArray(forKey: "HiddenApps") {
+            hiddenApps = Set(savedHiddenApps)
+        }
+        
         // discover bundled shortcutJsons
         scanShortcutJsons()
 
-        // load persisted selection if any, but restrict to files present in current locale's availableJsons
-        let availableNames = Set(availableJsons.map { $0.fileName })
-        if let saved = UserDefaults.standard.stringArray(forKey: "SelectedShortcutJsonFiles"), saved.count > 0 {
-            let savedSet = Set(saved)
-            let intersection = savedSet.intersection(availableNames)
-
-            if intersection.count > 0 {
-                // Restore only files that exist for current locale
-                self.selectedJsonFiles = intersection
-                // Persist cleaned selection
-                UserDefaults.standard.set(Array(intersection), forKey: "SelectedShortcutJsonFiles")
-                loadSelectedFiles()
-            } else if availableNames.count > 0 {
-                // Previously saved selection doesn't apply to this locale: default to all available for this locale
-                self.selectedJsonFiles = availableNames
-                UserDefaults.standard.set(Array(availableNames), forKey: "SelectedShortcutJsonFiles")
-                loadSelectedFiles()
-            } else {
-                // No available JSONs for this locale -> fallback to default single file
-                UserDefaults.standard.removeObject(forKey: "SelectedShortcutJsonFiles")
-                load(from: filename)
-            }
+        // Auto-load all available JSON files
+        if !availableJsons.isEmpty {
+            self.selectedJsonFiles = Set(availableJsons.map { $0.fileName })
+            loadSelectedFiles()
         } else {
-            // First launch: select all discovered JSON files by default (if any), persist and load them
-            if availableNames.count > 0 {
-                self.selectedJsonFiles = availableNames
-                UserDefaults.standard.set(Array(availableNames), forKey: "SelectedShortcutJsonFiles")
-                loadSelectedFiles()
-            } else {
-                load(from: filename)
-            }
+            // Fallback to default single file if no JSONs found
+            load(from: filename)
         }
     }
 
@@ -434,6 +437,11 @@ class ShortcutStore: ObservableObject {
             if app.disEnable == true && !showHidden {
                 return nil
             }
+            
+            // Filter user-hidden apps unless showHidden is true
+            if hiddenApps.contains(app.appName) && !showHidden {
+                return nil
+            }
 
             // Filter groups within the app
             let filteredGroups = app.groups?.compactMap { (group) -> ShortcutGroup? in
@@ -480,6 +488,11 @@ class ShortcutStore: ObservableObject {
 
         // Sort apps by order
         filteredApps = sortByOrder(filteredApps) { $0.order }
+        
+        // Apply custom app order if exists
+        if !customAppOrder.isEmpty {
+            filteredApps = applyCustomOrder(filteredApps)
+        }
 
         // Sort groups and shortcuts within each app
         for i in filteredApps.indices {
@@ -522,6 +535,70 @@ class ShortcutStore: ObservableObject {
                 return false
             case (nil, nil):
                 return false
+            }
+        }
+    }
+    
+    // MARK: - App ordering methods
+    private func applyCustomOrder(_ apps: [ShortcutApp]) -> [ShortcutApp] {
+        var orderedApps: [ShortcutApp] = []
+        var remainingApps = apps
+        
+        // First, add apps in the custom order
+        for appName in customAppOrder {
+            if let index = remainingApps.firstIndex(where: { $0.appName == appName }) {
+                orderedApps.append(remainingApps.remove(at: index))
+            }
+        }
+        
+        // Then add any remaining apps that weren't in the custom order
+        orderedApps.append(contentsOf: remainingApps)
+        
+        return orderedApps
+    }
+    
+    // Method to move an app in the custom order
+    func moveApp(from source: IndexSet, to destination: Int) {
+        let appNames = filteredApps.map { $0.appName }
+        var newOrder = customAppOrder.isEmpty ? appNames : customAppOrder
+        
+        // Ensure all current apps are in the order array
+        for appName in appNames {
+            if !newOrder.contains(appName) {
+                newOrder.append(appName)
+            }
+        }
+        
+        newOrder.move(fromOffsets: source, toOffset: destination)
+        customAppOrder = newOrder
+    }
+    
+    // MARK: - App visibility methods
+    func toggleAppVisibility(_ appName: String) {
+        if hiddenApps.contains(appName) {
+            hiddenApps.remove(appName)
+        } else {
+            hiddenApps.insert(appName)
+        }
+    }
+    
+    func getAllAvailableApps() -> [ShortcutApp] {
+        // Return all apps from loaded JSON files, regardless of hiddenApps filter
+        // This is used for the settings UI to show all apps with visibility toggles
+        return apps.compactMap { (app) -> ShortcutApp? in
+            // Only filter disabled apps from JSON
+            if app.disEnable == true {
+                return nil
+            }
+            return app
+        }.sorted { lhs, rhs in
+            // Apply custom order if exists, otherwise use JSON order
+            if !customAppOrder.isEmpty {
+                let lhsIndex = customAppOrder.firstIndex(of: lhs.appName) ?? Int.max
+                let rhsIndex = customAppOrder.firstIndex(of: rhs.appName) ?? Int.max
+                return lhsIndex < rhsIndex
+            } else {
+                return (lhs.order ?? 0) < (rhs.order ?? 0)
             }
         }
     }

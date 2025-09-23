@@ -10,13 +10,6 @@ struct SettingsView: View {
         Form {
             // Export at top
             Section {
-                //HStack {
-                //    Button("再スキャン") {
-                //        store.refreshAvailableJsons()
-                //    }
-                //    Spacer()
-                // }
-
                 Button("エクスポート (JSON)") {
                     doExport()
                 }
@@ -25,35 +18,52 @@ struct SettingsView: View {
                     Alert(title: Text("エクスポート"), message: Text(exportMessage), dismissButton: .default(Text("OK")))
                 }
             }
-
-            // JSON file selection list
-            Section(header: Text("ショートカットJSON")) {
-                // debug: show count and filenames
-                if store.availableJsons.count > 0 {
-                    Text("検出数: \(store.availableJsons.count)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-
-                if store.availableJsons.isEmpty {
-                    Text("利用可能なJSONが見つかりません。")
+            
+            // Integrated app management section
+            Section(header: Text("アプリ管理（表示・順序）")) {
+                let allApps = store.getAllAvailableApps()
+                
+                if allApps.isEmpty {
+                    Text("アプリが見つかりません。")
                         .foregroundColor(.secondary)
                 } else {
-                    ForEach(store.availableJsons) { entry in
+                    ForEach(allApps, id: \.id) { app in
                         HStack {
-                            Text(entry.displayName)
+                            Image(systemName: "line.horizontal.3")
+                                .foregroundColor(.secondary)
+                            Text(app.appName)
                             Spacer()
                             Toggle(isOn: Binding<Bool>(
-                                get: { store.selectedJsonFiles.contains(entry.fileName) },
+                                get: { !store.hiddenApps.contains(app.appName) },
                                 set: { newValue in
-                                    store.toggleJsonSelection(entry.fileName)
+                                    store.toggleAppVisibility(app.appName)
                                 }
                             )) {
                                 EmptyView()
                             }
                             .labelsHidden()
                         }
+                        .padding(.vertical, 2)
+                        .opacity(store.hiddenApps.contains(app.appName) ? 0.5 : 1.0)
                     }
+                    .onMove(perform: { source, destination in
+                        let allAppNames = allApps.map { $0.appName }
+                        var newOrder = store.customAppOrder.isEmpty ? allAppNames : store.customAppOrder
+                        
+                        // Ensure all current apps are in the order array
+                        for appName in allAppNames {
+                            if !newOrder.contains(appName) {
+                                newOrder.append(appName)
+                            }
+                        }
+                        
+                        newOrder.move(fromOffsets: source, toOffset: destination)
+                        store.customAppOrder = newOrder
+                    })
+                    
+                    Text("ドラッグして並び替え、トグルで表示/非表示を設定できます。")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
             }
         }
@@ -76,7 +86,8 @@ struct SettingsView: View {
 extension SettingsView {
     private func doExport() {
         // Build modified apps where shortcuts in store.hiddenIDs get disEnable = true
-        let modifiedApps: [ShortcutApp] = store.filteredApps.map { app in
+        // and update order based on custom app ordering
+        let modifiedApps: [ShortcutApp] = store.filteredApps.enumerated().map { (index, app) in
             let modifiedGroups = app.groups?.map { group in
                 let modifiedShortcuts = group.shortcuts?.map { shortcut -> ShortcutItem in
                     if store.hiddenIDs.contains(shortcut.id) {
@@ -88,7 +99,8 @@ extension SettingsView {
                 return ShortcutGroup(id: group.id, groupName: group.groupName, disEnable: group.disEnable, order: group.order, description: group.description, shortcuts: modifiedShortcuts)
             }
 
-            return ShortcutApp(id: app.id, appName: app.appName, disEnable: app.disEnable, order: app.order, icon: app.icon, version: app.version, groups: modifiedGroups)
+            // Update order based on current position in filteredApps (which reflects custom ordering)
+            return ShortcutApp(id: app.id, appName: app.appName, disEnable: app.disEnable, order: index, icon: app.icon, version: app.version, groups: modifiedGroups)
         }
 
         let encoder = JSONEncoder()

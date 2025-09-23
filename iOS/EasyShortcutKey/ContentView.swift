@@ -76,8 +76,8 @@ struct ContentView: View {
                         Section(header: appSectionHeader(app)) {
                             if let groups = app.groups, groups.count > 0 {
                                 // 初期選択をセット（safeIndex は折りたたみ時のみ使用するので _ に置換）
-                                let currentIndexOptional = store.selectedGroupIndex[app.id] ?? nil
-                                let currentIndex = currentIndexOptional ?? 0
+                                //let currentIndexOptional = store.selectedGroupIndex[app.id] ?? nil
+                                //let currentIndex = currentIndexOptional ?? 0
 
                                 // グループタブと展開ボタン
                                 HStack(alignment: .center, spacing: 6) {
