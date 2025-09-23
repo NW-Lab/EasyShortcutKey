@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "ja",
   "strings" : {
-    "" : {
-
-    },
     "—" : {
 
     },
@@ -20,40 +17,114 @@
 
     },
     "エクスポート" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export"
+          }
+        }
+      }
     },
     "エクスポート (JSON)" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export(JSON)"
+          }
+        }
+      }
     },
     "コピーしました: %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "copied: %@"
+          }
+        }
+      }
     },
     "ショートカットJSON" : {
-
-    },
-    "再スキャン" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShortcutJson"
+          }
+        }
+      }
     },
     "利用可能なJSONが見つかりません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No JSON available."
+          }
+        }
+      }
     },
     "検出数: %lld" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "detected: %lld"
+          }
+        }
+      }
     },
     "表示" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show"
+          }
+        }
+      }
     },
     "設定" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setting"
+          }
+        }
+      }
     },
     "閉じる" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        }
+      }
     },
     "非表示" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hidden"
+          }
+        }
+      }
     },
     "非表示を表示" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Hidden"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

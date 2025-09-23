@@ -128,6 +128,11 @@ class ShortcutStore: ObservableObject {
         didSet { updateFilteredApps() }
     }
 
+    // UI selection state for export functionality
+    @Published var selectedAppIndex: Int = 0
+    @Published var selectedGroupIndex: [UUID: Int?] = [:]
+    @Published var expandedSet: Set<UUID> = []
+
     // MARK: - JSON file discovery & selection
     struct JsonFileEntry: Identifiable {
         let id = UUID()
@@ -149,13 +154,37 @@ class ShortcutStore: ObservableObject {
         // discover bundled shortcutJsons
         scanShortcutJsons()
 
-        // load persisted selection if any
+        // load persisted selection if any, but restrict to files present in current locale's availableJsons
+        let availableNames = Set(availableJsons.map { $0.fileName })
         if let saved = UserDefaults.standard.stringArray(forKey: "SelectedShortcutJsonFiles"), saved.count > 0 {
-            self.selectedJsonFiles = Set(saved)
-            loadSelectedFiles()
+            let savedSet = Set(saved)
+            let intersection = savedSet.intersection(availableNames)
+
+            if intersection.count > 0 {
+                // Restore only files that exist for current locale
+                self.selectedJsonFiles = intersection
+                // Persist cleaned selection
+                UserDefaults.standard.set(Array(intersection), forKey: "SelectedShortcutJsonFiles")
+                loadSelectedFiles()
+            } else if availableNames.count > 0 {
+                // Previously saved selection doesn't apply to this locale: default to all available for this locale
+                self.selectedJsonFiles = availableNames
+                UserDefaults.standard.set(Array(availableNames), forKey: "SelectedShortcutJsonFiles")
+                loadSelectedFiles()
+            } else {
+                // No available JSONs for this locale -> fallback to default single file
+                UserDefaults.standard.removeObject(forKey: "SelectedShortcutJsonFiles")
+                load(from: filename)
+            }
         } else {
-            // fallback to default single file
-            load(from: filename)
+            // First launch: select all discovered JSON files by default (if any), persist and load them
+            if availableNames.count > 0 {
+                self.selectedJsonFiles = availableNames
+                UserDefaults.standard.set(Array(availableNames), forKey: "SelectedShortcutJsonFiles")
+                loadSelectedFiles()
+            } else {
+                load(from: filename)
+            }
         }
     }
 
@@ -182,13 +211,40 @@ class ShortcutStore: ObservableObject {
     private func scanShortcutJsons() {
         print("[ShortcutStore] scanShortcutJsons: start scanning bundle for JSON files (prefer shortcutJsons subdirectory)")
 
+        // Debug: print bundle resourceURL and its top-level children to help diagnose missing folders
+        if let res = Bundle.main.resourceURL {
+            print("[ShortcutStore] bundle.resourceURL = \(res.path)")
+            let fm = FileManager.default
+            if let children = try? fm.contentsOfDirectory(atPath: res.path) {
+                print("[ShortcutStore] bundle top-level children: \(children)")
+            } else {
+                print("[ShortcutStore] failed to list bundle resourceURL children")
+            }
+        } else {
+            print("[ShortcutStore] Bundle.resourceURL is nil")
+        }
+        
+
         var entries: [JsonFileEntry] = []
         let decoder = JSONDecoder()
         var seenNames: Set<String> = []
 
         // First, try to get files specifically in shortcutJsons subdirectory (preferred)
-        if let subUrls = Bundle.main.urls(forResourcesWithExtension: "json", subdirectory: "shortcutJsons"), subUrls.count > 0 {
-            print("[ShortcutStore] found \(subUrls.count) files in shortcutJsons subdirectory")
+        // Choose subdirectory based on current preferred language. If English, prefer shortcutJsons_en.
+        // Decide preferred subdirectory based on the device/user language preference.
+        // Use Locale.preferredLanguages so that the user's language setting controls which folder is used.
+        let preferredSubdir: String
+        // Use device/user preferred language to decide folder. Do NOT rely on Bundle.preferredLocalizations
+        // so Xcode Run As/App Language overrides won't change which folder we pick.
+        let userLang = Locale.preferredLanguages.first ?? ""
+        if userLang.hasPrefix("en") {
+            preferredSubdir = "shortcutJsons_en"
+        } else {
+            preferredSubdir = "shortcutJsons"
+        }
+
+        if let subUrls = Bundle.main.urls(forResourcesWithExtension: "json", subdirectory: preferredSubdir), subUrls.count > 0 {
+            print("[ShortcutStore] found \(subUrls.count) files in \(preferredSubdir) subdirectory")
             for url in subUrls {
                 let fname = url.lastPathComponent
                 guard !seenNames.contains(fname) else { continue }
@@ -223,54 +279,111 @@ class ShortcutStore: ObservableObject {
             availableJsons = uniqueByKey.values.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
             print("[ShortcutStore] scan complete (subdir). found \(availableJsons.count) json entries (deduped)")
              return
-        }
+         }
 
-        // Fallback: recursive scan of bundle resources (used for testing), but exclude top-level Shortcuts.json
-        guard let resourceURL = Bundle.main.resourceURL else {
-            print("[ShortcutStore] Bundle.resourceURL is nil")
-            availableJsons = []
-            return
-        }
+        // If Bundle API didn't return files for the preferred subdir, try a case-insensitive
+        // match of the directory name under the bundle resource URL and enumerate its files.
+        if let resourceURL = Bundle.main.resourceURL {
+            let fm = FileManager.default
+            if let children = try? fm.contentsOfDirectory(at: resourceURL, includingPropertiesForKeys: nil, options: []) {
+                if let matchDir = children.first(where: { $0.hasDirectoryPath && $0.lastPathComponent.lowercased() == preferredSubdir.lowercased() }) {
+                    print("[ShortcutStore] found directory (case-insensitive match): \(matchDir.path)")
+                    if let jsonFiles = try? fm.contentsOfDirectory(at: matchDir, includingPropertiesForKeys: nil, options: []).filter({ $0.pathExtension.lowercased() == "json" }), jsonFiles.count > 0 {
+                        for url in jsonFiles {
+                            let fname = url.lastPathComponent
+                            guard !seenNames.contains(fname) else { continue }
+                            seenNames.insert(fname)
 
-        let fm = FileManager.default
-        let enumerator = fm.enumerator(at: resourceURL, includingPropertiesForKeys: nil)
+                            print("[ShortcutStore] inspecting matched-dir file: \(url.path)")
+                            do {
+                                let data = try Data(contentsOf: url)
+                                do {
+                                    let apps = try decodeApps(from: data, using: decoder)
+                                    let display = apps.first?.appName ?? fname
+                                    entries.append(JsonFileEntry(fileName: fname, displayName: display, url: url))
+                                    print("[ShortcutStore] decoded JSON from matched-dir: \(fname) -> display=\(display)")
+                                } catch {
+                                    print("[ShortcutStore] decode error for matched-dir file \(fname): \(error)")
+                                }
+                            } catch {
+                                print("[ShortcutStore] failed to read data at url: \(url.path) error: \(error)")
+                            }
+                        }
 
-        while let element = enumerator?.nextObject() as? URL {
-            if element.pathExtension.lowercased() != "json" { continue }
-            let fname = element.lastPathComponent
-            // skip the main Shortcuts.json at bundle root to avoid duplicate default
-            if fname == "Shortcuts.json" { continue }
-            if seenNames.contains(fname) { continue }
-            seenNames.insert(fname)
-
-            print("[ShortcutStore] inspecting file: \(element.path)")
-            do {
-                let data = try Data(contentsOf: element)
-                do {
-                    let apps = try decodeApps(from: data, using: decoder)
-                    let display = apps.first?.appName ?? fname
-                    entries.append(JsonFileEntry(fileName: fname, displayName: display, url: element))
-                    print("[ShortcutStore] decoded JSON: \(fname) -> display=\(display) at \(element.path)")
-                } catch {
-                    print("[ShortcutStore] decode error for file \(fname): \(error)")
+                        // Deduplicate as before
+                        var uniqueByKey: [String: JsonFileEntry] = [:]
+                        for e in entries {
+                            let key = e.displayName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                            if uniqueByKey[key] == nil {
+                                uniqueByKey[key] = e
+                            } else {
+                                print("[ShortcutStore] skipping duplicate displayName: \(e.displayName) at \(e.url.path)")
+                            }
+                        }
+                        availableJsons = uniqueByKey.values.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
+                        print("[ShortcutStore] scan complete (matched-dir). found \(availableJsons.count) json entries (deduped)")
+                        return
+                    }
                 }
-            } catch {
-                print("[ShortcutStore] failed to read data at url: \(element.path) error: \(error)")
             }
-        }
 
-        // Deduplicate by normalized displayName for fallback scan as well
-        var uniqueByKeyFallback: [String: JsonFileEntry] = [:]
-        for e in entries {
-            let key = e.displayName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-            if uniqueByKeyFallback[key] == nil {
-                uniqueByKeyFallback[key] = e
-            } else {
-                print("[ShortcutStore] skipping duplicate displayName (fallback): \(e.displayName) at \(e.url.path)")
+            // If the preferred subdir isn't present in the bundle, some build setups may have
+            // placed the JSON files at the bundle root. As a pragmatic fallback, use top-level
+            // JSONs filtered by locale: English => use *_en.json only; others => exclude *_en.json.
+            if let topJsons = try? fm.contentsOfDirectory(at: resourceURL, includingPropertiesForKeys: nil, options: []).filter({ $0.pathExtension.lowercased() == "json" }), topJsons.count > 0 {
+                let wantEnglish = preferredSubdir.hasSuffix("_en")
+                let filteredTop = topJsons.filter { url in
+                    let name = url.lastPathComponent
+                    if name == "Shortcuts.json" { return false }
+                    if wantEnglish {
+                        return name.lowercased().hasSuffix("_en.json")
+                    } else {
+                        return !name.lowercased().hasSuffix("_en.json")
+                    }
+                }
+                if filteredTop.count > 0 {
+                    print("[ShortcutStore] found top-level JSONs matching locale (count=\(filteredTop.count)). Using them as fallback")
+                    for url in filteredTop {
+                        let fname = url.lastPathComponent
+                        guard !seenNames.contains(fname) else { continue }
+                        seenNames.insert(fname)
+
+                        print("[ShortcutStore] inspecting top-level file: \(url.path)")
+                        do {
+                            let data = try Data(contentsOf: url)
+                            do {
+                                let apps = try decodeApps(from: data, using: decoder)
+                                let display = apps.first?.appName ?? fname
+                                entries.append(JsonFileEntry(fileName: fname, displayName: display, url: url))
+                                print("[ShortcutStore] decoded JSON from top-level: \(fname) -> display=\(display)")
+                            } catch {
+                                print("[ShortcutStore] decode error for top-level file \(fname): \(error)")
+                            }
+                        } catch {
+                            print("[ShortcutStore] failed to read data at url: \(url.path) error: \(error)")
+                        }
+                    }
+
+                    var uniqueByKeyTop: [String: JsonFileEntry] = [:]
+                    for e in entries {
+                        let key = e.displayName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                        if uniqueByKeyTop[key] == nil {
+                            uniqueByKeyTop[key] = e
+                        } else {
+                            print("[ShortcutStore] skipping duplicate displayName (top-level): \(e.displayName) at \(e.url.path)")
+                        }
+                    }
+                    availableJsons = uniqueByKeyTop.values.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
+                    print("[ShortcutStore] scan complete (top-level). found \(availableJsons.count) json entries (deduped)")
+                    return
+                }
             }
-        }
-        availableJsons = uniqueByKeyFallback.values.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
-        print("[ShortcutStore] scan complete. found \(availableJsons.count) json entries (deduped)")
+         }
+
+        // Per-locale policy: nothing found for preferred subdir or top-level fallback
+        print("[ShortcutStore] no JSON files found in \(preferredSubdir). availableJsons set to empty per locale policy")
+        availableJsons = []
+        return
      }
      
      // Public refresh for UI to trigger re-scan
@@ -381,6 +494,18 @@ class ShortcutStore: ObservableObject {
                 }
             }
         }
+        
+        // Initialize default group selection for apps that don't have selection yet
+        initializeDefaultGroupSelection()
+    }
+    
+    // Initialize default group selection (first group for each app)
+    private func initializeDefaultGroupSelection() {
+        for app in filteredApps {
+            if selectedGroupIndex[app.id] == nil, let groups = app.groups, groups.count > 0 {
+                selectedGroupIndex[app.id] = 0 // Select first group by default
+            }
+        }
     }
     
     private func sortByOrder<T>(_ items: [T], orderSelector: (T) -> Int?) -> [T] {
@@ -437,6 +562,20 @@ extension ShortcutItem {
         self.description = description
         self.context = context
         self.order = order
+    }
+}
+
+// MARK: - Export Models
+struct ExportGroupEntry: Codable {
+    let appName: String
+    let disEnable: Bool?
+    let order: Int?
+    let icon: String?
+    let version: String?
+    let group: ShortcutGroup
+    
+    private enum CodingKeys: String, CodingKey {
+        case appName, disEnable, order, icon, version, group
     }
 }
 

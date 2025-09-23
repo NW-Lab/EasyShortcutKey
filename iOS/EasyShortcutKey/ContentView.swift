@@ -6,13 +6,6 @@ struct ContentView: View {
     @StateObject private var store = ShortcutStore()
     @State private var copiedText: String = ""
     @State private var showCopyFeedback: Bool = false
-    // 各アプリごとの選択中グループインデックスと展開状態を保持
-    // selectedGroupIndex stores Optional to allow "no selection" when expanded
-    @State private var selectedGroupIndex: [UUID: Int?] = [:]
-    // expandedSet contains app ids that are expanded
-    @State private var expandedSet: Set<UUID> = []
-    // 選択中アプリのインデックス
-    @State private var selectedAppIndex: Int = 0
 
     var body: some View {
         NavigationView {
@@ -53,17 +46,29 @@ struct ContentView: View {
                 // Main content
                 // App タブ（複数アプリを選択）
                 if store.filteredApps.count > 0 {
-                    let safeAppIndex = min(max(0, selectedAppIndex), store.filteredApps.count - 1)
+                    let safeAppIndex = min(max(0, store.selectedAppIndex), store.filteredApps.count - 1)
 
                     // アプリ名をタブで表示
-                    Picker("", selection: $selectedAppIndex) {
-                        ForEach(Array(store.filteredApps.enumerated()), id: \.offset) { idx, app in
-                            Text(app.appName).tag(idx)
+                    // App tabs: horizontally scrollable buttons to avoid truncation
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach(Array(store.filteredApps.enumerated()), id: \.offset) { idx, app in
+                                Button(action: { store.selectedAppIndex = idx }) {
+                                    Text(app.appName)
+                                        .font(.subheadline)
+                                        .lineLimit(1)
+                                        .padding(.vertical, 6)
+                                        .padding(.horizontal, 12)
+                                        .background(store.selectedAppIndex == idx ? Color.accentColor.opacity(0.18) : Color(UIColor.systemGray6))
+                                        .foregroundColor(store.selectedAppIndex == idx ? Color.primary : Color.primary)
+                                        .cornerRadius(8)
+                                }
+                                .buttonStyle(BorderlessButtonStyle())
+                            }
                         }
+                        .padding(.horizontal)
+                        .padding(.vertical, 2)
                     }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .padding(.horizontal)
-                    .padding(.vertical, 2)
 
                     // 選択中アプリのみ表示
                     List {
@@ -71,26 +76,26 @@ struct ContentView: View {
                         Section(header: appSectionHeader(app)) {
                             if let groups = app.groups, groups.count > 0 {
                                 // 初期選択をセット（safeIndex は折りたたみ時のみ使用するので _ に置換）
-                                let currentIndexOptional = selectedGroupIndex[app.id] ?? nil
+                                let currentIndexOptional = store.selectedGroupIndex[app.id] ?? nil
                                 let currentIndex = currentIndexOptional ?? 0
 
                                 // グループタブと展開ボタン
                                 HStack(alignment: .center, spacing: 6) {
                                     Button(action: {
                                         // toggle expanded state in set
-                                        if expandedSet.contains(app.id) {
-                                            expandedSet.remove(app.id)
+                                        if store.expandedSet.contains(app.id) {
+                                            store.expandedSet.remove(app.id)
                                             // when collapsing, restore selection to 0 if nil
-                                            if selectedGroupIndex[app.id] == nil {
-                                                selectedGroupIndex[app.id] = 0
+                                            if store.selectedGroupIndex[app.id] == nil {
+                                                store.selectedGroupIndex[app.id] = 0
                                             }
                                         } else {
-                                            expandedSet.insert(app.id)
+                                            store.expandedSet.insert(app.id)
                                             // when expanding, clear selection
-                                            selectedGroupIndex[app.id] = nil
+                                            store.selectedGroupIndex[app.id] = nil
                                         }
                                     }) {
-                                        Image(systemName: (expandedSet.contains(app.id)) ? "chevron.down" : "chevron.right")
+                                        Image(systemName: (store.expandedSet.contains(app.id)) ? "chevron.down" : "chevron.right")
                                             .font(.system(size: 16, weight: .semibold))
                                             .frame(width: 24, height: 24)
                                     }
@@ -105,32 +110,35 @@ struct ContentView: View {
                                     .buttonStyle(BorderlessButtonStyle())
 
                                     // グループタブ（optional selection allowed）
-                                    Picker("", selection: Binding<Int?>(
-                                        get: {
-                                            // selectedGroupIndex[app.id] returns Int??, flatten to Int?
-                                            if let storedValue = selectedGroupIndex[app.id] {
-                                                return storedValue
-                                            } else {
-                                                return nil
+                                    // Group tabs: horizontally scrollable buttons (collapsed mode)
+                                    ScrollView(.horizontal, showsIndicators: false) {
+                                        HStack(spacing: 8) {
+                                            ForEach(Array(groups.enumerated()), id: \.offset) { idx, group in
+                                                let selectedIndex = store.selectedGroupIndex[app.id] ?? 0
+                                                let isSelected = selectedIndex == idx
+                                                Button(action: {
+                                                    store.selectedGroupIndex[app.id] = idx
+                                                    store.expandedSet.remove(app.id)
+                                                }) {
+                                                    Text(group.groupName)
+                                                        .font(.caption)
+                                                        .lineLimit(1)
+                                                        .padding(.vertical, 6)
+                                                        .padding(.horizontal, 10)
+                                                        .background(isSelected ? Color.accentColor.opacity(0.18) : Color(UIColor.systemGray6))
+                                                        .cornerRadius(8)
+                                                }
+                                                .buttonStyle(BorderlessButtonStyle())
+                                                .disabled(store.expandedSet.contains(app.id))
                                             }
-                                        },
-                                        set: { newValue in
-                                            selectedGroupIndex[app.id] = newValue
-                                            // selecting a group collapses expanded state
-                                            expandedSet.remove(app.id)
-                                        })) {
-                                        ForEach(Array(groups.enumerated()), id: \.offset) { idx, group in
-                                            Text(group.groupName).tag(Optional(idx))
                                         }
+                                        .frame(height: 32)
+                                        .layoutPriority(1)
                                     }
-                                    .pickerStyle(SegmentedPickerStyle())
-                                    .frame(height: 32)
-                                    .layoutPriority(1)
-                                    .disabled(expandedSet.contains(app.id))
-                                }
-                                
+                                 }
+                                 
                                 // 展開時は全グループを表示、グループ名を出力
-                                if expandedSet.contains(app.id) {
+                                if store.expandedSet.contains(app.id) {
                                      ForEach(groups) { group in
                                          // グループ名（目立つ装飾）
                                          HStack(spacing: 8) {
@@ -161,7 +169,7 @@ struct ContentView: View {
                                      }
                                 } else {
                                     // 折りたたみ時は選択中のグループのみ表示
-                                    let selIdxOptional = selectedGroupIndex[app.id] ?? nil
+                                    let selIdxOptional = store.selectedGroupIndex[app.id] ?? nil
                                     let selIdx = selIdxOptional ?? 0
                                     let safeIdx = min(max(0, selIdx), groups.count - 1)
                                      if let shortcuts = groups[safeIdx].shortcuts {
@@ -268,7 +276,7 @@ struct ContentView: View {
     
     private func keysButton(keys: [String]) -> some View {
         Button(action: {
-            copyToClipboard(keys.joined(separator: " + "))
+            //copyToClipboard(keys.joined(separator: " + "))
         }) {
             Text(keys.joined(separator: " + "))
                 .font(.caption)
@@ -288,7 +296,7 @@ struct ContentView: View {
             
             if let keys = step.keys {
                 Button(action: {
-                    copyToClipboard(keys.joined(separator: " + "))
+                    //copyToClipboard(keys.joined(separator: " + "))
                 }) {
                     Text(keys.joined(separator: " + "))
                         .font(.caption2)

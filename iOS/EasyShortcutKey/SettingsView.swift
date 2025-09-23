@@ -10,12 +10,12 @@ struct SettingsView: View {
         Form {
             // Export at top
             Section {
-                HStack {
-                    Button("再スキャン") {
-                        store.refreshAvailableJsons()
-                    }
-                    Spacer()
-                }
+                //HStack {
+                //    Button("再スキャン") {
+                //        store.refreshAvailableJsons()
+                //    }
+                //    Spacer()
+                // }
 
                 Button("エクスポート (JSON)") {
                     doExport()
@@ -76,7 +76,7 @@ struct SettingsView: View {
 extension SettingsView {
     private func doExport() {
         // Build modified apps where shortcuts in store.hiddenIDs get disEnable = true
-        let modifiedApps: [ShortcutApp] = store.apps.map { app in
+        let modifiedApps: [ShortcutApp] = store.filteredApps.map { app in
             let modifiedGroups = app.groups?.map { group in
                 let modifiedShortcuts = group.shortcuts?.map { shortcut -> ShortcutItem in
                     if store.hiddenIDs.contains(shortcut.id) {
@@ -97,7 +97,7 @@ extension SettingsView {
             let data = try encoder.encode(modifiedApps)
             if let jsonString = String(data: data, encoding: .utf8) {
                 UIPasteboard.general.string = jsonString
-                exportMessage = "JSONをクリップボードにコピーしました。"
+                exportMessage = "アプリデータ(\(modifiedApps.count)個)をクリップボードにコピーしました。"
                 showExportAlert = true
             }
         } catch {
