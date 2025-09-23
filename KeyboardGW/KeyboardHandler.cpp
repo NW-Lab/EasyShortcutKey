@@ -2,48 +2,48 @@
 
 // キー名とUSB HIDコードのマッピングテーブル
 const KeyboardHandler::KeyMapping KeyboardHandler::keyMappings[] = {
-  // 修飾キー（大文字小文字両対応）
-  {"ctrl", 0, KEY_LEFT_CTRL},
-  {"control", 0, KEY_LEFT_CTRL},
-  {"Ctrl", 0, KEY_LEFT_CTRL},
-  {"Control", 0, KEY_LEFT_CTRL},
+  // 修飾キー（大文字小文字両対応） - 順序修正済み
+  {"ctrl", KEY_LEFT_CTRL, 0},
+  {"control", KEY_LEFT_CTRL, 0},
+  {"Ctrl", KEY_LEFT_CTRL, 0},
+  {"Control", KEY_LEFT_CTRL, 0},
   
-  {"shift", 0, KEY_LEFT_SHIFT},
-  {"Shift", 0, KEY_LEFT_SHIFT},
+  {"shift", KEY_LEFT_SHIFT, 0},
+  {"Shift", KEY_LEFT_SHIFT, 0},
   
-  {"alt", 0, KEY_LEFT_ALT},
-  {"option", 0, KEY_LEFT_ALT},
-  {"Alt", 0, KEY_LEFT_ALT},
-  {"Option", 0, KEY_LEFT_ALT},
+  {"alt", KEY_LEFT_ALT, 0},
+  {"option", KEY_LEFT_ALT, 0},
+  {"Alt", KEY_LEFT_ALT, 0},
+  {"Option", KEY_LEFT_ALT, 0},
   
-  {"cmd", 0, KEY_LEFT_GUI},
-  {"win", 0, KEY_LEFT_GUI},
-  {"gui", 0, KEY_LEFT_GUI},
-  {"meta", 0, KEY_LEFT_GUI},
-  {"Cmd", 0, KEY_LEFT_GUI},
-  {"Win", 0, KEY_LEFT_GUI},
-  {"Command", 0, KEY_LEFT_GUI},
-  {"Windows", 0, KEY_LEFT_GUI},
+  {"cmd", KEY_LEFT_GUI, 0},
+  {"win", KEY_LEFT_GUI, 0},
+  {"gui", KEY_LEFT_GUI, 0},
+  {"meta", KEY_LEFT_GUI, 0},
+  {"Cmd", KEY_LEFT_GUI, 0},
+  {"Win", KEY_LEFT_GUI, 0},
+  {"Command", KEY_LEFT_GUI, 0},
+  {"Windows", KEY_LEFT_GUI, 0},
   
-  // 文字キー（大文字小文字両対応）
-  {"a", KEY_A, 0}, {"A", KEY_A, 0}, {"b", KEY_B, 0}, {"B", KEY_B, 0},
-  {"c", KEY_C, 0}, {"C", KEY_C, 0}, {"d", KEY_D, 0}, {"D", KEY_D, 0},
-  {"e", KEY_E, 0}, {"E", KEY_E, 0}, {"f", KEY_F, 0}, {"F", KEY_F, 0},
-  {"g", KEY_G, 0}, {"G", KEY_G, 0}, {"h", KEY_H, 0}, {"H", KEY_H, 0},
-  {"i", KEY_I, 0}, {"I", KEY_I, 0}, {"j", KEY_J, 0}, {"J", KEY_J, 0},
-  {"k", KEY_K, 0}, {"K", KEY_K, 0}, {"l", KEY_L, 0}, {"L", KEY_L, 0},
-  {"m", KEY_M, 0}, {"M", KEY_M, 0}, {"n", KEY_N, 0}, {"N", KEY_N, 0},
-  {"o", KEY_O, 0}, {"O", KEY_O, 0}, {"p", KEY_P, 0}, {"P", KEY_P, 0},
-  {"q", KEY_Q, 0}, {"Q", KEY_Q, 0}, {"r", KEY_R, 0}, {"R", KEY_R, 0},
-  {"s", KEY_S, 0}, {"S", KEY_S, 0}, {"t", KEY_T, 0}, {"T", KEY_T, 0},
-  {"u", KEY_U, 0}, {"U", KEY_U, 0}, {"v", KEY_V, 0}, {"V", KEY_V, 0},
-  {"w", KEY_W, 0}, {"W", KEY_W, 0}, {"x", KEY_X, 0}, {"X", KEY_X, 0},
-  {"y", KEY_Y, 0}, {"Y", KEY_Y, 0}, {"z", KEY_Z, 0}, {"Z", KEY_Z, 0},
+  // 文字キー（大文字小文字両対応） - HIDコード直接指定
+  {"a", 0x04, 0}, {"A", 0x04, 0}, {"b", 0x05, 0}, {"B", 0x05, 0},
+  {"c", 0x06, 0}, {"C", 0x06, 0}, {"d", 0x07, 0}, {"D", 0x07, 0},
+  {"e", 0x08, 0}, {"E", 0x08, 0}, {"f", 0x09, 0}, {"F", 0x09, 0},
+  {"g", 0x0A, 0}, {"G", 0x0A, 0}, {"h", 0x0B, 0}, {"H", 0x0B, 0},
+  {"i", 0x0C, 0}, {"I", 0x0C, 0}, {"j", 0x0D, 0}, {"J", 0x0D, 0},
+  {"k", 0x0E, 0}, {"K", 0x0E, 0}, {"l", 0x0F, 0}, {"L", 0x0F, 0},
+  {"m", 0x10, 0}, {"M", 0x10, 0}, {"n", 0x11, 0}, {"N", 0x11, 0},
+  {"o", 0x12, 0}, {"O", 0x12, 0}, {"p", 0x13, 0}, {"P", 0x13, 0},
+  {"q", 0x14, 0}, {"Q", 0x14, 0}, {"r", 0x15, 0}, {"R", 0x15, 0},
+  {"s", 0x16, 0}, {"S", 0x16, 0}, {"t", 0x17, 0}, {"T", 0x17, 0},
+  {"u", 0x18, 0}, {"U", 0x18, 0}, {"v", 0x19, 0}, {"V", 0x19, 0},
+  {"w", 0x1A, 0}, {"W", 0x1A, 0}, {"x", 0x1B, 0}, {"X", 0x1B, 0},
+  {"y", 0x1C, 0}, {"Y", 0x1C, 0}, {"z", 0x1D, 0}, {"Z", 0x1D, 0},
   
-  // 数字キー
-  {"0", KEY_0, 0}, {"1", KEY_1, 0}, {"2", KEY_2, 0}, {"3", KEY_3, 0},
-  {"4", KEY_4, 0}, {"5", KEY_5, 0}, {"6", KEY_6, 0}, {"7", KEY_7, 0},
-  {"8", KEY_8, 0}, {"9", KEY_9, 0},
+  // 数字キー - HIDコード直接指定
+  {"0", 0x27, 0}, {"1", 0x1E, 0}, {"2", 0x1F, 0}, {"3", 0x20, 0},
+  {"4", 0x21, 0}, {"5", 0x22, 0}, {"6", 0x23, 0}, {"7", 0x24, 0},
+  {"8", 0x25, 0}, {"9", 0x26, 0},
   
   // ファンクションキー（大文字小文字両対応）
   {"f1", KEY_F1, 0}, {"F1", KEY_F1, 0}, {"f2", KEY_F2, 0}, {"F2", KEY_F2, 0},
@@ -76,18 +76,18 @@ const KeyboardHandler::KeyMapping KeyboardHandler::keyMappings[] = {
   {"pagedown", KEY_PAGE_DOWN, 0}, {"PageDown", KEY_PAGE_DOWN, 0},
   {"insert", KEY_INSERT, 0}, {"Insert", KEY_INSERT, 0},
   
-  // 記号キー（一部）
-  {"-", KEY_MINUS, 0},
-  {"=", KEY_EQUAL, 0},
-  {"[", KEY_LEFT_BRACE, 0},
-  {"]", KEY_RIGHT_BRACE, 0},
-  {"\\", KEY_BACKSLASH, 0},
-  {";", KEY_SEMICOLON, 0},
-  {"'", KEY_QUOTE, 0},
-  {",", KEY_COMMA, 0},
-  {".", KEY_PERIOD, 0},
-  {"/", KEY_SLASH, 0},
-  {"`", KEY_TILDE, 0}
+  // 記号キー（一部） - HIDコード直接指定
+  {"-", 0x2D, 0},      // Minus/Hyphen
+  {"=", 0x2E, 0},      // Equal sign
+  {"[", 0x2F, 0},      // Left bracket
+  {"]", 0x30, 0},      // Right bracket
+  {"\\", 0x31, 0},     // Backslash
+  {";", 0x33, 0},      // Semicolon
+  {"'", 0x34, 0},      // Apostrophe/Quote
+  {",", 0x36, 0},      // Comma
+  {".", 0x37, 0},      // Period
+  {"/", 0x38, 0},      // Slash
+  {"`", 0x35, 0}       // Grave accent/Tilde
 };
 
 const int KeyboardHandler::keyMappingsCount = sizeof(keyMappings) / sizeof(KeyMapping);

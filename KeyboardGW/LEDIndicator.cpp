@@ -9,9 +9,9 @@ LEDIndicator::LEDIndicator() {
 }
 
 void LEDIndicator::begin() {
-  M5.begin();
-  M5.dis.begin();
-  M5.dis.setBrightness(50); // デフォルト輝度
+  AtomS3.begin(true);  // M5AtomS3Lite初期化
+  AtomS3.dis.setBrightness(50); // デフォルト輝度
+  Serial.println("[LED] M5AtomS3 LED初期化完了");
   setStatus(STATUS_STARTING);
 }
 
@@ -57,20 +57,25 @@ void LEDIndicator::update() {
       lastBlinkTime = currentTime;
       
       if (blinkState) {
-        M5.dis.fillpix(blinkColor);
+        AtomS3.dis.drawpix(blinkColor);
+        AtomS3.update();
       } else {
-        M5.dis.fillpix(LED_OFF);
+        AtomS3.dis.drawpix(LED_OFF);
+        AtomS3.update();
       }
     }
   }
 }
 
 void LEDIndicator::setBrightness(uint8_t brightness) {
-  M5.dis.setBrightness(brightness);
+  AtomS3.dis.setBrightness(brightness);
+  Serial.printf("[LED] 輝度設定: %d\n", brightness);
 }
 
 void LEDIndicator::setColor(uint32_t color) {
-  M5.dis.fillpix(color);
+  AtomS3.dis.drawpix(color);
+  AtomS3.update();
+  Serial.printf("[LED] 色設定: 0x%06X\n", color);
   stopBlink();
 }
 
