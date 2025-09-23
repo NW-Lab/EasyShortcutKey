@@ -1,5 +1,42 @@
 # 使用方法ガイド
 
+## 🆕 iOS版 EasyShortcutKey Version 2.0 の使い方
+
+### 基本的な動作モード
+
+**Version 2.0では2つの動作モードがあります：**
+
+1. **🎮 キー送信モード**（KeyboardGW接続時）
+   - ショートカットをタップ → PC/Macに実際のキー操作を送信
+   - リアルタイム反応で即座にアプリケーション操作が可能
+
+2. **📋 クリップボードモード**（従来の動作）
+   - ショートカットをタップ → クリップボードにコピー
+   - KeyboardGW未接続時の動作
+
+### KeyboardGWデバイスのペアリング
+
+**必要なもの:**
+- iPhone（iOS 14以降）
+- KeyboardGWデバイス（M5Stack AtomS3 + ファームウェア）
+- PC（Windows/Mac、USBポート）
+
+**ペアリング手順:**
+1. KeyboardGWをPCのUSBポートに接続
+2. iOSアプリの設定画面から「KeyboardGW」を選択
+3. 「デバイスを検索」をタップ
+4. リストに表示された「EasyShortcutKey-GW」を選択
+5. 接続完了（LEDが緑色に点灯）
+
+**詳細な手順:** [`Manual/Pairing.html`](Manual/Pairing.html) をご覧ください。
+
+### 接続状況の確認
+
+**ホーム画面のステータスインジケータ:**
+- 🟢 **緑色**: KeyboardGW接続済み（キー送信可能）
+- 🟠 **オレンジ（点滅）**: デバイス検索中
+- ⚪ **グレー**: 未接続・待機中
+
 ## ブラウザ版 Easy Shortcut Key の使い方
 
 ### 基本的な使用方法
@@ -91,3 +128,39 @@
   ---
 
   詳細な設定例や運用ルール、他デバイスの情報は `config/` と `browser/README.md` を参照してください。
+
+## iOS版 詳細情報
+
+### 対応キー一覧（Version 2.0）
+
+**修飾キー（大文字小文字両対応）:**
+- `Ctrl`, `Control`, `Shift`, `Alt`, `Option`
+- `Cmd`, `Command`, `Win`, `Windows`
+
+**特殊キー:**
+- 矢印キー: `↑↓←→` (記号) または `Up/Down/Left/Right` (英語)
+- 機能キー: `Space`, `Enter`, `Tab`, `Esc`, `F1-F12`
+- その他: `Backspace`, `Delete`, `Home`, `End`, `PageUp`, `PageDown`
+
+### トラブルシューティング
+
+**キーが送信されない場合:**
+1. KeyboardGWの接続状況を確認（LEDが緑色で点灯）
+2. PC側でキーボードデバイスとして認識されているか確認
+3. 設定画面の「テストキー送信」で動作確認
+
+**デバイスが見つからない場合:**
+1. KeyboardGWがUSBで正しく接続されているか確認
+2. デバイスのLEDが青色で点灯（待機中）になっているか確認
+3. iPhoneのBluetooth設定を確認
+
+### システム要件
+
+- **iOS**: 14.0以降
+- **KeyboardGW**: M5Stack AtomS3 + カスタムファームウェア
+- **PC**: Windows 10以降 または macOS 10.15以降
+- **通信**: Bluetooth LE対応
+
+---
+
+詳細なペアリング手順とFAQは [`Manual/Pairing.html`](Manual/Pairing.html) をご覧ください。

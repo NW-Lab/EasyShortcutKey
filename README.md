@@ -4,7 +4,22 @@
 
 ショートカットキーが覚えられない問題を解決するため、iOS、ブラウザ、M5Stack Tab5、M5Paper など複数のデバイスで共通の設定を使って、いつでもどこでもショートカットキーを確認できるシステムです。
 
-## 🎯 特徴
+## � Version 2.0 新機能
+
+**🎮 リアルタイムキー送信機能**
+- iOSアプリとKeyboardGWデバイス（M5Stack AtomS3）をBluetoothで連携
+- ショートカットをタップするだけでPCに実際のキー操作を送信
+- USB HIDキーボードとしてWindows/Mac両対応
+
+**システム構成:**
+```
+iPhone (iOSアプリ) → [Bluetooth] → KeyboardGW → [USB] → PC (Windows/Mac)
+```
+
+**🔗 ペアリング方法:**
+詳細なペアリング手順は [`Manual/Pairing.html`](Manual/Pairing.html) をご覧ください。
+
+## �🎯 特徴
 
 - **統一された設定**: 1つのJSONファイルで全デバイスの設定を管理
 - **マルチデバイス対応**: iOS、ブラウザ、M5Stack、M5Paper 対応予定
@@ -32,7 +47,9 @@
    - 命名例: `VS Code (mac).json`, `Photoshop.json`。
    - マージ時のルール: 各アプリ内で `order` が設定されていればそれを優先、未指定ならファイル内の配列順を保持する想定。
 - `browser/` – ブラウザ用の静的アセット（`index.source.html`, `index.html`, `app.js`, `style.css`, ビルドスクリプトなど）。
-- `iOS/` – iOS（SwiftUI）実装のソース。
+- `iOS/` – iOS（SwiftUI）実装のソース。Version 2.0でKeyboardGWとのBluetooth連携機能を実装。
+- `KeyboardGW/` – M5Stack AtomS3用のファームウェア（Arduino/PlatformIO）。BLE通信とUSB HID Keyboard機能を提供。
+- `Manual/` – 使用方法とペアリング手順のドキュメント。WordPress等での公開用HTMLも含む。
 
 ## ドキュメント
 

@@ -48,6 +48,53 @@ KeyboardGWは、iPhoneから受信したショートカットコマンドを、P
 - **必要ライブラリ**:
   - `ESP32 BLE Arduino`
   - `USB HID`
+  - `M5AtomS3`
+  - `ArduinoJson`
+
+## Version 2.0 対応キー一覧（実装済み）
+
+### 修飾キー（大文字小文字両対応）
+- `Ctrl`, `Control` → KEY_LEFT_CTRL
+- `Shift` → KEY_LEFT_SHIFT  
+- `Alt`, `Option` → KEY_LEFT_ALT
+- `Cmd`, `Command`, `Win`, `Windows` → KEY_LEFT_GUI
+
+### 文字・数字キー（A-Z、0-9）
+- 大文字小文字両対応: `a`/`A`, `b`/`B`, ... `z`/`Z`
+- 数字キー: `0`, `1`, `2`, ... `9`
+
+### ファンクションキー（大文字小文字両対応）
+- `F1`/`f1`, `F2`/`f2`, ... `F12`/`f12`
+
+### 特殊キー（大文字小文字両対応）
+- `Enter`/`enter`, `Return`/`return` → KEY_RETURN
+- `Space`/`space` → KEY_SPACE
+- `Tab`/`tab` → KEY_TAB
+- `Backspace`/`backspace` → KEY_BACKSPACE
+- `Delete`/`delete` → KEY_DELETE
+- `Escape`/`escape`, `Esc`/`esc` → KEY_ESC
+
+### 矢印キー（記号と英語表記両対応）
+- `↑`, `Up`/`up` → KEY_UP_ARROW
+- `↓`, `Down`/`down` → KEY_DOWN_ARROW  
+- `←`, `Left`/`left` → KEY_LEFT_ARROW
+- `→`, `Right`/`right` → KEY_RIGHT_ARROW
+
+### その他特殊キー
+- `Home`/`home`, `End`/`end`
+- `PageUp`/`pageup`, `PageDown`/`pagedown`
+- `Insert`/`insert`
+
+### 記号キー
+- `-`, `=`, `[`, `]`, `\`, `;`, `'`, `,`, `.`, `/`, `` ` ``
+
+## BLE通信プロトコル（実装済み）
+
+### GATT Service & Characteristics
+- **Service UUID**: `12345678-1234-1234-1234-123456789ABC`
+- **Shortcut Characteristic**: `12345678-1234-1234-1234-123456789ABD` (Write)
+- **Status Characteristic**: `12345678-1234-1234-1234-123456789ABE` (Notify)  
+- **Pairing Characteristic**: `12345678-1234-1234-1234-123456789ABF` (Write)
   - `M5AtomS3` (LED制御用)
 
 ## ファイル構成（予定）

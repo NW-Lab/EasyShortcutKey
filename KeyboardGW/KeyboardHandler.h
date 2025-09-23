@@ -32,6 +32,7 @@ public:
 private:
   uint8_t getKeyCode(String keyName);
   uint8_t getModifierCode(String keyName);
+  String normalizeKeyName(String keyName);
   void pressModifiers(uint8_t modifiers);
   void releaseModifiers(uint8_t modifiers);
   void delay_ms(int ms);

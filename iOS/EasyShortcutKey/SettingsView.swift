@@ -8,6 +8,25 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
+            // KeyboardGW設定セクション
+            Section(header: Text("外部デバイス")) {
+                NavigationLink(destination: KeyboardGWPairingView()) {
+                    HStack {
+                        Image(systemName: "keyboard")
+                            .foregroundColor(.blue)
+                            .frame(width: 24)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("KeyboardGW")
+                                .font(.body)
+                            Text("PCのUSBキーボードとして認識されます。")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                    }
+                }
+            }
+            
             // Export at top
             Section {
                 Button("エクスポート (JSON)") {

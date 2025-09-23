@@ -7,8 +7,44 @@
     "%lld." : {
 
     },
+    "%lld%%" : {
+
+    },
     "Context: %@" : {
 
+    },
+    "KeyboardGW" : {
+
+    },
+    "KeyboardGWデバイスをペアリングすると、ショートカット表示時に実際のキー入力が送信されます。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When you pair a KeyboardGW device, actual keystrokes are sent when shortcuts are displayed."
+          }
+        }
+      }
+    },
+    "KeyboardGW接続中" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KeyboardGW Connected"
+          }
+        }
+      }
+    },
+    "KeyboardGW設定" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KeyboardGW Setting"
+          }
+        }
+      }
     },
     "No apps" : {
 
@@ -16,11 +52,35 @@
     "OK" : {
 
     },
+    "PCのUSBキーボードとして認識されます。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "It will be recognized as a USB keyboard by your PC."
+          }
+        }
+      }
+    },
     "アプリが見つかりません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App not found."
+          }
+        }
+      }
     },
     "アプリ管理（表示・順序）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App management (display/order)"
+          }
+        }
+      }
     },
     "エクスポート" : {
       "localizations" : {
@@ -52,38 +112,102 @@
         }
       }
     },
-    "ショートカットJSON" : {
-      "extractionState" : "stale",
+    "テストキー送信" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ShortcutJson"
+            "value" : "Test key transmission"
+          }
+        }
+      }
+    },
+    "デバイスを検索" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find Device"
+          }
+        }
+      }
+    },
+    "デバイス名: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Devie: %@"
           }
         }
       }
     },
     "ドラッグして並び替え、トグルで表示/非表示を設定できます。" : {
-
-    },
-    "利用可能なJSONが見つかりません。" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No JSON available."
+            "value" : "You can drag them to rearrange them and toggle to show/hide them."
           }
         }
       }
     },
-    "検出数: %lld" : {
-      "extractionState" : "stale",
+    "切断" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "detected: %lld"
+            "value" : "disconnected"
+          }
+        }
+      }
+    },
+    "外部キーボードデバイスと接続してショートカットキーを送信できます" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can connect an external keyboard device and send shortcut keys."
+          }
+        }
+      }
+    },
+    "外部デバイス" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "External Devices"
+          }
+        }
+      }
+    },
+    "完了" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "completion"
+          }
+        }
+      }
+    },
+    "検索中..." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Searching…"
+          }
+        }
+      }
+    },
+    "発見されたデバイス" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discovered Devices"
           }
         }
       }

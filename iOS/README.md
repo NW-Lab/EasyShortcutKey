@@ -67,11 +67,33 @@ JSON スキーマの詳細は `config/schema.json` を参照。`appName` / `grou
 
 ---
 
-## BLE を使うときの注意（先にメモ）
-実装を入れるときは Info.plist に以下のキーが必要になるよ：
+## BLE を使うときの注意（実装済み）
+Version 2.0で BLE 実装が完了しました。Info.plist に以下のキーを追加する必要があります：
 - `NSBluetoothAlwaysUsageDescription` … Bluetooth 利用の目的説明
 
-Central 役でスキャン/接続する場合はこれで OK。バックグラウンド接続や Peripheral 役もやるなら、追加の設定が必要になることがある（そのときに追記）。
+### Version 2.0 の新機能
+- **KeyboardGWManager.swift**: BLE通信管理クラス
+- **KeyboardGWPairingView.swift**: デバイスペアリング設定画面  
+- **ContentView**: KeyboardGW接続状況表示とリアルタイムキー送信
+- **SettingsView**: KeyboardGW設定項目追加
+
+### KeyboardGWとの連携仕様
+- **BLE Service UUID**: `12345678-1234-1234-1234-123456789ABC`
+- **ショートカット特性**: `12345678-1234-1234-1234-123456789ABD`
+- **ステータス特性**: `12345678-1234-1234-1234-123456789ABE`
+- **ペアリング特性**: `12345678-1234-1234-1234-123456789ABF`
+
+### 対応キー一覧
+KeyboardGWは以下の特殊キーに完全対応：
+- **修飾キー**: Shift, Ctrl/Control, Alt/Option, Cmd/Win/Command/Windows
+- **矢印キー**: ↑↓←→ (記号) または Up/Down/Left/Right (英語)
+- **特殊キー**: Space, Enter/Return, Tab, Esc/Escape, Backspace, Delete
+- **ファンクションキー**: F1-F12
+- **その他**: Home, End, PageUp, PageDown, Insert
+
+### 動作モード
+- **接続中**: ショートカットタップ → KeyboardGW経由でPCにリアルタイム送信 🎮
+- **未接続**: ショートカットタップ → クリップボードにコピー（従来通り）📋
 
 ---
 
@@ -95,4 +117,37 @@ Central 役でスキャン/接続する場合はこれで OK。バックグラ�
 - 初期スキャフォールド追加（SwiftUI）
 - `Shortcuts.json` ロードと一覧表示の実装
 - `Item.swift`（テンプレート）削除、参照クリーンアップ済み
+- **Version 2.0**: KeyboardGW連携機能を追加
+  - `KeyboardGWManager.swift` … BLE通信でKeyboardGWと接続するマネージャークラス
+  - `KeyboardGWPairingView.swift` … KeyboardGWのペアリング設定画面
+  - `SettingsView.swift` … KeyboardGW設定項目を追加
+  - `ContentView.swift` … 接続状況表示とショートカット送信機能を追加
+  - ショートカットタップ時: KeyboardGW接続中は実際のキー送信、未接続時はクリップボードコピー
+
+## Version 2.0 設定手順
+
+### 1. Xcodeプロジェクト設定
+1. Xcode で `iOS/EasyShortcutKey.xcodeproj` を開く
+2. プロジェクトナビゲータで `EasyShortcutKey` プロジェクトを選択
+3. `TARGETS` → `EasyShortcutKey` → `Info` タブを選択
+4. `Custom iOS Target Properties` セクションで `+` ボタンをクリック
+5. `Privacy - Bluetooth Always Usage Description` を追加
+6. 値に「KeyboardGWデバイスと接続してショートカットキーを送信するために使用します。」と入力
+
+### 2. KeyboardGWデバイス設定
+KeyboardGWデバイス（ESP32S3 M5AtomS3）に以下のファームウェアを書き込んでください：
+- `KeyboardGW/KeyboardGW.ino` をArduino IDEまたはPlatformIOでコンパイル・書き込み
+- BLEデバイス名: `EasyShortcutKey-GW`
+- サービスUUID: `12345678-1234-1234-1234-123456789ABC`
+
+### 3. ペアリング手順
+1. iOSアプリを起動
+2. 右上の「設定」ボタンをタップ
+3. 「KeyboardGW」→「デバイスを検索」をタップ
+4. 発見されたデバイス一覧から対象デバイスを選択
+5. 接続が完了すると、ホーム画面に「KeyboardGW接続中」と表示される
+
+### 4. 使用方法
+- **KeyboardGW接続中**: ショートカットをタップすると実際のキー入力がPCに送信される
+- **KeyboardGW未接続**: ショートカットをタップするとクリップボードにコピーされる（従来通り）
 

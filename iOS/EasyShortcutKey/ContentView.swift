@@ -4,6 +4,7 @@ import UIKit
 
 struct ContentView: View {
     @StateObject private var store = ShortcutStore()
+    @StateObject private var keyboardGWManager = KeyboardGWManager()
     @State private var copiedText: String = ""
     @State private var showCopyFeedback: Bool = false
 
@@ -12,6 +13,36 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 // Header with title on first line, toggle + settings button on second line
                 VStack(alignment: .leading, spacing: 4) {
+                    // KeyboardGW接続状況表示
+                    if keyboardGWManager.isConnected {
+                        HStack(spacing: 8) {
+                            Circle()
+                                .fill(Color.green)
+                                .frame(width: 8, height: 8)
+                            
+                            Text("KeyboardGW接続中")
+                                .font(.caption2)
+                                .foregroundColor(.green)
+                                .fontWeight(.medium)
+                            
+                            if keyboardGWManager.batteryLevel >= 0 {
+                                HStack(spacing: 2) {
+                                    Image(systemName: batteryIcon)
+                                        .font(.caption2)
+                                        .foregroundColor(batteryColor)
+                                    Text("\(keyboardGWManager.batteryLevel)%")
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .padding(.top, 8)
+                        .padding(.bottom, 4)
+                    }
+                    
                     // 1行目: タイトル
                     //Text("Easy Shortcut Key")
                     //    .font(.largeTitle)
@@ -24,6 +55,14 @@ struct ContentView: View {
                             .font(.caption)
                             .frame(width: 150)
                         Spacer()
+                        
+                        // KeyboardGW接続ステータスインジケータ
+                        Circle()
+                            .fill(keyboardGWStatusColor)
+                            .frame(width: 12, height: 12)
+                            .opacity(keyboardGWManager.isScanning ? 0.6 : 1.0)
+                            .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), 
+                                     value: keyboardGWManager.isScanning)
                         
                         // NavigationLink で設定画面へ遷移
                         NavigationLink(destination: SettingsView(store: store)) {
@@ -276,7 +315,7 @@ struct ContentView: View {
     
     private func keysButton(keys: [String]) -> some View {
         Button(action: {
-            //copyToClipboard(keys.joined(separator: " + "))
+            handleShortcutAction(keys: keys)
         }) {
             Text(keys.joined(separator: " + "))
                 .font(.caption)
@@ -296,7 +335,7 @@ struct ContentView: View {
             
             if let keys = step.keys {
                 Button(action: {
-                    //copyToClipboard(keys.joined(separator: " + "))
+                    handleShortcutAction(keys: keys)
                 }) {
                     Text(keys.joined(separator: " + "))
                         .font(.caption2)
@@ -341,6 +380,29 @@ struct ContentView: View {
         }
     }
     
+    // ショートカットアクションの処理
+    private func handleShortcutAction(keys: [String]) {
+        if keyboardGWManager.isConnected {
+            // KeyboardGWが接続されていればキーを送信
+            keyboardGWManager.sendShortcut(keys: keys)
+            
+            // 視覚的フィードバック（送信成功）
+            withAnimation(.easeInOut(duration: 0.2)) {
+                showCopyFeedback = true
+                copiedText = "送信: \(keys.joined(separator: " + "))"
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    showCopyFeedback = false
+                }
+            }
+        } else {
+            // KeyboardGWが接続されていなければクリップボードにコピー
+            copyToClipboard(keys.joined(separator: " + "))
+        }
+    }
+    
     @Environment(\.modelContext) private var modelContext
 
     private func loadHiddenIDs() {
@@ -371,6 +433,43 @@ struct ContentView: View {
     // Load hidden IDs when view appears
     private func onAppearLoad() {
         loadHiddenIDs()
+    }
+    
+    // バッテリーアイコンの計算
+    private var batteryIcon: String {
+        let level = keyboardGWManager.batteryLevel
+        if level >= 75 {
+            return "battery.100"
+        } else if level >= 50 {
+            return "battery.75"
+        } else if level >= 25 {
+            return "battery.25"
+        } else {
+            return "battery.0"
+        }
+    }
+    
+    // バッテリーレベルによる色の計算
+    private var batteryColor: Color {
+        let level = keyboardGWManager.batteryLevel
+        if level >= 50 {
+            return .green
+        } else if level >= 25 {
+            return .orange
+        } else {
+            return .red
+        }
+    }
+    
+    // KeyboardGW接続ステータスの色
+    private var keyboardGWStatusColor: Color {
+        if keyboardGWManager.isConnected {
+            return .green      // 接続済み = 緑
+        } else if keyboardGWManager.isScanning {
+            return .orange     // 検索中 = オレンジ（点滅）
+        } else {
+            return .gray       // 未接続 = グレー
+        }
     }
 }
 

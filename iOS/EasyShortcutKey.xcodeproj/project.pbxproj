@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		22BF698E2E8005C9000C07EA /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 22BF698D2E8005C9000C07EA /* README.md */; };
+		22F8F23B2E82C38600868A74 /* info.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 22F8F23A2E82C38600868A74 /* info.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		227EB7032E7F8E5400100809 /* EasyShortcutKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyShortcutKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22BF698D2E8005C9000C07EA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		22F8F23A2E82C38600868A74 /* info.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = info.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -37,6 +39,7 @@
 		227EB6FA2E7F8E5400100809 = {
 			isa = PBXGroup;
 			children = (
+				22F8F23A2E82C38600868A74 /* info.xcstrings */,
 				22BF698D2E8005C9000C07EA /* README.md */,
 				227EB7052E7F8E5400100809 /* EasyShortcutKey */,
 				227EB7042E7F8E5400100809 /* Products */,
@@ -116,6 +119,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22F8F23B2E82C38600868A74 /* info.xcstrings in Resources */,
 				22BF698E2E8005C9000C07EA /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,7 +280,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.NwLab.EasySCK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -303,6 +307,7 @@
 				DEVELOPMENT_TEAM = VWXW74ETWH;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "KeyboardGWデバイスとBluetooth接続してショートカットキーを送信するために使用します。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -313,7 +318,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.NwLab.EasySCK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;

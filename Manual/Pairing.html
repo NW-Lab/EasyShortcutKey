@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyShortcutKey Version 2.0 ペアリングガイド</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-connected { background-color: #28a745; }
+        .status-scanning { background-color: #fd7e14; }
+        .status-disconnected { background-color: #6c757d; }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .code {
+            background: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 90%;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 10px 0;
+        }
+        .device-status {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🔗 EasyShortcutKey Version 2.0 ペアリングガイド</h1>
+
+<p>Version 2.0では、iOSアプリとKeyboardGWデバイスをBluetoothで接続し、実際のキーボード操作をPCに送信できるようになりました。このガイドでは、デバイスのペアリング方法を詳しく説明します。</p>
+
+<h2>📱 システム構成</h2>
+<div class="step">
+<pre>iPhone（iOSアプリ）→ [Bluetooth] → KeyboardGW → [USB] → PC（Windows/Mac）</pre>
+<p><strong>KeyboardGW</strong>は、iPhoneからのコマンドを受信してPCにキーボード入力を送信する中継デバイスです。</p>
+</div>
+
+<h2>🔧 必要なもの</h2>
+<ul>
+    <li><strong>iPhone</strong>（iOS 14以降、Bluetooth対応）</li>
+    <li><strong>KeyboardGW デバイス</strong>（M5Stack AtomS3 + カスタムファームウェア）</li>
+    <li><strong>PC</strong>（Windows または Mac、USBポート必要）</li>
+    <li><strong>EasyShortcutKey iOSアプリ</strong>（Version 2.0以降）</li>
+</ul>
+
+<h2>⚡ KeyboardGWデバイスの準備</h2>
+
+<div class="step">
+    <h3>ステップ1: デバイスの接続</h3>
+    <ol>
+        <li>KeyboardGWデバイス（M5Stack AtomS3）をPCのUSBポートに接続します</li>
+        <li>デバイスの内蔵LEDが<strong>青色で点滅</strong>することを確認します（起動中）</li>
+        <li>数秒後、LEDが<strong>青色で点灯</strong>に変わります（Bluetooth待機中）</li>
+    </ol>
+</div>
+
+<div class="warning">
+    <h4>⚠️ 注意事項</h4>
+    <ul>
+        <li>KeyboardGWは<strong>セキュリティ対応</strong>しており、初回ペアリング後は登録済みiPhoneからの接続のみ受け付けます</li>
+        <li>デバイスをリセットする場合は、ファームウェアの再書き込みが必要です</li>
+    </ul>
+</div>
+
+<h2>📱 iOSアプリでのペアリング</h2>
+
+<div class="step">
+    <h3>ステップ1: 設定画面を開く</h3>
+    <ol>
+        <li>EasyShortcutKey アプリを起動します</li>
+        <li>右上の <code>設定</code> ボタンをタップします</li>
+        <li><code>外部デバイス</code> セクションの <code>KeyboardGW</code> をタップします</li>
+    </ol>
+</div>
+
+<div class="step">
+    <h3>ステップ2: デバイスを検索</h3>
+    <ol>
+        <li><code>デバイスを検索</code> ボタンをタップします</li>
+        <li>アプリがBluetooth権限を要求した場合は <code>許可</code> をタップします</li>
+        <li>画面上部のステータスが「検索中...」に変わります</li>
+        <li>ホーム画面のインジケータが<span class="status-indicator status-scanning"></span><strong>オレンジ色で点滅</strong>します</li>
+    </ol>
+</div>
+
+<div class="step">
+    <h3>ステップ3: デバイスを選択</h3>
+    <ol>
+        <li>「発見されたデバイス」リストに <code>EasyShortcutKey-GW</code> が表示されます</li>
+        <li>該当デバイスをタップして接続を開始します</li>
+        <li>接続が成功すると、KeyboardGWのLEDが<strong>緑色で点灯</strong>します</li>
+        <li>アプリのステータスが「接続済み」に変わります</li>
+    </ol>
+</div>
+
+<h2>✅ 接続状況の確認方法</h2>
+
+<h3>🏠 ホーム画面での確認</h3>
+<p>アプリのホーム画面で、トグルスイッチと設定ボタンの間にあるステータスインジケータで確認できます：</p>
+
+<div class="device-status">
+    <span class="status-indicator status-connected"></span>
+    <strong>緑色：</strong> KeyboardGW接続済み（キー送信可能）
+</div>
+
+<div class="device-status">
+    <span class="status-indicator status-scanning"></span>
+    <strong>オレンジ（点滅）：</strong> デバイス検索中
+</div>
+
+<div class="device-status">
+    <span class="status-indicator status-disconnected"></span>
+    <strong>グレー：</strong> 未接続・待機中
+</div>
+
+<h3>🔧 設定画面での確認</h3>
+<p>KeyboardGW設定画面では、より詳細な情報を確認できます：</p>
+<ul>
+    <li><strong>デバイス名</strong>：接続中のデバイス名</li>
+    <li><strong>バッテリー残量</strong>：デバイスの電池残量（USB給電時は表示されない場合があります）</li>
+    <li><strong>接続状況</strong>：詳細なステータス情報</li>
+</ul>
+
+<h2>🎮 ショートカットキーの送信テスト</h2>
+
+<div class="step">
+    <h3>テスト手順</h3>
+    <ol>
+        <li>KeyboardGWが接続されていることを確認します</li>
+        <li>PC上でテキストエディタやメモ帳を開きます</li>
+        <li>iOSアプリのホーム画面でお好きなショートカットをタップします</li>
+        <li>PCに実際のキー操作が送信されることを確認します</li>
+    </ol>
+</div>
+
+<div class="success">
+    <h4>✅ 成功時の動作</h4>
+    <ul>
+        <li>iOSアプリに「送信: Cmd + C」などの一時的なフィードバックが表示されます</li>
+        <li>PC側で実際のキーボード操作として認識されます</li>
+        <li>KeyboardGWのLEDが<strong>白色で短時間点滅</strong>します（送信中表示）</li>
+    </ul>
+</div>
+
+<h2>🔄 接続が切れた場合の対処法</h2>
+
+<div class="step">
+    <h3>自動再接続</h3>
+    <p>通常は自動で再接続を試みますが、手動で再接続する場合：</p>
+    <ol>
+        <li>KeyboardGW設定画面を開きます</li>
+        <li><code>切断</code> ボタンをタップして一度切断します</li>
+        <li><code>デバイスを検索</code> で再度接続を試みます</li>
+    </ol>
+</div>
+
+<div class="step">
+    <h3>デバイスのリセット</h3>
+    <p>完全にリセットが必要な場合：</p>
+    <ol>
+        <li>KeyboardGWをPCから取り外します</li>
+        <li>数秒待ってから再度接続します</li>
+        <li>LEDが青色で点滅→点灯することを確認します</li>
+        <li>iOSアプリから再度ペアリングを行います</li>
+    </ol>
+</div>
+
+<h2>❓ よくある質問</h2>
+
+<h3>Q: デバイスが見つかりません</h3>
+<div class="warning">
+    <p><strong>確認事項：</strong></p>
+    <ul>
+        <li>KeyboardGWがPCに正しく接続されているか</li>
+        <li>デバイスのLEDが青色で点灯しているか</li>
+        <li>iPhoneのBluetoothが有効になっているか</li>
+        <li>他のデバイスとペアリング済みでないか</li>
+    </ul>
+</div>
+
+<h3>Q: 接続はできるがキーが送信されません</h3>
+<div class="warning">
+    <p><strong>確認事項：</strong></p>
+    <ul>
+        <li>PC側でKeyboardGWがキーボードデバイスとして認識されているか</li>
+        <li>アプリのステータスが「接続済み」になっているか</li>
+        <li>テストとして設定画面の「テストキー送信」を試してみてください</li>
+    </ul>
+</div>
+
+<h3>Q: バッテリー残量が表示されません</h3>
+<div class="warning">
+    <p>KeyboardGWはUSB給電のため、バッテリー情報は表示されない場合があります。これは正常な動作です。</p>
+</div>
+
+<h2>🚀 活用方法</h2>
+
+<div class="success">
+    <h3>効率的な使い方</h3>
+    <ul>
+        <li><strong>プレゼン中</strong>：手元のiPhoneでスライド操作</li>
+        <li><strong>動画編集</strong>：複雑なショートカットを簡単タップで実行</li>
+        <li><strong>プログラミング</strong>：IDEのショートカットを素早く実行</li>
+        <li><strong>リモートワーク</strong>：離れた場所からのPC操作</li>
+    </ul>
+</div>
+
+<h2>📞 サポート</h2>
+
+<p>ペアリングに関する問題や質問がある場合は、以下をご確認ください：</p>
+<ul>
+    <li><a href="https://github.com/NW-Lab/EasyShortcutKey">GitHub リポジトリ</a></li>
+    <li><code>iOS/README.md</code>（詳細な技術情報）</li>
+    <li><code>KeyboardGW/README.md</code>（ファームウェア情報）</li>
+</ul>
+
+<hr>
+<p><small>EasyShortcutKey Version 2.0 - 2025年9月23日更新</small></p>
+
+</body>
+</html>
