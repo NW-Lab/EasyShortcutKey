@@ -90,6 +90,31 @@ struct KeyboardGWPairingView: View {
                         }
                         .disabled(keyboardGWManager.isScanning)
                         
+                        // デバッグ用: フィルターなしスキャンボタン
+                        Button(action: {
+                            keyboardGWManager.startScanning(withServiceFilter: false)
+                        }) {
+                            HStack {
+                                if keyboardGWManager.isScanning {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                        .scaleEffect(0.8)
+                                } else {
+                                    Image(systemName: "magnifyingglass.circle")
+                                }
+                                Text(keyboardGWManager.isScanning ? "全デバイス検索中..." : "全デバイスを検索（デバッグ用）")
+                                    .fontWeight(.semibold)
+                                    .font(.caption)
+                            }
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 12)
+                            .background(keyboardGWManager.isScanning ? Color.gray : Color.orange)
+                            .cornerRadius(8)
+                        }
+                        .disabled(keyboardGWManager.isScanning)
+                        
                         // 発見されたデバイス一覧
                         if !keyboardGWManager.discoveredDevices.isEmpty {
                             VStack(alignment: .leading, spacing: 8) {

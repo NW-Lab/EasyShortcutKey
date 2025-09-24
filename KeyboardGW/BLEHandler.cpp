@@ -146,9 +146,21 @@ void BLEHandler::onWrite(BLECharacteristic* characteristic) {
 
 void BLEHandler::startAdvertising() {
   BLEAdvertising* advertising = BLEDevice::getAdvertising();
+  
+  // サービスUUIDを明示的に追加
   advertising->addServiceUUID(BLE_SERVICE_UUID);
-  advertising->setScanResponse(false);
-  advertising->setMinPreferred(0x0);
+  
+  // 広告設定を最適化
+  advertising->setScanResponse(true);  // スキャンレスポンスを有効化
+  advertising->setMinPreferred(0x06);  // より安全な最小間隔
+  advertising->setMaxPreferred(0x12);  // 最大間隔も設定
+  
+  // デバイス名を明示的に設定（念のため）
+  BLEDevice::setDeviceName(BLE_DEVICE_NAME);
+  
+  Serial.println("[BLE] Starting advertising...");
+  Serial.println("[BLE] Service UUID: " + String(BLE_SERVICE_UUID));
+  Serial.println("[BLE] Device Name: " + String(BLE_DEVICE_NAME));
   
   BLEDevice::startAdvertising();
   Serial.println("[BLE] Advertising started");

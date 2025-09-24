@@ -35,6 +35,11 @@ class KeyboardGWManager: NSObject, ObservableObject {
     
     /// デバイスのスキャンを開始
     func startScanning() {
+        startScanning(withServiceFilter: true)
+    }
+    
+    /// デバイスのスキャンを開始（フィルター指定可能）
+    func startScanning(withServiceFilter useFilter: Bool = true) {
         guard centralManager.state == .poweredOn else {
             connectionStatus = "Bluetoothが無効です"
             return
@@ -42,12 +47,21 @@ class KeyboardGWManager: NSObject, ObservableObject {
         
         isScanning = true
         discoveredDevices.removeAll()
-        connectionStatus = "デバイス検索中..."
+        connectionStatus = useFilter ? "デバイス検索中..." : "全デバイス検索中..."
         
-        centralManager.scanForPeripherals(
-            withServices: [serviceUUID],
-            options: [CBCentralManagerScanOptionAllowDuplicatesKey: false]
-        )
+        // デバッグ用: フィルターありなしを選択可能
+        if useFilter {
+            centralManager.scanForPeripherals(
+                withServices: [serviceUUID],
+                options: [CBCentralManagerScanOptionAllowDuplicatesKey: false]
+            )
+        } else {
+            // フィルターなしスキャン（デバッグ用）
+            centralManager.scanForPeripherals(
+                withServices: nil,
+                options: [CBCentralManagerScanOptionAllowDuplicatesKey: false]
+            )
+        }
         
         // 15秒後にスキャンを停止
         DispatchQueue.main.asyncAfter(deadline: .now() + 15) {
@@ -155,8 +169,31 @@ extension KeyboardGWManager: CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         if !discoveredDevices.contains(where: { $0.identifier == peripheral.identifier }) {
-            discoveredDevices.append(peripheral)
+            
+            // デバッグ情報を詳しく出力
             print("🔍 デバイス発見：\(peripheral.name ?? "Unknown") (\(RSSI)dBm)")
+            print("   UUID: \(peripheral.identifier)")
+            print("   広告データ: \(advertisementData)")
+            
+            // KeyboardGW関連のデバイスかチェック
+            let name = peripheral.name ?? ""
+            let isKeyboardGW = name.contains("EasyShortcutKey") || name.contains("KeyboardGW") || name.contains("shortcut")
+            
+            if isKeyboardGW {
+                print("   ✅ KeyboardGW関連デバイスを発見！")
+            }
+            
+            // 全デバイス検索モードかどうかをチェック
+            let isFullScanMode = connectionStatus.contains("全デバイス検索中")
+            
+            if isFullScanMode {
+                // 全デバイススキャンモードの場合は全て追加
+                discoveredDevices.append(peripheral)
+            } else if isKeyboardGW {
+                // 通常スキャンでもKeyboardGWは追加（名前ベースフィルタリング）
+                discoveredDevices.append(peripheral)
+                print("   📱 通常スキャンでKeyboardGWデバイスを追加")
+            }
         }
     }
     
