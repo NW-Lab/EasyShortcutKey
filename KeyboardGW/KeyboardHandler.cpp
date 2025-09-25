@@ -99,11 +99,25 @@ KeyboardHandler::KeyboardHandler() {
 void KeyboardHandler::begin() {
   Serial.println("[Keyboard] Initializing USB HID Keyboard...");
   
+  // BLE接続が確立してからUSB HIDを初期化
+  delay(3000);  // BLE安定化待ち
+  
+  // 記事に従った初期化順序
   keyboard.begin();
   USB.begin();
   
+  delay(2000);  // USB HID安定化待ち
+  
   isInitialized = true;
   Serial.println("[Keyboard] USB HID Keyboard initialized");
+  
+  // 初期化完了の確認のため少し待ってからテスト送信
+  delay(1000);
+  if (isInitialized) {
+    Serial.println("[Keyboard] Sending test message...");
+    keyboard.print("HID Test OK");
+    Serial.println("[Keyboard] Test message sent");
+  }
 }
 
 void KeyboardHandler::sendShortcut(ShortcutCommand command) {

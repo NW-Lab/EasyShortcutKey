@@ -132,10 +132,36 @@ Service UUID: 12345678-1234-1234-1234-123456789ABC
 ```
 
 ## ファームウェア書き込み方法
-### ESPTool使用（配布用）
+### ビルド (開発者)
+PlatformIO:
 ```bash
-esptool.py --chip esp32s3 --port COM3 --baud 921600 write_flash -z 0x0 KeyboardGW.bin
+cd KeyboardGW
+pio run
 ```
+ビルド後 `KeyboardGW/firmware/KeyboardGW_m5stack-atoms3.bin` が自動生成される（`export_firmware.py` post スクリプト）。
+
+### 配布バイナリ書き込み (esptool.py)
+1. Python と esptool を用意:
+  ```bash
+  pip install esptool
+  ```
+2. ポート確認 (macOS例):
+  ```bash
+  ls /dev/cu.usb* | grep -i modem
+  ```
+3. 既存 flash を消したい場合（任意）:
+  ```bash
+  esptool.py --chip esp32s3 --port /dev/cu.usbmodem1101 erase_flash
+  ```
+4. 書き込み:
+  ```bash
+  esptool.py --chip esp32s3 --port /dev/cu.usbmodem1101 --baud 921600 write_flash -z 0x0 firmware/KeyboardGW_m5stack-atoms3.bin
+  ```
+5. 再起動 (USB 再接続 or RST)。
+
+Windows の場合は `/dev/cu.usbmodemXXXX` を `COMx` に置き換えてね。Baud は 921600 か 460800 が推奨。安定しない場合は 115200 に下げる。
+
+### Arduino IDE使用（開発用）
 
 ### Arduino IDE使用（開発用）
 1. ボード設定: `ESP32S3 Dev Module`
@@ -159,3 +185,4 @@ esptool.py --chip esp32s3 --port COM3 --baud 921600 write_flash -z 0x0 KeyboardG
 ## 変更履歴
 - 初期プロジェクト作成
 - 要件定義・仕様書作成
+- export_firmware スクリプト追加 (自動で firmware/.bin を生成)

@@ -58,3 +58,38 @@ iPhone (iOSアプリ) → [Bluetooth] → KeyboardGW → [USB] → PC (Windows/M
 ---
 
 License: MIT
+
+## 🔥 KeyboardGW ファームウェア書き込み (esptool.py 利用)
+
+PlatformIO / Arduino IDE を使わずに、配布されたバイナリ (`KeyboardGW/firmware/KeyboardGW_m5stack-atoms3.bin`) を直接書き込みたい場合は `esptool.py` を使えるよ。Python が入っていない場合は先にインストールしてね。
+
+### 1. esptool.py インストール
+```bash
+pip install esptool
+```
+
+### 2. 接続ポート確認 (macOS例)
+```bash
+ls /dev/cu.usb* | grep -i modem
+```
+例: `/dev/cu.usbmodem1101`
+
+### 3. (必要なら) フラッシュ全消去
+```bash
+esptool.py --chip esp32s3 --port /dev/cu.usbmodem1101 erase_flash
+```
+
+### 4. バイナリ書き込み
+```bash
+esptool.py --chip esp32s3 --port /dev/cu.usbmodem1101 --baud 921600 write_flash -z 0x0 KeyboardGW/firmware/KeyboardGW_m5stack-atoms3.bin
+```
+
+### 5. 書き込み後
+USBを一度抜き差し or RST ボタンで再起動。PC側に新しい HID Keyboard として再列挙されるよ。
+
+### トラブル対処
+- `Failed to connect`: RST 押しながらBOOT相当のボタン (AtomS3 は自動で入ること多い) を試す
+- `A fatal error occurred: MD5 mismatch`: もう一度書き込み（ケーブル/ハブ品質確認）
+- ポートが途中で消える: HID専用モードで CDC が消える仕様。書き込み時だけブートローダが CDC を出すので、その間に実行する。
+
+詳しい手順は `KeyboardGW/README.md` と `Manual/FirmwareFlash.html` も参照してね。

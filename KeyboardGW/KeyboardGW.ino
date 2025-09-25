@@ -1,170 +1,62 @@
 /*
- * EasyShortcutKey KeyboardGW
- * 
- * iPhone からBLE経由でショートカットコマンドを受信し、
- * USB HIDキーボードとしてPCに送信するデバイス
- * 
- * Hardware: M5Stack AtomS3 (ESP32-S3)
- * Libraries: ESP32 BLE Arduino, USB HID, M5AtomS3, ArduinoJson
+ * ESP32-S3 USB HID Keyboard Test
+ * Based on: https://lang-ship.com/blog/work/esp32-s3atoms3%e3%81%a7usb%e3%83%87%e3%83%90%e3%82%a4%e3%82%b9%e3%81%a7%e3%83%9e%e3%82%a6%e3%82%b9%e3%81%a8%e3%82%ad%e3%83%bc%e3%83%9c%e3%83%bc%e3%83%89%e5%ae%9f%e9%a8%93/
  */
 
-#include "Config.h"
-#include "LEDIndicator.h"
-#include "BLEHandler.h"
-#include "KeyboardHandler.h"
+#include "USB.h"
+#include "USBHIDKeyboard.h"
+#include "M5AtomS3.h"
 
-// グローバルオブジェクト
-LEDIndicator ledIndicator;
-BLEHandler bleHandler;
-KeyboardHandler keyboardHandler;
-
-// システム状態
-DeviceStatus currentStatus = STATUS_STARTING;
-unsigned long lastStatusUpdate = 0;
-bool systemInitialized = false;
-
-// 関数プロトタイプ
-void onShortcutReceived(ShortcutCommand command);
-void onBLEConnectionChanged(bool connected);
-void updateSystemStatus();
-void printSystemInfo();
+USBHIDKeyboard keyboard;
 
 void setup() {
-  // シリアル通信初期化
-  Serial.begin(SERIAL_BAUD_RATE);
+  // M5AtomS3初期化
+  auto cfg = M5.config();
+  AtomS3.begin(cfg);
+  
+  Serial.begin(115200);
   delay(1000);
   
-  Serial.println("=================================");
-  Serial.println("EasyShortcutKey KeyboardGW v1.0");
-  Serial.println("=================================");
+  Serial.println("Starting ESP32-S3 USB HID Test");
   
-  // LED初期化
-  Serial.println("[System] Initializing LED...");
-  ledIndicator.begin();
-  ledIndicator.setStatus(STATUS_STARTING);
+  // USB初期化を最初に行う
+  USB.begin();
+  delay(2000);
   
+  // HIDキーボード初期化
+  keyboard.begin();
   delay(1000);
   
-  // USB HIDキーボード初期化
-  Serial.println("[System] Initializing USB HID Keyboard...");
-  keyboardHandler.begin();
+  Serial.println("USB HID Keyboard initialized");
+  Serial.println("Waiting 5 seconds before sending test message...");
+  delay(5000);
   
-  delay(500);
-  
-  // BLE初期化
-  Serial.println("[System] Initializing BLE...");
-  bleHandler.begin();
-  bleHandler.setShortcutCallback(onShortcutReceived);
-  bleHandler.setConnectionCallback(onBLEConnectionChanged);
-  
-  // 初期化完了
-  currentStatus = STATUS_BLE_ADVERTISING;
-  ledIndicator.setStatus(currentStatus);
-  bleHandler.sendStatus(currentStatus);
-  
-  systemInitialized = true;
-  Serial.println("[System] System initialization completed!");
-  printSystemInfo();
+  // テストメッセージ送信
+  Serial.println("Sending: Hello from ESP32-S3 AtomS3!");
+  keyboard.print("Hello from ESP32-S3 AtomS3!");
+  keyboard.write(KEY_RETURN);
+  Serial.println("Test message sent!");
 }
 
 void loop() {
-  if (!systemInitialized) return;
+  M5.update();
   
-  // 各コンポーネントの更新
-  ledIndicator.update();
-  bleHandler.update();
-  
-  // システム状態の定期更新
-  updateSystemStatus();
-  
-  // 短い遅延
-  delay(10);
-}
-
-// ショートカットコマンド受信時のコールバック
-void onShortcutReceived(ShortcutCommand command) {
-  Serial.println("[System] Shortcut command received");
-  
-  // ステータスをキー送信中に変更
-  currentStatus = STATUS_SENDING_KEYS;
-  ledIndicator.setStatus(currentStatus);
-  bleHandler.sendStatus(currentStatus);
-  
-  // キーボード入力を送信
-  keyboardHandler.sendShortcut(command);
-  
-  // ステータスを接続中に戻す
-  delay(100);
-  if (bleHandler.isConnected()) {
-    currentStatus = STATUS_BLE_CONNECTED;
-  } else {
-    currentStatus = STATUS_BLE_ADVERTISING;
+  // ボタンが押されたらテストメッセージを送信
+  if (M5.Btn.wasPressed()) {
+    Serial.println("Button pressed - sending: Test Key Input");
+    keyboard.print("Test Key Input ");
+    keyboard.write(KEY_RETURN);
+    delay(200);
   }
   
-  ledIndicator.setStatus(currentStatus);
-  bleHandler.sendStatus(currentStatus);
-}
-
-// BLE接続状態変更時のコールバック
-void onBLEConnectionChanged(bool connected) {
-  Serial.println("[System] BLE connection changed: " + String(connected ? "Connected" : "Disconnected"));
-  
-  if (connected) {
-    currentStatus = STATUS_BLE_CONNECTED;
-  } else {
-    currentStatus = STATUS_BLE_ADVERTISING;
+  // 15秒おきに自動でテスト送信
+  static unsigned long lastSent = 0;
+  if (millis() - lastSent > 15000) {
+    Serial.println("Auto test - sending: Auto Message from AtomS3");
+    keyboard.print("Auto Message from AtomS3 ");
+    keyboard.write(KEY_RETURN);
+    lastSent = millis();
   }
   
-  ledIndicator.setStatus(currentStatus);
-  bleHandler.sendStatus(currentStatus);
-}
-
-// システム状態の定期更新
-void updateSystemStatus() {
-  unsigned long currentTime = millis();
-  
-  // 1秒間隔でステータスチェック
-  if (currentTime - lastStatusUpdate >= 1000) {
-    lastStatusUpdate = currentTime;
-    
-    // BLE接続状態をチェック
-    bool bleConnected = bleHandler.isConnected();
-    bool keyboardConnected = keyboardHandler.isConnected();
-    
-    DeviceStatus newStatus = currentStatus;
-    
-    // ステータス判定
-    if (!keyboardConnected) {
-      newStatus = STATUS_ERROR;
-      Serial.println("[System] Warning: USB HID not connected");
-    } else if (bleConnected && currentStatus != STATUS_SENDING_KEYS) {
-      newStatus = STATUS_BLE_CONNECTED;
-    } else if (!bleConnected && currentStatus != STATUS_SENDING_KEYS) {
-      newStatus = STATUS_BLE_ADVERTISING;
-    }
-    
-    // ステータス変更があった場合
-    if (newStatus != currentStatus) {
-      currentStatus = newStatus;
-      ledIndicator.setStatus(currentStatus);
-      bleHandler.sendStatus(currentStatus);
-    }
-  }
-}
-
-// システム情報表示
-void printSystemInfo() {
-  Serial.println("\n--- System Information ---");
-  Serial.println("Device: EasyShortcutKey KeyboardGW");
-  Serial.println("Hardware: M5Stack AtomS3 (ESP32-S3)");
-  Serial.println("BLE Device Name: " + String(BLE_DEVICE_NAME));
-  Serial.println("Service UUID: " + String(BLE_SERVICE_UUID));
-  Serial.println("Free Heap: " + String(ESP.getFreeHeap()) + " bytes");
-  Serial.println("Chip Model: " + String(ESP.getChipModel()));
-  Serial.println("Chip Revision: " + String(ESP.getChipRevision()));
-  Serial.println("Flash Size: " + String(ESP.getFlashChipSize()) + " bytes");
-  Serial.println("----------------------------\n");
-  
-  Serial.println("System ready for BLE connections!");
-  Serial.println("Waiting for iPhone to connect...\n");
+  delay(50);
 }

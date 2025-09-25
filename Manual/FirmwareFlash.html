@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>EasyShortcutKey KeyboardGW ファームウェア書き込みガイド (esptool版)</title>
+<style>
+ body {font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;line-height:1.6;color:#222;max-width:880px;margin:0 auto;padding:24px;}
+ h1,h2,h3{line-height:1.25;margin-top:2.0em;}
+ pre,code{font-family:Menlo,Monaco,Consolas,monospace;font-size:0.9em;background:#f5f7f9;border-radius:4px;padding:2px 6px;}
+ pre{padding:14px;overflow:auto;}
+ .step{background:#f2f8ff;border-left:4px solid #0d6efd;padding:16px 20px;margin:18px 0;border-radius:0 6px 6px 0;}
+ .warn{background:#fff4d6;border-left:4px solid #ffb017;padding:14px 18px;margin:18px 0;border-radius:0 6px 6px 0;}
+ .ok{background:#e9faef;border-left:4px solid #2ba84a;padding:14px 18px;margin:18px 0;border-radius:0 6px 6px 0;}
+ ul,ol{margin:0 0 1.2em 1.4em;}
+ .badge{display:inline-block;background:#0d6efd;color:#fff;font-size:0.72em;padding:2px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;}
+ a{color:#0d6efd;text-decoration:none;}a:hover{text-decoration:underline;}
+ table{border-collapse:collapse;width:100%;font-size:0.9em;margin:18px 0;}th,td{border:1px solid #ddd;padding:8px 10px;text-align:left;}th{background:#f0f3f6;}
+ .cmd-title{font-weight:bold;margin-top:1.2em;}
+</style>
+</head>
+<body>
+<h1>🧪 KeyboardGW ファームウェア書き込みガイド <span class="badge">esptool</span></h1>
+<p>M5Stack AtomS3 用 <strong>KeyboardGW</strong> ファームウェアを、Arduino IDE や PlatformIO を使わずに <code>esptool.py</code> で直接フラッシュする手順をまとめたよ。配布された <code>.bin</code> ファイルをそのまま書き込みたい利用者向け。</p>
+
+<h2>🔧 事前確認</h2>
+<ul>
+ <li>対象ハード: M5Stack AtomS3 (ESP32-S3)</li>
+ <li>USBデータ対応のケーブルを使用（充電専用ケーブルは不可）</li>
+ <li>Windows / macOS / Linux いずれもOK</li>
+</ul>
+
+<div class="warn"><strong>注意:</strong> 本手順は既存ユーザ向け簡易更新フロー。開発を行いたい場合は <code>KeyboardGW/README.md</code> を参照し PlatformIO でビルドしてね。</div>
+
+<h2>① esptool.py をインストール</h2>
+<div class="step">
+<p>Python が使える環境なら以下でインストール。</p>
+<pre><code>pip install esptool</code></pre>
+<p>バージョン確認:</p>
+<pre><code>esptool.py version</code></pre>
+</div>
+
+<h2>② デバイスのシリアルポートを調べる</h2>
+<div class="step">
+<p>macOS 例:</p>
+<pre><code>ls /dev/cu.usb* | grep -i modem</code></pre>
+<p>Windows 例: デバイスマネージャ → ポート (COM/LPT) で <code>COM3</code> などを確認。</p>
+</div>
+
+<h2>③ (任意) フラッシュ全消去</h2>
+<p>既存データをリセットしたい場合のみ。</p>
+<pre><code>esptool.py --chip esp32s3 --port /dev/cu.usbmodem1101 erase_flash</code></pre>
+<div class="warn">ポート名は環境に合わせて変更してね。Windows なら <code>COM5</code> など。</div>
+
+<h2>④ ファームウェアを書き込む</h2>
+<p>配布された <code>KeyboardGW_m5stack-atoms3.bin</code> (例: ダウンロードフォルダ) を使う。</p>
+<pre><code>esptool.py --chip esp32s3 --port /dev/cu.usbmodem1101 --baud 921600 write_flash -z 0x0 KeyboardGW_m5stack-atoms3.bin</code></pre>
+<ul>
+ <li><code>-z</code>: 転送データを圧縮</li>
+ <li><code>0x0</code>: 単一バイナリをフラッシュ全体先頭に書く構成 (huge_app パーティション想定)</li>
+</ul>
+
+<h2>⑤ 書き込み完了後</h2>
+<div class="ok">
+<ul>
+ <li>USB を一度抜き差し or RST ボタンで再起動</li>
+ <li>PC に HID Keyboard として再認識される</li>
+ <li>LED: 起動→青 / 待機→青点灯 / 接続→緑</li>
+</ul>
+</div>
+
+<h2>🩺 トラブルシューティング</h2>
+<table>
+<thead><tr><th>症状</th><th>原因候補 / 対処</th></tr></thead>
+<tbody>
+<tr><td>Failed to connect</td><td>USBケーブル不良 / タイミングずれ。抜き差しして再度実行。必要ならボード起動直後にコマンド。</td></tr>
+<tr><td>ポートが途中で消える</td><td>本ファームは HID 優先で CDC が常時出ない。書き込みはブートローダ(CDC有効)の短時間内に行う。</td></tr>
+<tr><td>MD5 mismatch</td><td>再書込み。USBハブを経由しているなら直結する。</td></tr>
+<tr><td>文字化け</td><td>シリアルモニタ速度設定ミスマッチ。115200 を指定。</td></tr>
+</tbody>
+</table>
+
+<h2>🧩 よく使うコマンド集</h2>
+<pre><code># チップ情報
+esptool.py --port /dev/cu.usbmodem1101 chip_id
+
+# フラッシュ情報
+esptool.py --port /dev/cu.usbmodem1101 flash_id
+
+# 起動ログ (開発版で CDC 有効時)
+screen /dev/cu.usbmodem1101 115200
+</code></pre>
+
+<h2>📦 開発者向け (任意)</h2>
+<p>自分でビルドしたい場合:</p>
+<pre><code>git clone https://github.com/NW-Lab/EasyShortcutKey.git
+cd EasyShortcutKey/KeyboardGW
+pio run
+# 出力: firmware/KeyboardGW_m5stack-atoms3.bin</code></pre>
+
+<h2>🔁 バージョン更新時のフロー (配布側メモ)</h2>
+<ol>
+ <li>PlatformIO でビルド (ボード: m5stack-atoms3)</li>
+ <li><code>firmware/KeyboardGW_m5stack-atoms3.bin</code> をリリースアセット or 配布サイトへアップ</li>
+ <li>本ページ (WordPress) のダウンロードリンクを更新</li>
+</ol>
+
+<hr>
+<p><small>EasyShortcutKey – Firmware Flash Guide / Updated: 2025-09-25</small></p>
+</body>
+</html>
