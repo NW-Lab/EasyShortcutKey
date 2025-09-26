@@ -2,7 +2,7 @@ import SwiftUI
 import CoreBluetooth
 
 struct KeyboardGWPairingView: View {
-    @StateObject private var keyboardGWManager = KeyboardGWManager()
+    @ObservedObject private var keyboardGWManager = KeyboardGWManager.shared
     @Environment(\.presentationMode) private var presentationMode
     
     var body: some View {

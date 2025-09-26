@@ -4,6 +4,9 @@ import Combine
 
 // KeyboardGWの接続状態を管理するクラス
 class KeyboardGWManager: NSObject, ObservableObject {
+    // シングルトンインスタンス
+    static let shared = KeyboardGWManager()
+    
     // MARK: - Published Properties
     @Published var isConnected: Bool = false
     @Published var isScanning: Bool = false
@@ -18,6 +21,8 @@ class KeyboardGWManager: NSObject, ObservableObject {
     private var shortcutCharacteristic: CBCharacteristic?
     private var statusCharacteristic: CBCharacteristic?
     private var pairingCharacteristic: CBCharacteristic?
+    private var savedPeripheralIdentifier: UUID?
+    private var isAutoReconnecting: Bool = false
     
     // BLE UUIDs (KeyboardGWのConfig.hと一致させる)
     private let serviceUUID = CBUUID(string: "12345678-1234-1234-1234-123456789ABC")
@@ -26,9 +31,56 @@ class KeyboardGWManager: NSObject, ObservableObject {
     private let pairingCharUUID = CBUUID(string: "12345678-1234-1234-1234-123456789ABF")
     
     // MARK: - Initialization
-    override init() {
+    private override init() {
         super.init()
         centralManager = CBCentralManager(delegate: self, queue: nil)
+        loadSavedPeripheral()
+    }
+    
+    // MARK: - Auto-reconnection methods
+    
+    /// 保存されたデバイス情報を読み込み
+    private func loadSavedPeripheral() {
+        if let savedUUIDString = UserDefaults.standard.string(forKey: "SavedPeripheralUUID"),
+           let savedUUID = UUID(uuidString: savedUUIDString) {
+            savedPeripheralIdentifier = savedUUID
+            print("💾 保存されたデバイス情報を読み込み: \(savedUUIDString)")
+        }
+    }
+    
+    /// デバイス情報を保存
+    private func savePeripheral(_ peripheral: CBPeripheral) {
+        savedPeripheralIdentifier = peripheral.identifier
+        UserDefaults.standard.set(peripheral.identifier.uuidString, forKey: "SavedPeripheralUUID")
+        UserDefaults.standard.set(peripheral.name, forKey: "SavedPeripheralName")
+        print("💾 デバイス情報を保存: \(peripheral.name ?? "Unknown") (\(peripheral.identifier))")
+    }
+    
+    /// 保存されたデバイスに自動再接続を試行
+    private func attemptAutoReconnection() {
+        guard let savedUUID = savedPeripheralIdentifier,
+              centralManager.state == .poweredOn,
+              !isConnected && !isAutoReconnecting else {
+            return
+        }
+        
+        isAutoReconnecting = true
+        
+        DispatchQueue.main.async {
+            self.connectionStatus = "前回接続デバイスに再接続中..."
+        }
+        
+        // 保存されたUUIDでデバイスを取得
+        let knownPeripherals = centralManager.retrievePeripherals(withIdentifiers: [savedUUID])
+        
+        if let peripheral = knownPeripherals.first {
+            print("🔄 保存されたデバイスに自動再接続試行: \(peripheral.name ?? "Unknown")")
+            connect(to: peripheral)
+        } else {
+            print("🔄 保存されたデバイスが見つからない、スキャンを開始")
+            isAutoReconnecting = false
+            startScanning()
+        }
     }
     
     // MARK: - Public Methods
@@ -41,13 +93,20 @@ class KeyboardGWManager: NSObject, ObservableObject {
     /// デバイスのスキャンを開始（フィルター指定可能）
     func startScanning(withServiceFilter useFilter: Bool = true) {
         guard centralManager.state == .poweredOn else {
-            connectionStatus = "Bluetoothが無効です"
+            DispatchQueue.main.async {
+                self.connectionStatus = "Bluetoothが無効です"
+            }
+            print("❌ Bluetooth無効でスキャン開始できません")
             return
         }
         
-        isScanning = true
-        discoveredDevices.removeAll()
-        connectionStatus = useFilter ? "デバイス検索中..." : "全デバイス検索中..."
+        print("🔍 スキャン開始 (フィルター: \(useFilter))")
+        
+        DispatchQueue.main.async {
+            self.isScanning = true
+            self.discoveredDevices.removeAll()
+            self.connectionStatus = useFilter ? "デバイス検索中..." : "全デバイス検索中..."
+        }
         
         // デバッグ用: フィルターありなしを選択可能
         if useFilter {
@@ -72,18 +131,24 @@ class KeyboardGWManager: NSObject, ObservableObject {
     /// デバイスのスキャンを停止
     func stopScanning() {
         centralManager.stopScan()
-        isScanning = false
-        if discoveredDevices.isEmpty && !isConnected {
-            connectionStatus = "デバイスが見つかりません"
+        DispatchQueue.main.async {
+            self.isScanning = false
+            if self.discoveredDevices.isEmpty && !self.isConnected {
+                self.connectionStatus = "デバイスが見つかりません"
+            }
         }
+        print("🔍 スキャン停止")
     }
     
     /// 指定したデバイスに接続
     func connect(to peripheral: CBPeripheral) {
         stopScanning()
-        connectionStatus = "接続中..."
-        connectedPeripheral = peripheral
+        DispatchQueue.main.async {
+            self.connectionStatus = "接続中..."
+            self.connectedPeripheral = peripheral
+        }
         centralManager.connect(peripheral, options: nil)
+        print("🔌 接続試行: \(peripheral.name ?? "Unknown")")
     }
     
     /// 現在のデバイスから切断
@@ -153,45 +218,82 @@ class KeyboardGWManager: NSObject, ObservableObject {
 // MARK: - CBCentralManagerDelegate
 extension KeyboardGWManager: CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        print("🔄 Bluetooth状態変更: \(central.state.rawValue)")
         switch central.state {
         case .poweredOn:
-            connectionStatus = "準備完了"
+            DispatchQueue.main.async {
+                self.connectionStatus = "準備完了"
+            }
+            print("✅ Bluetooth準備完了")
+            // 自動再接続を試行
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.attemptAutoReconnection()
+            }
         case .poweredOff:
-            connectionStatus = "Bluetoothがオフです"
+            DispatchQueue.main.async {
+                self.connectionStatus = "Bluetoothがオフです"
+                self.isConnected = false
+                self.isScanning = false
+            }
+            print("❌ Bluetoothがオフ")
         case .unauthorized:
-            connectionStatus = "Bluetooth使用が許可されていません"
+            DispatchQueue.main.async {
+                self.connectionStatus = "Bluetooth使用が許可されていません"
+                self.isConnected = false
+                self.isScanning = false
+            }
+            print("❌ Bluetooth使用許可なし")
         case .unsupported:
-            connectionStatus = "Bluetoothがサポートされていません"
+            DispatchQueue.main.async {
+                self.connectionStatus = "Bluetoothがサポートされていません"
+            }
+            print("❌ Bluetoothサポートなし")
+        case .resetting:
+            DispatchQueue.main.async {
+                self.connectionStatus = "Bluetoothリセット中..."
+                self.isConnected = false
+                self.isScanning = false
+            }
+            print("⚠️ Bluetoothリセット中")
         default:
-            connectionStatus = "Bluetooth状態不明"
+            DispatchQueue.main.async {
+                self.connectionStatus = "Bluetooth状態不明"
+            }
+            print("⚠️ Bluetooth状態不明: \(central.state)")
         }
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        if !discoveredDevices.contains(where: { $0.identifier == peripheral.identifier }) {
-            
-            // デバッグ情報を詳しく出力
-            print("🔍 デバイス発見：\(peripheral.name ?? "Unknown") (\(RSSI)dBm)")
-            print("   UUID: \(peripheral.identifier)")
-            print("   広告データ: \(advertisementData)")
-            
-            // KeyboardGW関連のデバイスかチェック
-            let name = peripheral.name ?? ""
-            let isKeyboardGW = name.contains("EasyShortcutKey") || name.contains("KeyboardGW") || name.contains("shortcut")
-            
-            if isKeyboardGW {
-                print("   ✅ KeyboardGW関連デバイスを発見！")
-            }
-            
+        // すでに発見済みかチェック
+        guard !discoveredDevices.contains(where: { $0.identifier == peripheral.identifier }) else {
+            return
+        }
+        
+        // デバッグ情報を詳しく出力
+        print("🔍 デバイス発見：\(peripheral.name ?? "Unknown") (\(RSSI)dBm)")
+        print("   UUID: \(peripheral.identifier)")
+        print("   広告データ: \(advertisementData)")
+        
+        // KeyboardGW関連のデバイスかチェック
+        let name = peripheral.name ?? ""
+        let isKeyboardGW = name.contains("EasyShortcutKey") || name.contains("KeyboardGW") || name.contains("shortcut")
+        
+        if isKeyboardGW {
+            print("   ✅ KeyboardGW関連デバイスを発見！")
+        }
+        
+        // メインスレッドでUI更新
+        DispatchQueue.main.async {
             // 全デバイス検索モードかどうかをチェック
-            let isFullScanMode = connectionStatus.contains("全デバイス検索中")
+            let isFullScanMode = self.connectionStatus.contains("全デバイス検索中")
             
             if isFullScanMode {
                 // 全デバイススキャンモードの場合は全て追加
-                discoveredDevices.append(peripheral)
+                self.discoveredDevices.append(peripheral)
+                print("   📱 全デバイススキャンでデバイスを追加")
             } else if isKeyboardGW {
                 // 通常スキャンでもKeyboardGWは追加（名前ベースフィルタリング）
-                discoveredDevices.append(peripheral)
+                self.discoveredDevices.append(peripheral)
                 print("   📱 通常スキャンでKeyboardGWデバイスを追加")
             }
         }
@@ -199,32 +301,85 @@ extension KeyboardGWManager: CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("✅ 接続成功：\(peripheral.name ?? "Unknown")")
-        isConnected = true
-        deviceName = peripheral.name ?? "KeyboardGW"
-        connectionStatus = "接続済み"
+        
+        // デバイス情報を保存（自動再接続用）
+        savePeripheral(peripheral)
+        isAutoReconnecting = false
+        
+        // メインスレッドでUI更新
+        DispatchQueue.main.async {
+            self.isConnected = true
+            self.deviceName = peripheral.name ?? "KeyboardGW"
+            self.connectionStatus = "接続済み"
+        }
         
         peripheral.delegate = self
         peripheral.discoverServices([serviceUUID])
+        
+        // 3秒後にテスト接続確認を送信
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.sendConnectionTest()
+        }
+    }
+    
+    /// 接続テストメッセージを送信（デバイス側のLED更新を促すため）
+    private func sendConnectionTest() {
+        guard let characteristic = shortcutCharacteristic,
+              let peripheral = connectedPeripheral,
+              peripheral.state == .connected else {
+            print("❌ 接続テスト失敗：デバイスが接続されていません")
+            return
+        }
+        
+        let testCommand = [
+            "keys": [""],  // 空のキー（実際には何も送信しない）
+            "keyCount": 0,
+            "test": true
+        ] as [String : Any]
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: testCommand),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            print("❌ 接続テストJSONデータの作成に失敗")
+            return
+        }
+        
+        let data = jsonString.data(using: .utf8)!
+        peripheral.writeValue(data, for: characteristic, type: .withoutResponse)
+        print("📤 接続テストメッセージを送信")
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         print("❌ 接続失敗：\(error?.localizedDescription ?? "Unknown error")")
-        connectionStatus = "接続失敗"
-        connectedPeripheral = nil
+        
+        isAutoReconnecting = false
+        
+        // メインスレッドでUI更新
+        DispatchQueue.main.async {
+            self.connectionStatus = "接続失敗"
+            self.connectedPeripheral = nil
+        }
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         print("🔌 デバイス切断：\(peripheral.name ?? "Unknown")")
-        isConnected = false
-        connectionStatus = "未接続"
-        deviceName = ""
-        connectedPeripheral = nil
-        shortcutCharacteristic = nil
-        statusCharacteristic = nil
-        pairingCharacteristic = nil
+        
+        // メインスレッドでUI更新
+        DispatchQueue.main.async {
+            self.isConnected = false
+            self.connectionStatus = "未接続"
+            self.deviceName = ""
+            self.connectedPeripheral = nil
+            self.shortcutCharacteristic = nil
+            self.statusCharacteristic = nil
+            self.pairingCharacteristic = nil
+        }
         
         if let error = error {
             print("❌ 切断エラー：\(error.localizedDescription)")
+            // 予期しない切断の場合は自動再接続を試行
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.attemptAutoReconnection()
+            }
         }
     }
 }

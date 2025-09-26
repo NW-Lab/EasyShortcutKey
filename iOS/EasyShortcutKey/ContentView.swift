@@ -4,7 +4,7 @@ import UIKit
 
 struct ContentView: View {
     @StateObject private var store = ShortcutStore()
-    @StateObject private var keyboardGWManager = KeyboardGWManager()
+    @ObservedObject private var keyboardGWManager = KeyboardGWManager.shared
     @State private var copiedText: String = ""
     @State private var showCopyFeedback: Bool = false
 
@@ -57,12 +57,20 @@ struct ContentView: View {
                         Spacer()
                         
                         // KeyboardGW接続ステータスインジケータ
-                        Circle()
-                            .fill(keyboardGWStatusColor)
-                            .frame(width: 12, height: 12)
-                            .opacity(keyboardGWManager.isScanning ? 0.6 : 1.0)
-                            .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), 
-                                     value: keyboardGWManager.isScanning)
+                        HStack(spacing: 4) {
+                            Circle()
+                                .fill(keyboardGWManager.isConnected ? .green : 
+                                      keyboardGWManager.isScanning ? .orange : .gray)
+                                .frame(width: 12, height: 12)
+                                .opacity(keyboardGWManager.isScanning ? 0.6 : 1.0)
+                                .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), 
+                                         value: keyboardGWManager.isScanning)
+                            
+                            // デバッグ用：現在の状態を表示
+                            Text("\(keyboardGWManager.isConnected ? "接続" : keyboardGWManager.isScanning ? "検索" : "未接続")")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
                         
                         // NavigationLink で設定画面へ遷移
                         NavigationLink(destination: SettingsView(store: store)) {
@@ -258,6 +266,12 @@ struct ContentView: View {
             }
         }
         .onAppear(perform: onAppearLoad)
+        .onReceive(keyboardGWManager.$isConnected) { isConnected in
+            print("🔄 UI更新: isConnected = \(isConnected)")
+        }
+        .onReceive(keyboardGWManager.$isScanning) { isScanning in
+            print("🔄 UI更新: isScanning = \(isScanning)")
+        }
         .navigationViewStyle(StackNavigationViewStyle())
     }
     
@@ -433,6 +447,10 @@ struct ContentView: View {
     // Load hidden IDs when view appears
     private func onAppearLoad() {
         loadHiddenIDs()
+        // KeyboardGWの自動スキャンを開始
+        if !keyboardGWManager.isConnected && !keyboardGWManager.isScanning {
+            keyboardGWManager.startScanning()
+        }
     }
     
     // バッテリーアイコンの計算
@@ -458,17 +476,6 @@ struct ContentView: View {
             return .orange
         } else {
             return .red
-        }
-    }
-    
-    // KeyboardGW接続ステータスの色
-    private var keyboardGWStatusColor: Color {
-        if keyboardGWManager.isConnected {
-            return .green      // 接続済み = 緑
-        } else if keyboardGWManager.isScanning {
-            return .orange     // 検索中 = オレンジ（点滅）
-        } else {
-            return .gray       // 未接続 = グレー
         }
     }
 }

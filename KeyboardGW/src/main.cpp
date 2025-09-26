@@ -22,6 +22,9 @@ USBHIDKeyboard keyboard;
 
 bool deviceConnected = false;
 
+// BLEHandler をグローバル変数に
+BLEHandler bleHandler;
+
 // LED制御ヘルパー
 inline void setDisplayColor(uint32_t color) {
     AtomS3.dis.drawpix(color);
@@ -64,19 +67,51 @@ void setup() {
     
     // BLEHandler に初期化を委譲
     Serial.println("Initializing BLE via BLEHandler...");
-    static BLEHandler bleHandler;
     bleHandler.begin();
 
     // ショートカット受信時のコールバックを登録
     bleHandler.setShortcutCallback([&bleHandler](ShortcutCommand cmd){
-        // 実行中は白
-        setDisplayColor(0xffffff);
+        Serial.println("=== ショートカット受信 ===");
+        Serial.println("keyCount: " + String(cmd.keyCount));
+        
+        // 実行中はオレンジ
+        setDisplayColor(0xff8000);  // オレンジ色
+        
         if (cmd.keyCount > 0) {
+            Serial.println("Received keys:");
+            for (int i = 0; i < cmd.keyCount; ++i) {
+                Serial.println("  [" + String(i) + "] = '" + cmd.keys[i] + "'");
+            }
+            
+            // デバッグ用：受信したデータをそのまま表示
+            Serial.println("DEBUG: Raw key data received");
+            keyboard.print("DEBUG_KEYS:");
             for (int i = 0; i < cmd.keyCount; ++i) {
                 keyboard.print(cmd.keys[i]);
+                if (i < cmd.keyCount - 1) {
+                    keyboard.print("+");
+                }
             }
+            keyboard.print(" ");
+            
+            // さらに詳細なテスト：単純にCmd+Cを強制送信
+            Serial.println("DEBUG: Force sending Cmd+C");
+            keyboard.print("FORCE_CMD_C:");
+            keyboard.press(KEY_LEFT_GUI);  // Command key
+            delay(10);
+            keyboard.press('c');           // C key
+            delay(50);
+            keyboard.release('c');         // Release C
+            keyboard.release(KEY_LEFT_GUI); // Release Command
+            keyboard.print(" ");
+            
+            Serial.println("=== ショートカット送信完了 ===");
+        } else {
+            Serial.println("No keys to send");
+            keyboard.print("NO_KEYS_RECEIVED ");
         }
-        delay(50);
+        
+        delay(100);
         setDisplayColor(bleHandler.isConnected() ? 0x00ff00 : 0x0000ff);
     });
 
@@ -106,6 +141,9 @@ void setup() {
 
 void loop() {
     M5.update();
+    
+    // BLE接続状態の更新処理
+    bleHandler.update();
     
     // ボタンが押されたらテスト送信
     if (M5.BtnA.wasPressed()) {
