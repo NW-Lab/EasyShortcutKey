@@ -5,7 +5,7 @@
   "version": "11",
   "groups": [
     {
-      "groupName": "AI Features (Windows Copilot)",
+      "groupName": "Copilot",
       "order": 1,
       "description": "AI-powered system operations and support",
       "shortcuts": [
@@ -33,7 +33,7 @@
       "id": "549f1ac0-f21b-48bb-a1f0-3fa585f9523e"
     },
     {
-      "groupName": "System Operations",
+      "groupName": "System",
       "order": 2,
       "description": "Basic system operations",
       "shortcuts": [
@@ -201,7 +201,7 @@
       "id": "ba38f24b-764c-4adb-afc4-94ea05c516ef"
     },
     {
-      "groupName": "Screenshot & Recording",
+      "groupName": "Screenshot & Record",
       "order": 4,
       "description": "Screen capture functionality",
       "shortcuts": [
