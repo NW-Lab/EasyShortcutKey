@@ -5,7 +5,7 @@
   "version": "11",
   "groups": [
     {
-      "groupName": "AI機能 (Windows Copilot)",
+      "groupName": "Copilot",
       "order": 1,
       "description": "AI支援によるシステム操作とサポート",
       "shortcuts": [
