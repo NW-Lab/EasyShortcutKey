@@ -1,11 +1,11 @@
 {
-  "appName": "VS Code (Windows)",
+  "appName": "VS Code(Win)",
   "order": 1,
   "icon": "icons/vscode.png",
   "version": "1.80+",
   "groups": [
     {
-      "groupName": "AI機能 (GitHub Copilot)",
+      "groupName": "Copilot",
       "order": 1,
       "description": "AI支援によるコード提案と補完",
       "shortcuts": [

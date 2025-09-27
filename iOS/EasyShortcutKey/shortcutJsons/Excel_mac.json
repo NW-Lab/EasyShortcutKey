@@ -4,14 +4,14 @@
   "icon": "icons/excel.png",
   "groups": [
     {
-      "groupName": "AI機能(Copilot)",
+      "groupName": "Copilot",
       "order": 1,
       "description": "AI支援によるデータ分析と数式作成",
       "shortcuts": [
         {
           "action": "パネルを開く",
           "keys": [
-            "Copilot"
+            "Option","Shift"
           ],
           "description": "Microsoft 365 Copilotパネルを開く",
           "order": 1,
@@ -79,7 +79,7 @@
       "id": "5fdd0126-02eb-4aeb-8919-cf415ce4eb87"
     },
     {
-      "groupName": "セル操作・編集",
+      "groupName": "セル操作",
       "order": 3,
       "description": "データ入力と編集",
       "shortcuts": [
@@ -142,7 +142,7 @@
       "description": "ワークシート内の移動",
       "shortcuts": [
         {
-          "action": "端に移動",
+          "action": "先頭",
           "keys": [
             "Cmd",
             "←"
