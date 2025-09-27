@@ -4,17 +4,32 @@
  */
 
 #include <Arduino.h>
-#include "USB.h"
-#include "USBHIDKeyboard.h"
+#include "tinyusb.h"
+#include "tusb_cdc_acm.h"
 #include "M5AtomS3.h"
 #include "BLEDevice.h"
 #include "BLEHandler.h"
 #include "BLE2902.h"
+#include "Config.h"
 #include <esp_gap_ble_api.h>
 #include <ArduinoJson.h>
 
-// USB HIDキーボード
-USBHIDKeyboard keyboard;
+// TinyUSB直接制御（参考サンプル準拠）
+static const char *TAG = "KeyboardGW";
+
+// CDC受信コールバック（参考サンプルから）
+void tinyusb_cdc_rx_callback(int itf, cdcacm_event_t *event) {
+    static uint8_t buf[CONFIG_TINYUSB_CDC_RX_BUFSIZE + 1];
+    size_t rx_size = 0;
+    esp_err_t ret = tinyusb_cdcacm_read(itf, buf, CONFIG_TINYUSB_CDC_RX_BUFSIZE, &rx_size);
+    if (ret == ESP_OK && rx_size > 0) {
+        ESP_LOGI(TAG, "CDC received %d bytes", rx_size);
+        // HID送信（今は無効化）
+        // if (rx_size > 0) {
+        //     tud_hid_n_report(0, buf[0], &buf[1], rx_size - 1);
+        // }
+    }
+}
 
 // BLE設定
 #define SERVICE_UUID        "12345678-1234-1234-1234-123456789abc"
@@ -36,34 +51,51 @@ inline void setDisplayColor(uint32_t color) {
 // Shortcut handling will be done via BLEHandler callbacks
 
 void setup() {
-  Serial.begin(115200);
-    delay(1000);
-      
-  // M5AtomS3初期化（元の方法に戻す）
+    Serial.begin(SERIAL_BAUD_RATE);
+    Serial.setDebugOutput(true);
+    delay(500);
+
+    // M5AtomS3初期化
     AtomS3.begin(true);
-    //auto cfg = M5.config();
-    //AtomS3.begin(cfg);
-    AtomS3.dis.setBrightness(100);  // 輝度設定追加
-    
-    Serial.begin(115200);
-    delay(1000);
-    
+    AtomS3.dis.setBrightness(100);
+
     Serial.println("=== EasyShortcutKey KeyboardGW Starting ===");
-    
+
     // BLE接続状態を明示的に初期化
     deviceConnected = false;
-    
+
     // ディスプレイ初期化（赤色 = 初期化中）
-    setDisplayColor(0xff0000);  // 赤色（16進数）
+    setDisplayColor(0xff0000);
     Serial.println("Display: RED (Initializing)");
+
+    Serial.println("Initializing TinyUSB Direct Control...");
+
+    // TinyUSB直接初期化（参考サンプル準拠）
+    ESP_LOGI(TAG, "USB initialization");
     
-    // USB HID初期化
-    Serial.println("Initializing USB HID...");
-    USB.begin();
-    delay(2000);
-    keyboard.begin();
-    delay(1000);
-    Serial.println("USB HID initialized!");
+    // TinyUSB設定
+    tinyusb_config_t tusb_cfg = {
+        .device_descriptor = NULL,
+        .string_descriptor = NULL,
+        .string_descriptor_count = 0,
+        .external_phy = false,
+        .configuration_descriptor = NULL,
+    };
+    
+    ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
+    
+    // CDC設定
+    tinyusb_config_cdcacm_t acm_cfg = {
+        .usb_dev = TINYUSB_USBDEV_0,
+        .cdc_port = TINYUSB_CDC_ACM_0,
+        .rx_unread_buf_sz = 64,
+        .callback_rx = &tinyusb_cdc_rx_callback,
+        .callback_rx_wanted_char = NULL,
+    };
+    ESP_ERROR_CHECK(tusb_cdc_acm_init(&acm_cfg));
+    
+    ESP_LOGI(TAG, "TinyUSB initialization DONE");
+    Serial.println("TinyUSB Direct Control initialized!");
     
     // BLEHandler に初期化を委譲
     Serial.println("Initializing BLE via BLEHandler...");
@@ -83,32 +115,26 @@ void setup() {
                 Serial.println("  [" + String(i) + "] = '" + cmd.keys[i] + "'");
             }
             
-            // デバッグ用：受信したデータをそのまま表示
-            Serial.println("DEBUG: Raw key data received");
-            keyboard.print("DEBUG_KEYS:");
+            // デバッグ用：受信したデータをそのまま表示（TinyUSB版）
+            Serial.println("DEBUG: Raw key data received (TinyUSB mode)");
+            // keyboard.print は使用不可（TinyUSB直接制御のため）
+            Serial.print("RECEIVED_KEYS:");
             for (int i = 0; i < cmd.keyCount; ++i) {
-                keyboard.print(cmd.keys[i]);
+                Serial.print(cmd.keys[i]);
                 if (i < cmd.keyCount - 1) {
-                    keyboard.print("+");
+                    Serial.print("+");
                 }
             }
-            keyboard.print(" ");
+            Serial.println(" ");
             
-            // さらに詳細なテスト：単純にCmd+Cを強制送信
-            Serial.println("DEBUG: Force sending Cmd+C");
-            keyboard.print("FORCE_CMD_C:");
-            keyboard.press(KEY_LEFT_GUI);  // Command key
-            delay(10);
-            keyboard.press('c');           // C key
-            delay(50);
-            keyboard.release('c');         // Release C
-            keyboard.release(KEY_LEFT_GUI); // Release Command
-            keyboard.print(" ");
+            // HID送信（今後実装予定）
+            Serial.println("DEBUG: HID output not implemented in TinyUSB direct mode yet");
             
             Serial.println("=== ショートカット送信完了 ===");
         } else {
             Serial.println("No keys to send");
-            keyboard.print("NO_KEYS_RECEIVED ");
+            // keyboard.print は使用不可
+            Serial.println("NO_KEYS_RECEIVED");
         }
         
         delay(100);
@@ -145,14 +171,14 @@ void loop() {
     // BLE接続状態の更新処理
     bleHandler.update();
     
-    // ボタンが押されたらテスト送信
+    // ボタンが押されたらテスト送信（TinyUSB版）
     if (M5.BtnA.wasPressed()) {
-        Serial.println("Button pressed - sending test");
-        keyboard.print("Button Test from AtomS3 ");
-        keyboard.write(KEY_RETURN);
+        Serial.println("Button pressed - TinyUSB direct mode test");
+        // keyboard.print は使用不可
+        Serial.println("Button Test from AtomS3 (TinyUSB mode)");
         
         // オレンジ色に一瞬点灯（ボタンテスト）
-    setDisplayColor(0xff8000);  // オレンジ色（16進数）
+        setDisplayColor(0xff8000);  // オレンジ色（16進数）
         delay(200);
         
         // 元の色に戻す

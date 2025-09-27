@@ -1,16 +1,16 @@
 Flash write example (ESP32-S3 / 4MB flash assumption)
 
 "
-    "Erase (å¿…è¦ãªã‚‰):
+    "Erase (•K—v‚È‚ç):
 "
     "  esptool.py --chip esp32s3 --port <PORT> erase_flash
 
 "
-    "Write (åœ§ç¸®æœ‰åŠ¹ -z):
+    "Write (ˆ³k—LŒø -z):
 "
     f"  esptool.py --chip esp32s3 --port <PORT> --baud 921600 write_flash -z 0x0 KeyboardGW_m5stack-atoms3.bin
 
 "
-    "Detect chip (å‹•ä½œç¢ºèªç”¨):
+    "Detect chip (“®ìŠm”F—p):
 "
     "  esptool.py --port <PORT> --baud 115200 chip_id
