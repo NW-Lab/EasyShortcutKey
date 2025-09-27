@@ -5,7 +5,7 @@
   "version": "14+",
   "groups": [
     {
-      "groupName": "AI機能(Siri & ショートカット)",
+      "groupName": "AI機能",
       "order": 1,
       "description": "AI支援による音声操作とタスク自動化",
       "shortcuts": [

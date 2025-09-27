@@ -1,11 +1,11 @@
 {
-  "appName": "Microsoft Word (Windows)",
+  "appName": "Word(Win)",
   "order": 3,
   "icon": "icons/word.png",
   "version": "365",
   "groups": [
     {
-      "groupName": "AI機能 (Microsoft 365 Copilot)",
+      "groupName": "Copilot",
       "order": 1,
       "description": "AI支援による文書作成と編集",
       "shortcuts": [

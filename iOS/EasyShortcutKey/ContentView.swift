@@ -7,6 +7,7 @@ struct ContentView: View {
     @ObservedObject private var keyboardGWManager = KeyboardGWManager.shared
     @State private var copiedText: String = ""
     @State private var showCopyFeedback: Bool = false
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         NavigationView {
@@ -16,14 +17,14 @@ struct ContentView: View {
                     // KeyboardGW接続状況表示
                     if keyboardGWManager.isConnected {
                         HStack(spacing: 8) {
-                            Circle()
-                                .fill(Color.green)
-                                .frame(width: 8, height: 8)
-                            
-                            Text("KeyboardGW接続中")
-                                .font(.caption2)
-                                .foregroundColor(.green)
-                                .fontWeight(.medium)
+                            //Circle()
+                            //    .fill(Color.green)
+                            //    .frame(width: 8, height: 8)
+                            //
+                            //Text("KeyboardGW接続中")
+                            //    .font(.caption2)
+                            //    .foregroundColor(.green)
+                            //    .fontWeight(.medium)
                             
                             if keyboardGWManager.batteryLevel >= 0 {
                                 HStack(spacing: 2) {
@@ -59,12 +60,12 @@ struct ContentView: View {
                         // KeyboardGW接続ステータスインジケータ
                         HStack(spacing: 4) {
                             Circle()
-                                .fill(keyboardGWManager.isConnected ? .green : 
+                                .fill(keyboardGWManager.isConnected ? .green :
                                       keyboardGWManager.isScanning ? .orange : .gray)
                                 .frame(width: 12, height: 12)
                                 .opacity(keyboardGWManager.isScanning ? 0.6 : 1.0)
-                                .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), 
-                                         value: keyboardGWManager.isScanning)
+                                //.animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true),
+                                //         value: keyboardGWManager.isScanning)
                             
                             // デバッグ用：現在の状態を表示
                             Text("\(keyboardGWManager.isConnected ? "接続" : keyboardGWManager.isScanning ? "検索" : "未接続")")
@@ -332,15 +333,17 @@ struct ContentView: View {
             handleShortcutAction(keys: keys)
         }) {
             Text(keys.joined(separator: " + "))
-                .font(.caption)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 2)
-                .background(Color.blue.opacity(0.15))
-                .foregroundColor(.blue)
-                .cornerRadius(6)
+                // キー表示を少し大きくして余裕を持たせる
+                .font(.subheadline)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                // ダークモードでは背景を濃くして文字色を白にする（視認性向上）
+                .background(colorScheme == .dark ? Color.blue.opacity(0.40) : Color.blue.opacity(0.18))
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.blue)
+                .cornerRadius(8)
         }
     }
-    
+
     private func stepView(step: ShortcutStep, index: Int) -> some View {
         HStack(spacing: 4) {
             Text("\(index).")
@@ -352,12 +355,14 @@ struct ContentView: View {
                     handleShortcutAction(keys: keys)
                 }) {
                     Text(keys.joined(separator: " + "))
-                        .font(.caption2)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 1)
-                        .background(Color.green.opacity(0.15))
-                        .foregroundColor(.green)
-                        .cornerRadius(4)
+                        // ステップ内のキーも少し大きめに調整
+                        .font(.caption)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        // 緑のキー表示もダークモード時に背景を少し濃くして視認性を確保
+                        .background(colorScheme == .dark ? Color.green.opacity(0.33) : Color.green.opacity(0.16))
+                        .foregroundColor(colorScheme == .dark ? Color.white : Color.green)
+                        .cornerRadius(6)
                 }
             } else if let action = step.action {
                 Text(action)

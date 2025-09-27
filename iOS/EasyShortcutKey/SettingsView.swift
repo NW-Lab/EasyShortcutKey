@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var store: ShortcutStore
+    @ObservedObject private var keyboardGWManager = KeyboardGWManager.shared
     @Environment(\.presentationMode) private var presentationMode
     @State private var showExportAlert: Bool = false
     @State private var exportMessage: String = ""
@@ -23,20 +24,35 @@ struct SettingsView: View {
                                 .foregroundColor(.secondary)
                         }
                         Spacer()
+                        
+                        // KeyboardGW の接続ステータスを示す円を追加
+                        Circle()
+                            .fill(keyboardGWManager.isConnected ? Color.green : (keyboardGWManager.isScanning ? Color.orange : Color.gray))
+                            .frame(width: 12, height: 12)
+                            .opacity(keyboardGWManager.isScanning ? 0.6 : 1.0)
+                            .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: keyboardGWManager.isScanning)
                     }
                 }
             }
             
             // Export at top
             Section {
-                Button("エクスポート (JSON)") {
-                    doExport()
+                Button(action: { doExport() }) {
+                    HStack {
+                        Text("エクスポート (JSON)")
+                        Spacer()
+                        Text("他のデバイス用に設定を出力します")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                       }
                 }
                 .foregroundColor(.blue)
                 .alert(isPresented: $showExportAlert) {
                     Alert(title: Text("エクスポート"), message: Text(exportMessage), dismissButton: .default(Text("OK")))
                 }
-            }
+                
+                // キャプション: 他デバイス向けに設定を出力する旨を説明
+                 }
             
             // Integrated app management section
             Section(header: Text("アプリ管理（表示・順序）")) {

@@ -5,7 +5,7 @@
   "version": "365",
   "groups": [
     {
-      "groupName": "AI機能(Copilot)",
+      "groupName": "Copilot",
       "order": 1,
       "description": "AI支援によるデータ分析と数式作成",
       "shortcuts": [
