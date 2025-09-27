@@ -1,11 +1,11 @@
 {
-  "appName": "Microsoft Word (Windows)",
+  "appName": "Word",
   "order": 3,
   "icon": "icons/word.png",
   "version": "365",
   "groups": [
     {
-      "groupName": "AI Features (Microsoft 365 Copilot)",
+      "groupName": "Copilot",
       "order": 1,
       "description": "AI-powered document creation and editing",
       "shortcuts": [
@@ -35,7 +35,7 @@
       "id": "84878a63-63ea-46ae-8ff4-33b8cc54428c"
     },
     {
-      "groupName": "Basic Operations",
+      "groupName": "Basic",
       "order": 2,
       "description": "File operations and basic functions",
       "shortcuts": [

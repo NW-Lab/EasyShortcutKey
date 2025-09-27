@@ -1,11 +1,11 @@
 {
-  "appName": "VS Code (Windows)",
+  "appName": "VS Code(Win)",
   "order": 1,
   "icon": "icons/vscode.png",
   "version": "1.80+",
   "groups": [
     {
-      "groupName": "AI Features (GitHub Copilot)",
+      "groupName": "Copilot",
       "order": 1,
       "description": "AI-powered code suggestions and completions",
       "shortcuts": [
@@ -92,7 +92,7 @@
       "id": "1b5514e9-6075-486d-a542-d53058a81fc1"
     },
     {
-      "groupName": "Basic Operations & Navigation",
+      "groupName": "Basic & Navigation",
       "order": 2,
       "description": "File operations and navigation",
       "shortcuts": [

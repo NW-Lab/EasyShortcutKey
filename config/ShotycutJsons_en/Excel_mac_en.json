@@ -1,5 +1,5 @@
 {
-  "appName": "Microsoft Excel (macOS)",
+  "appName": "Excel(mac)",
   "order": 4,
   "icon": "icons/excel.png",
   "version": "365",
@@ -22,7 +22,7 @@
       "id": "cc9846c9-1031-4087-a110-8f3dd92e44f5"
     },
     {
-      "groupName": "Basic Operations",
+      "groupName": "Basic",
       "order": 2,
       "description": "File operations and basic functions",
       "shortcuts": [

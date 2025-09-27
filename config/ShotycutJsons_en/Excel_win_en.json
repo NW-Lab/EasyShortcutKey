@@ -1,11 +1,11 @@
 {
-  "appName": "Microsoft Excel (Windows)",
+  "appName": "Excel(Win)",
   "order": 4,
   "icon": "icons/excel.png",
   "version": "365",
   "groups": [
     {
-      "groupName": "AI Features (Microsoft 365 Copilot)",
+      "groupName": "Copilot",
       "order": 1,
       "description": "AI-powered data analysis and formula creation",
       "shortcuts": [
@@ -23,7 +23,7 @@
       "id": "a80ac104-454e-445c-86e3-b25edac66caa"
     },
     {
-      "groupName": "Basic Operations",
+      "groupName": "Basic",
       "order": 2,
       "description": "File operations and basic functions",
       "shortcuts": [
