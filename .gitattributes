@@ -1,0 +1,9 @@
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.afdesign binary
+
+# Ensure consistent line endings
+* text=auto
