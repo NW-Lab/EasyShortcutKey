@@ -1,0 +1,251 @@
+/*
+ * EasyShortcutKey - KeyboardGW
+ * ESP32-S3 AtomS3 + BLE + USB HID統合版
+ */
+
+#include <Arduino.h>
+#include "tusb.h"
+#include "M5AtomS3.h"
+#include "BLEDevice.h"
+#include "BLEHandler.h"
+#include "BLE2902.h"
+#include "Config.h"
+#include <esp_gap_ble_api.h>
+#include <ArduinoJson.h>
+
+// TinyUSB直接制御（参考サンプル準拠）
+static const char *TAG = "KeyboardGW";
+
+// We'll poll CDC in loop() using TinyUSB device API (tud_*).
+// Declare minimal prototypes in case headers differ in this Arduino environment.
+extern "C" {
+    bool tud_hid_ready(void);
+    bool tud_cdc_connected(void);
+    size_t tud_cdc_read(void* buffer, uint32_t bufsize);
+}
+
+// TinyUSB CDC write helpers (declare minimally)
+// Note: TinyUSB headers provide tud_cdc_write/tud_cdc_write_flush declarations.
+// Avoid re-declaring them here to prevent signature conflicts.
+
+// BLE設定
+#define SERVICE_UUID        "12345678-1234-1234-1234-123456789abc"
+#define CHARACTERISTIC_UUID "87654321-4321-4321-4321-cba987654321"
+
+bool deviceConnected = false;
+
+// BLEHandler をグローバル変数に
+BLEHandler bleHandler;
+
+// One-shot HID self-test flag
+static bool hid_selftest_sent = false;
+
+// LED制御ヘルパー
+inline void setDisplayColor(uint32_t color) {
+    AtomS3.dis.drawpix(color);
+    AtomS3.update();
+}
+
+// BLE handling is delegated to BLEHandler
+
+// Shortcut handling will be done via BLEHandler callbacks
+
+void setup() {
+    Serial.begin(SERIAL_BAUD_RATE);
+    Serial.setDebugOutput(true);
+    delay(500);
+
+    // Force some early debug prints to ensure UART is working
+    Serial.println("=== BOOT SEQUENCE START ===");
+    Serial.println("Serial test: 1");
+    delay(50);
+    Serial.println("Serial test: 2");
+    delay(50);
+    Serial.println("Serial test: 3");
+
+    // Also attempt to print the same messages over TinyUSB CDC if available
+    // Use runtime check so code is always compiled; relies on TinyUSB headers
+    if (tud_cdc_connected()) {
+        const char* s1 = "=== BOOT SEQUENCE START (CDC) ===\r\n";
+        tud_cdc_write((const uint8_t*)s1, strlen(s1));
+        tud_cdc_write_flush();
+        const char* s2 = "Serial test (CDC): OK\r\n";
+        tud_cdc_write((const uint8_t*)s2, strlen(s2));
+        tud_cdc_write_flush();
+    }
+
+    // M5AtomS3初期化
+    AtomS3.begin(true);
+    AtomS3.dis.setBrightness(100);
+
+    Serial.println("=== EasyShortcutKey KeyboardGW Starting ===");
+
+    // BLE接続状態を明示的に初期化
+    deviceConnected = false;
+
+    // ディスプレイ初期化（赤色 = 初期化中）
+    setDisplayColor(0xff0000);
+    Serial.println("Display: RED (Initializing)");
+
+    Serial.println("Initializing TinyUSB Direct Control...");
+
+    // TinyUSB直接初期化（参考サンプル準拠）
+    ESP_LOGI(TAG, "USB initialization");
+
+    // Note: in the Arduino/PlatformIO environment the TinyUSB device
+    // stack is provided by the core. Avoid using IDF-specific
+    // tinyusb_driver_install / tusb_cdc_acm APIs which are not
+    // available here. We'll rely on the tud_* (TinyUSB Device) APIs
+    // and poll USB in loop().
+    ESP_LOGI(TAG, "TinyUSB (Arduino integration) - using tud_* API if available");
+    Serial.println("TinyUSB (Arduino integration) initialized (no explicit driver install)");
+    // Log current HID ready state for debugging
+    bool hid_ready = false;
+    // Some Arduino TinyUSB integrations expose tud_hid_ready; if available, call it
+    #if defined(tud_hid_ready)
+    hid_ready = tud_hid_ready();
+    #endif
+    Serial.printf("HID ready: %s\n", hid_ready ? "yes" : "no");
+    
+    // BLEHandler に初期化を委譲
+    Serial.println("Initializing BLE via BLEHandler...");
+    bleHandler.begin();
+
+    // ショートカット受信時のコールバックを登録
+    bleHandler.setShortcutCallback([&bleHandler](ShortcutCommand cmd){
+        Serial.println("=== ショートカット受信 ===");
+        Serial.println("keyCount: " + String(cmd.keyCount));
+        
+        // 実行中はオレンジ
+        setDisplayColor(0xff8000);  // オレンジ色
+        
+        if (cmd.keyCount > 0) {
+            Serial.println("Received keys:");
+            for (int i = 0; i < cmd.keyCount; ++i) {
+                Serial.println("  [" + String(i) + "] = '" + cmd.keys[i] + "'");
+            }
+            
+            // デバッグ用：受信したデータをそのまま表示（TinyUSB版）
+            Serial.println("DEBUG: Raw key data received (TinyUSB mode)");
+            // keyboard.print は使用不可（TinyUSB直接制御のため）
+            Serial.print("RECEIVED_KEYS:");
+            for (int i = 0; i < cmd.keyCount; ++i) {
+                Serial.print(cmd.keys[i]);
+                if (i < cmd.keyCount - 1) {
+                    Serial.print("+");
+                }
+            }
+            Serial.println(" ");
+            
+            // HID送信（今後実装予定）
+            Serial.println("DEBUG: HID output not implemented in TinyUSB direct mode yet");
+            
+            Serial.println("=== ショートカット送信完了 ===");
+        } else {
+            Serial.println("No keys to send");
+            // keyboard.print は使用不可
+            Serial.println("NO_KEYS_RECEIVED");
+        }
+        
+        delay(100);
+        setDisplayColor(bleHandler.isConnected() ? 0x00ff00 : 0x0000ff);
+    });
+
+    // 接続状態変化のコールバック
+    bleHandler.setConnectionCallback([](bool connected){
+        if (connected) {
+            setDisplayColor(0x00ff00);
+            Serial.println("Display: GREEN (BLE Connected)");
+        } else {
+            setDisplayColor(0x0000ff);
+            Serial.println("Display: BLUE (BLE Disconnected, advertising restarted)");
+        }
+    });
+    
+    // 青色点灯（待機状態）
+    setDisplayColor(0x0000ff);  // 青色（16進数）
+    Serial.println("Display: BLUE (BLE Advertising, waiting for connection)");
+    
+    // 初期テスト（5秒後）
+    //delay(5000);
+    //Serial.println("Initial test: sending 'KeyboardGW Ready!'");
+    //keyboard.print("KeyboardGW Ready!");
+    //keyboard.write(KEY_RETURN);
+    
+    Serial.println("=== Setup completed ===");
+}
+
+void loop() {
+    M5.update();
+    // Allow TinyUSB device stack to run
+    #if defined(tud_task)
+    tud_task();
+    #endif
+    
+    // BLE接続状態の更新処理
+    bleHandler.update();
+    
+    // ボタンが押されたらテスト送信（TinyUSB版）
+    if (M5.BtnA.wasPressed()) {
+        Serial.println("Button pressed - TinyUSB direct mode test");
+        // keyboard.print は使用不可
+        Serial.println("Button Test from AtomS3 (TinyUSB mode)");
+        
+        // オレンジ色に一瞬点灯（ボタンテスト）
+        setDisplayColor(0xff8000);  // オレンジ色（16進数）
+        delay(200);
+        
+        // 元の色に戻す
+        if (deviceConnected) {
+            setDisplayColor(0x00ff00);  // 緑色（16進数）
+        } else {
+            setDisplayColor(0x0000ff);  // 青色（16進数）
+        }
+    }
+    
+    // Startup HID self-test: send one 'a' key report to host if HID is ready
+    if (!hid_selftest_sent) {
+        bool hid_ready = false;
+        #if defined(tud_hid_ready)
+        hid_ready = tud_hid_ready();
+        #endif
+
+        if (hid_ready) {
+            // Visual cue: flash orange
+            setDisplayColor(0xff8000);
+            delay(100);
+
+            // HID keyboard report: [modifier, reserved, keycode1, keycode2...]
+            uint8_t report[8] = {0};
+            // HID usage ID for 'a' is 0x04
+            report[2] = 0x04;
+
+            #if defined(tud_hid_report)
+            tud_hid_report(0, report, sizeof(report));
+            // release
+            memset(report, 0, sizeof(report));
+            tud_hid_report(0, report, sizeof(report));
+            #endif
+
+            // restore color based on BLE connection
+            setDisplayColor(bleHandler.isConnected() ? 0x00ff00 : 0x0000ff);
+            hid_selftest_sent = true;
+        }
+    }
+
+    // Periodic heartbeat to help debug CDC/Serial connectivity
+    static uint32_t last_hb = 0;
+    if (millis() - last_hb > 1000) {
+        last_hb = millis();
+        Serial.println("HEARTBEAT: Serial alive");
+        #if defined(tud_cdc_connected)
+        if (tud_cdc_connected()) {
+            const char* hb = "HEARTBEAT: CDC alive\r\n";
+            tud_cdc_write((const uint8_t*)hb, strlen(hb));
+            tud_cdc_write_flush();
+        }
+        #endif
+    }
+
+    delay(50);
+}

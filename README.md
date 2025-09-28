@@ -48,7 +48,7 @@ iPhone (iOSアプリ) → [Bluetooth] → KeyboardGW → [USB] → PC (Windows/M
    - マージ時のルール: 各アプリ内で `order` が設定されていればそれを優先、未指定ならファイル内の配列順を保持する想定。
 - `browser/` – ブラウザ用の静的アセット（`index.source.html`, `index.html`, `app.js`, `style.css`, ビルドスクリプトなど）。
 - `iOS/` – iOS（SwiftUI）実装のソース。Version 2.0でKeyboardGWとのBluetooth連携機能を実装。
-- `KeyboardGW/` – M5Stack AtomS3用のファームウェア（Arduino/PlatformIO）。BLE通信とUSB HID Keyboard機能を提供。
+- `KeyboardGW/` – M5Stack AtomS3用のファームウェア（PlatformIO 専用）。BLE通信とUSB HID Keyboard機能を提供。
 - `Manual/` – 使用方法とペアリング手順のドキュメント。WordPress等での公開用HTMLも含む。
 
 ## ドキュメント

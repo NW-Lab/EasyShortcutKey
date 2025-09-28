@@ -1,97 +1,183 @@
-# EasyShortcutKey KeyboardGW
+# EasyShortcutKey — KeyboardGW (PlatformIO)# EasyShortcutKey KeyboardGW
 
-このフォルダには、iPhone とPC間のショートカット中継を行うマイコン（KeyboardGW）のArduinoコードが含まれているよ。
 
-## システム構成
+
+このフォルダには、M5Stack AtomS3 (ESP32-S3) 用の KeyboardGW ファームウェア（PlatformIO ビルド）を置くよ。このフォルダには、iPhone とPC間のショートカット中継を行うマイコン（KeyboardGW）のArduinoコードが含まれているよ。
+
+
+
+概要:## システム構成
+
 ```
-iPhone —[BLE]→ KeyboardGW —[USB HID Keyboard]→ PC（Windows/Mac）
-```
+
+- 役割: iPhone から受信したショートカットコマンドを USB HID Keyboard として PC に送信する中継デバイス。iPhone —[BLE]→ KeyboardGW —[USB HID Keyboard]→ PC（Windows/Mac）
+
+- ハードウェア: M5Stack AtomS3 (ESP32-S3)```
+
+- 通信: BLE (GATT Peripheral) と USB HID
 
 KeyboardGWは、iPhoneから受信したショートカットコマンドを、PC側にUSBキーボード入力として送信するデバイス。
 
+対応開発環境:
+
 ## ハードウェア仕様
-- **マイコン**: ESP32-S3（M5Stack AtomS3を使用）
+
+- PlatformIO (推奨・唯一サポート)- **マイコン**: ESP32-S3（M5Stack AtomS3を使用）
+
 - **通信**: BLE (GATT) + USB HID Keyboard
-- **インジケータ**: 内蔵LEDで接続状態を表示
+
+重要: 以前は Arduino IDE のサポートが書かれていたけど、現在は PlatformIO のみをサポートするようになったため、Arduino IDE に関する手順や記述は削除/無効化されているよ。- **インジケータ**: 内蔵LEDで接続状態を表示
+
 - **電源**: USB給電
+
+ファイル構成 (実装済み/主要ファイル):
 
 ## 機能要件
 
-### BLE通信機能
-- iPhone（Central）からの接続を受信（Peripheral役）
-- GATTサービス・キャラクタリスティックによる通信
-- セキュア接続（ペアリング済みデバイスのみ接続許可）
-- 接続状態の管理と再接続処理
+```
 
-### USB HID Keyboard機能
-- USB HIDデバイスとしてPC側に認識
-- 修飾キー（Ctrl, Alt, Shift, Cmd等）の組み合わせ対応
-- 複数キーの同時押し対応
-- 日本語/英語キーボードレイアウト対応
+KeyboardGW/### BLE通信機能
 
-### 状態表示機能
+├── README.md- iPhone（Central）からの接続を受信（Peripheral役）
+
+├── platformio.ini- GATTサービス・キャラクタリスティックによる通信
+
+├── src/- セキュア接続（ペアリング済みデバイスのみ接続許可）
+
+│   ├── main.cpp- 接続状態の管理と再接続処理
+
+│   ├── BLEHandler.cpp/h
+
+│   ├── KeyboardHandler.cpp/h### USB HID Keyboard機能
+
+│   ├── usb_descriptors.cpp- USB HIDデバイスとしてPC側に認識
+
+│   └── ...- 修飾キー（Ctrl, Alt, Shift, Cmd等）の組み合わせ対応
+
+├── firmware/               # 自動生成されるビルド成果物 (.bin)- WindowsのCopilotキーみたいに複合の場合の変換する。Copilotキーはwin+C
+
+└── export_firmware.py      # ビルド後に firmware/ に .bin をコピーするスクリプト- 複数キーの同時押し対応
+
+```- 日本語/英語キーボードレイアウト対応
+
+
+
+ビルド方法 (開発者向け)### 状態表示機能
+
 - 内蔵LEDによる動作状態表示
-  - 起動中: 青点滅
-  - BLE待機中: 青点灯
+
+1. PlatformIO をインストール（VS Code + PlatformIO extension または pio CLI）  - 起動中: 青点滅
+
+2. ターミナルでこのフォルダへ移動:  - BLE待機中: 青点灯
+
   - BLE接続済み: 緑点灯
-  - キー送信中: 白点滅
-  - エラー: 赤点滅
+
+```  - キー送信中: 白点滅
+
+cd KeyboardGW  - エラー: 赤点滅
+
+```
 
 ### セキュリティ機能
-- ペアリング済みiPhoneのMACアドレス記録
-- 未知デバイスからの接続拒否
-- 接続タイムアウト処理
 
-## 開発環境
-- **IDE**: Arduino IDE または PlatformIO
-- **ボードマネージャ**: ESP32 Arduino Core
-- **必要ライブラリ**:
-  - `ESP32 BLE Arduino`
-  - `USB HID`
-  - `M5AtomS3`
-  - `ArduinoJson`
+3. ビルド:- ペアリング済みiPhoneのMACアドレス記録
+
+- 未知デバイスからの接続拒否
+
+```- 接続タイムアウト処理
+
+pio run
+
+```## 開発環境
+
+- **IDE**: PlatformIO
+
+4. 書き込み (デバイスが接続されている場合):
 
 ## Version 2.0 対応キー一覧（実装済み）
 
-### 修飾キー（大文字小文字両対応）
-- `Ctrl`, `Control` → KEY_LEFT_CTRL
+```
+
+pio run --target upload### 修飾キー（大文字小文字両対応）
+
+```- `Ctrl`, `Control` → KEY_LEFT_CTRL
+
 - `Shift` → KEY_LEFT_SHIFT  
-- `Alt`, `Option` → KEY_LEFT_ALT
+
+ビルド後、`firmware/KeyboardGW_m5stack-atoms3.bin` が自動生成される（`export_firmware.py` によりコピーされる）。- `Alt`, `Option` → KEY_LEFT_ALT
+
 - `Cmd`, `Command`, `Win`, `Windows` → KEY_LEFT_GUI
 
-### 文字・数字キー（A-Z、0-9）
-- 大文字小文字両対応: `a`/`A`, `b`/`B`, ... `z`/`Z`
-- 数字キー: `0`, `1`, `2`, ... `9`
+配布バイナリ書き込み (esptool.py)- 'copilot'  → KEY_LEFT_GUI + C
 
-### ファンクションキー（大文字小文字両対応）
-- `F1`/`f1`, `F2`/`f2`, ... `F12`/`f12`
+
+
+PlatformIO が使えない場合でも、配布済みの .bin を直接書き込む手順は以下の通り（参考）:### 文字・数字キー（A-Z、0-9）
+
+- 大文字小文字両対応: `a`/`A`, `b`/`B`, ... `z`/`Z`
+
+1. Python と esptool を用意:- 数字キー: `0`, `1`, `2`, ... `9`
+
+
+
+```### ファンクションキー（大文字小文字両対応）
+
+pip install esptool- `F1`/`f1`, `F2`/`f2`, ... `F12`/`f12`
+
+```
 
 ### 特殊キー（大文字小文字両対応）
-- `Enter`/`enter`, `Return`/`return` → KEY_RETURN
+
+2. 接続ポート確認（Windows 例）:- `Enter`/`enter`, `Return`/`return` → KEY_RETURN
+
 - `Space`/`space` → KEY_SPACE
-- `Tab`/`tab` → KEY_TAB
-- `Backspace`/`backspace` → KEY_BACKSPACE
-- `Delete`/`delete` → KEY_DELETE
-- `Escape`/`escape`, `Esc`/`esc` → KEY_ESC
 
-### 矢印キー（記号と英語表記両対応）
+```- `Tab`/`tab` → KEY_TAB
+
+# PowerShell- `Backspace`/`backspace` → KEY_BACKSPACE
+
+Get-WmiObject Win32_SerialPort | Select-Object DeviceID, Description- `Delete`/`delete` → KEY_DELETE
+
+```- `Escape`/`escape`, `Esc`/`esc` → KEY_ESC
+
+
+
+3. 書き込み例:### 矢印キー（記号と英語表記両対応）
+
 - `↑`, `Up`/`up` → KEY_UP_ARROW
-- `↓`, `Down`/`down` → KEY_DOWN_ARROW  
-- `←`, `Left`/`left` → KEY_LEFT_ARROW
-- `→`, `Right`/`right` → KEY_RIGHT_ARROW
 
-### その他特殊キー
+```- `↓`, `Down`/`down` → KEY_DOWN_ARROW  
+
+esptool.py --chip esp32s3 --port COM3 --baud 921600 write_flash -z 0x0 firmware/KeyboardGW_m5stack-atoms3.bin- `←`, `Left`/`left` → KEY_LEFT_ARROW
+
+```- `→`, `Right`/`right` → KEY_RIGHT_ARROW
+
+
+
+注意点:### その他特殊キー
+
 - `Home`/`home`, `End`/`end`
-- `PageUp`/`pageup`, `PageDown`/`pagedown`
-- `Insert`/`insert`
 
-### 記号キー
-- `-`, `=`, `[`, `]`, `\`, `;`, `'`, `,`, `.`, `/`, `` ` ``
+- このプロジェクトは現在 PlatformIO のみを公式サポートにしているよ。Arduino IDE に関する古い手順やコメントは無効化・削除済み。- `PageUp`/`pageup`, `PageDown`/`pagedown`
 
-## BLE通信プロトコル（実装済み）
+- 既存の古い実装や参考用コードは `KeyboardGW.old/` に残してあるので、必要なら参照してね。- `Insert`/`insert`
 
-### GATT Service & Characteristics
-- **Service UUID**: `12345678-1234-1234-1234-123456789ABC`
+
+
+関連ドキュメント:### 記号キー
+
+- ルート README.md- `-`, `=`, `[`, `]`, `\`, `;`, `'`, `,`, `.`, `/`, `` ` ``
+
+- Manual/FirmwareFlash.html
+
+- TROUBLESHOOTING.md## BLE通信プロトコル（実装済み）
+
+
+
+変更履歴:### GATT Service & Characteristics
+
+- KeyboardGW を PlatformIO のみに絞るため README を更新し、元の実装は `KeyboardGW.old/` に退避。- **Service UUID**: `12345678-1234-1234-1234-123456789ABC`
+
 - **Shortcut Characteristic**: `12345678-1234-1234-1234-123456789ABD` (Write)
 - **Status Characteristic**: `12345678-1234-1234-1234-123456789ABE` (Notify)  
 - **Pairing Characteristic**: `12345678-1234-1234-1234-123456789ABF` (Write)

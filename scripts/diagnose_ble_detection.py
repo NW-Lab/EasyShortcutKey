@@ -72,8 +72,8 @@ def analyze_ble_issues():
             "description": "ファームウェアがBLE広告を正常に送信していない",
             "solutions": [
                 "デバイスを一度リセット（USB抜き差し）",
-                "ファームウェアの再書き込み",
-                "シリアルログでBLE初期化メッセージを確認"
+                    "PlatformIO でファームウェアを再ビルド・書き込み",
+                    "pio device monitor でシリアルログ(BLE初期化メッセージ)を確認"
             ]
         },
         {
@@ -163,7 +163,7 @@ def provide_step_by_step_solution():
             "step": 4,
             "title": "ファームウェア確認・再書き込み（上級）",
             "actions": [
-                "Arduino IDEまたはPlatformIOでファームウェア再書き込み",
+                    "PlatformIOでファームウェア再書き込み",
                 "シリアルモニターでBLE初期化ログを確認",
                 "「BLE initialization completed」メッセージを確認",
                 "再度iOSアプリでデバイス検索"

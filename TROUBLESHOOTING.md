@@ -41,35 +41,25 @@
 
 ファームウェアが正常に動作していない可能性があります。以下を実行してください：
 
-#### Arduino IDE / PlatformIOを使用した確認方法：
+#### PlatformIO を使った確認・再書き込み手順：
 
 1. **開発環境の準備**
    ```bash
-   # PlatformIOの場合
+   # PlatformIO のプロジェクトディレクトリに移動
    cd /Users/tauchi/github/EasyShortcutKey/KeyboardGW
-   pio device list  # デバイスが認識されるかチェック
-   
-   # Arduino IDEの場合
-   # ツール > ボード > ESP32 > M5Stack-ATOMS3 を選択
-   # ツール > シリアルポート でデバイスが表示されるかチェック
+   # 接続されたデバイスを確認
+   pio device list
    ```
 
 2. **シリアルモニターでの確認**
    ```bash
-   # PlatformIOの場合
    pio device monitor --baud 115200
-   
-   # または画面コマンド
-   screen /dev/tty.usbserial-* 115200
    ```
 
 3. **ファームウェア再書き込み**
    ```bash
-   # PlatformIOの場合
    cd /Users/tauchi/github/EasyShortcutKey/KeyboardGW
    pio run --target upload
-   
-   # Arduino IDEの場合は「アップロード」ボタンをクリック
    ```
 
 ### 5. 📱 iOSアプリ側の確認

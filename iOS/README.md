@@ -136,7 +136,7 @@ KeyboardGWは以下の特殊キーに完全対応：
 
 ### 2. KeyboardGWデバイス設定
 KeyboardGWデバイス（ESP32S3 M5AtomS3）に以下のファームウェアを書き込んでください：
-- `KeyboardGW/KeyboardGW.ino` をArduino IDEまたはPlatformIOでコンパイル・書き込み
+- PlatformIO を使って `KeyboardGW` フォルダ内のファームウェアをビルド・書き込み
 - BLEデバイス名: `EasyShortcutKey-GW`
 - サービスUUID: `12345678-1234-1234-1234-123456789ABC`
 

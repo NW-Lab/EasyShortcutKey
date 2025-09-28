@@ -153,8 +153,8 @@ def provide_hardware_troubleshooting():
     print("   - LEDが青色で点滅→点灯することを確認")
     
     print_status("INFO", "4. 🛠 ファームウェアの確認:")
-    print("   - Arduino IDEまたはPlatform IOでファームウェアが正しく書き込まれているか")
-    print("   - シリアルモニターでデバッグメッセージを確認")
+    print("   - PlatformIO でファームウェアが正しく書き込まれているか確認")
+    print("   - シリアルモニター (pio device monitor) でデバッグメッセージを確認")
 
 def main():
     print("🖥 EasyShortcutKey USBデバイスチェックツール")
