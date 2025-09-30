@@ -9,62 +9,114 @@
 
 // Temporary debug: when set to 1, type the raw received BLE payload to the USB host
 // (useful for verifying what the iOS app actually sends in Notepad). Disable for normal operation.
-#define DEBUG_TYPE_RAW 1
+#define DEBUG_TYPE_RAW 0
 
 static NimBLECharacteristic* pShortcutChar = nullptr;
 static NimBLECharacteristic* pStatusChar = nullptr;
 
 class ShortcutCallbacks : public NimBLECharacteristicCallbacks {
+private:
+    std::string fragmentBuffer;
+    uint32_t lastFragmentTime = 0;
+    static const uint32_t FRAGMENT_TIMEOUT_MS = 1000;
+
+public:
     void onWrite(NimBLECharacteristic* pCharacteristic) override {
         std::string value = pCharacteristic->getValue();
-        if (value.empty()) return;
-        // Echo raw payload back via status characteristic for quick inspection on iOS
+        uint32_t currentTime = millis();
+        
+        if (value.empty()) {
+            if (pStatusChar) { pStatusChar->setValue("empty_payload"); pStatusChar->notify(); }
+            return;
+        }
+
+        Serial.print("Received payload length: ");
+        Serial.println(value.length());
+        Serial.print("Payload hex: ");
+        for (size_t i = 0; i < std::min(value.length(), (size_t)50); i++) {
+            Serial.printf("%02x", (unsigned char)value[i]);
+        }
+        Serial.println();
+        
+        // Check if this might be a fragment (timeout-based fragment detection)
+        bool isFragment = false;
+        if (!fragmentBuffer.empty() && (currentTime - lastFragmentTime) < FRAGMENT_TIMEOUT_MS) {
+            isFragment = true;
+            Serial.println("Detected continuation fragment");
+        } else if (!fragmentBuffer.empty()) {
+            Serial.println("Fragment timeout - clearing buffer");
+            fragmentBuffer.clear();
+        }
+        
+        // Handle potential fragmentation
+        std::string completePayload;
+        if (isFragment) {
+            fragmentBuffer += value;
+            completePayload = fragmentBuffer;
+            Serial.print("Assembled fragment length: ");
+            Serial.println(completePayload.length());
+        } else {
+            completePayload = value;
+            fragmentBuffer = value; // Start new fragment sequence
+        }
+        
+        lastFragmentTime = currentTime;
+        
+        // Try to parse as JSON
+        StaticJsonDocument<512> doc;
+        DeserializationError err = deserializeJson(doc, completePayload);
+        
+        if (err) {
+            Serial.print("JSON parse error: ");
+            Serial.println(err.c_str());
+            Serial.print("Raw payload (first 100 chars): ");
+            Serial.println(completePayload.substr(0, 100).c_str());
+            
+            // If single fragment failed, wait for more fragments
+            if (!isFragment && value.length() > 20) {
+                Serial.println("Parse failed but payload looks incomplete - waiting for fragments");
+                if (pStatusChar) { pStatusChar->setValue("waiting_fragments"); pStatusChar->notify(); }
+                return;
+            }
+            
+            // Send detailed error info via status
+            std::string errorMsg = "json_error:";
+            errorMsg += err.c_str();
+            if (pStatusChar) { 
+                pStatusChar->setValue(errorMsg.substr(0, 100));
+                pStatusChar->notify(); 
+            }
+            fragmentBuffer.clear(); // Clear on error
+            return;
+        }
+        
+        // JSON parsed successfully - clear fragment buffer and process
+        fragmentBuffer.clear();
+        Serial.println("JSON parsed successfully");
+        
         if (pStatusChar) {
-            // limit echo length to avoid large notifications; NimBLE can fragment but keep this small
-            const size_t maxEcho = 200;
-            std::string echo = value.substr(0, std::min(value.size(), maxEcho));
+            // Send success status with payload length info
+            std::string echo = "json_ok:len=" + std::to_string(completePayload.length());
             pStatusChar->setValue(echo);
             pStatusChar->notify();
         }
 
-#if DEBUG_TYPE_RAW
-        // DEBUG: type hex dump (lowercase 0-9a-f) of payload so host layout doesn't mangle symbols
-        {
-            std::string hex;
-            hex.reserve(value.size() * 2 + 1);
-            const char* hexchars = "0123456789abcdef";
-            for (unsigned char c : value) {
-                hex.push_back(hexchars[(c >> 4) & 0xF]);
-                hex.push_back(hexchars[c & 0xF]);
-            }
-            const char* out = hex.c_str();
-            const char* arr[1] = { out };
-            USBHID.writeKeys(arr, 1);
-            LEDIndicator::blink(LED_WHITE, 80);
-            if (pStatusChar) { pStatusChar->setValue("typed_hex"); pStatusChar->notify(); }
-            return;
-        }
-#endif
-
-        StaticJsonDocument<512> doc;
-        DeserializationError err = deserializeJson(doc, value);
-        if (err) {
-            Serial.print("JSON parse error: ");
-            Serial.println(err.c_str());
-            if (pStatusChar) { pStatusChar->setValue("json_error"); pStatusChar->notify(); }
-            return;
-        }
-
         if (!doc.containsKey("keys")) {
-            if (pStatusChar) { pStatusChar->setValue("no_keys"); pStatusChar->notify(); }
+            Serial.println("No 'keys' field in JSON");
+            if (pStatusChar) { pStatusChar->setValue("no_keys_field"); pStatusChar->notify(); }
             return;
         }
 
         JsonArray keys = doc["keys"].as<JsonArray>();
+        Serial.print("Keys array size: ");
+        Serial.println(keys.size());
+        
         std::vector<String> keyStrings;
         keyStrings.reserve(keys.size());
         for (auto k : keys) {
             keyStrings.emplace_back(k.as<const char*>());
+            Serial.print("Key: ");
+            Serial.println(keyStrings.back().c_str());
         }
 
         std::vector<const char*> keyPtrs;
@@ -73,10 +125,10 @@ class ShortcutCallbacks : public NimBLECharacteristicCallbacks {
 
         USBHID.writeKeys(keyPtrs.data(), keyPtrs.size());
 
-    // Indicate sending with a short white blink
-    LEDIndicator::blink(LED_WHITE, 80);
+        // Indicate sending with a short white blink
+        LEDIndicator::blink(LED_WHITE, 80);
 
-        if (pStatusChar) { pStatusChar->setValue("ok"); pStatusChar->notify(); }
+        if (pStatusChar) { pStatusChar->setValue("keys_sent_ok"); pStatusChar->notify(); }
     }
 };
 

@@ -5,7 +5,34 @@ import Combine
 // KeyboardGWの接続状態を管理するクラス
 class KeyboardGWManager: NSObject, ObservableObject {
     // シングルトンインスタンス
-    static let shared = KeyboardGWManager()
+    static let sha        // Debug: log the exact JSON payload being sent so we can verify on Xcode console
+        print("🔤 Sending JSON payload: \(jsonString)")
+        print("🔤 JSON length: \(jsonString.count) bytes")
+        
+        let data = jsonString.data(using: .utf8)!
+        print("🔤 Data length: \(data.count) bytes")
+        
+        // Check MTU to ensure single packet transmission
+        let mtu = peripheral.maximumWriteValueLength(for: .withResponse)
+        print("🔤 MTU for withResponse: \(mtu) bytes")
+        
+        if data.count > mtu {
+            print("⚠️ Payload (\(data.count) bytes) exceeds MTU (\(mtu) bytes) - may fragment")
+            // Try with withoutResponse for larger MTU
+            let mtuWithoutResponse = peripheral.maximumWriteValueLength(for: .withoutResponse)
+            print("🔤 MTU for withoutResponse: \(mtuWithoutResponse) bytes")
+            if data.count <= mtuWithoutResponse {
+                print("✅ Using withoutResponse to avoid fragmentation")
+                peripheral.writeValue(data, for: characteristic, type: .withoutResponse)
+            } else {
+                print("❌ Payload too large even for withoutResponse")
+                return
+            }
+        } else {
+            peripheral.writeValue(data, for: characteristic, type: .withResponse)
+        }
+        
+        print("📤 ショートカット送信：\(keys.joined(separator: "+"))")KeyboardGWManager()
     
     // MARK: - Published Properties
     @Published var isConnected: Bool = false
@@ -334,6 +361,11 @@ extension KeyboardGWManager: CBCentralManagerDelegate {
             return
         }
         
+        // Log MTU information after connection
+        let mtuWithResponse = peripheral.maximumWriteValueLength(for: .withResponse)
+        let mtuWithoutResponse = peripheral.maximumWriteValueLength(for: .withoutResponse)
+        print("📊 MTU情報 - withResponse: \(mtuWithResponse), withoutResponse: \(mtuWithoutResponse)")
+        
         let testCommand = [
             "keys": [""],  // 空のキー（実際には何も送信しない）
             "keyCount": 0,
@@ -346,6 +378,7 @@ extension KeyboardGWManager: CBCentralManagerDelegate {
             return
         }
         
+        print("🔤 Test JSON: \(jsonString)")
         let data = jsonString.data(using: .utf8)!
         peripheral.writeValue(data, for: characteristic, type: .withoutResponse)
         print("📤 接続テストメッセージを送信")
