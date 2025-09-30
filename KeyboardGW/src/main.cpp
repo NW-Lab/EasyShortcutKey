@@ -7,12 +7,51 @@
 #include "USBHID.h"
 #include "LEDIndicator.h"
 
-// Temporary debug: when set to 1, type the raw received BLE payload to the USB host
+// Temporary debug: when set to 1, type debug information to the USB host via HID keyboard
 // (useful for verifying what the iOS app actually sends in Notepad). Disable for normal operation.
-#define DEBUG_TYPE_RAW 0
+#define DEBUG_TYPE_RAW 1
 
 static NimBLECharacteristic* pShortcutChar = nullptr;
 static NimBLECharacteristic* pStatusChar = nullptr;
+
+#if DEBUG_TYPE_RAW
+// Helper function to safely type debug strings via USB HID using Base64 encoding
+void typeDebugString(const String& text) {
+    const char* str = text.c_str();
+    const char* arr[1] = { str };
+    USBHID.writeKeys(arr, 1);
+    delay(100); // Longer delay between debug outputs for readability
+}
+
+// Base64 encoding for safe transmission (basic implementation)
+String encodeBase64(const String& input) {
+    const char* chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    String output = "";
+    int val = 0, valb = -6;
+    for (char c : input) {
+        val = (val << 8) + c;
+        valb += 8;
+        while (valb >= 0) {
+            output += chars[(val >> valb) & 0x3F];
+            valb -= 6;
+        }
+    }
+    if (valb > -6) output += chars[((val << 8) >> (valb + 8)) & 0x3F];
+    while (output.length() % 4) output += '=';
+    return output;
+}
+
+// Convert bytes to hex string safely
+String bytesToHex(const std::string& data) {
+    String hex = "";
+    for (unsigned char c : data) {
+        char buf[3];
+        sprintf(buf, "%02x", c);
+        hex += buf;
+    }
+    return hex;
+}
+#endif
 
 class ShortcutCallbacks : public NimBLECharacteristicCallbacks {
 private:
@@ -37,6 +76,13 @@ public:
             Serial.printf("%02x", (unsigned char)value[i]);
         }
         Serial.println();
+
+#if DEBUG_TYPE_RAW
+        // Type comprehensive debug info via USB HID for Notepad inspection
+        typeDebugString("\nDEBUG_RX_START\n");
+        typeDebugString("LEN" + String(value.length()) + "\n");
+        typeDebugString("HEX" + bytesToHex(value) + "\n");
+#endif
         
         // Check if this might be a fragment (timeout-based fragment detection)
         bool isFragment = false;
@@ -71,10 +117,18 @@ public:
             Serial.println(err.c_str());
             Serial.print("Raw payload (first 100 chars): ");
             Serial.println(completePayload.substr(0, 100).c_str());
+
+#if DEBUG_TYPE_RAW
+            typeDebugString("JSON_ERROR\n");
+            typeDebugString("PAYLOAD_HEX" + bytesToHex(completePayload.substr(0, 50)) + "\n");
+#endif
             
             // If single fragment failed, wait for more fragments
             if (!isFragment && value.length() > 20) {
                 Serial.println("Parse failed but payload looks incomplete - waiting for fragments");
+#if DEBUG_TYPE_RAW
+                typeDebugString("WAIT_FRAGMENTS\n");
+#endif
                 if (pStatusChar) { pStatusChar->setValue("waiting_fragments"); pStatusChar->notify(); }
                 return;
             }
@@ -93,6 +147,11 @@ public:
         // JSON parsed successfully - clear fragment buffer and process
         fragmentBuffer.clear();
         Serial.println("JSON parsed successfully");
+
+#if DEBUG_TYPE_RAW
+        typeDebugString("JSON_OK\n");
+        typeDebugString("JSON_HEX" + bytesToHex(completePayload) + "\n");
+#endif
         
         if (pStatusChar) {
             // Send success status with payload length info
@@ -110,6 +169,10 @@ public:
         JsonArray keys = doc["keys"].as<JsonArray>();
         Serial.print("Keys array size: ");
         Serial.println(keys.size());
+
+#if DEBUG_TYPE_RAW
+        typeDebugString("KEYS" + String(keys.size()) + "\n");
+#endif
         
         std::vector<String> keyStrings;
         keyStrings.reserve(keys.size());
@@ -117,8 +180,18 @@ public:
             keyStrings.emplace_back(k.as<const char*>());
             Serial.print("Key: ");
             Serial.println(keyStrings.back().c_str());
+#if DEBUG_TYPE_RAW
+            typeDebugString("K" + String(keyStrings.size()-1) + "HEX" + bytesToHex(keyStrings.back().c_str()) + "\n");
+#endif
         }
 
+#if DEBUG_TYPE_RAW
+        typeDebugString("DEBUG_RX_END\n\n");
+        // Don't actually send keys in debug mode - just show what would be sent
+        typeDebugString("KEYS_NOT_SENT_DEBUG_MODE\n\n");
+        LEDIndicator::blink(LED_WHITE, 80);
+        if (pStatusChar) { pStatusChar->setValue("debug_complete"); pStatusChar->notify(); }
+#else
         std::vector<const char*> keyPtrs;
         keyPtrs.reserve(keyStrings.size());
         for (auto &s : keyStrings) keyPtrs.push_back(s.c_str());
@@ -129,6 +202,7 @@ public:
         LEDIndicator::blink(LED_WHITE, 80);
 
         if (pStatusChar) { pStatusChar->setValue("keys_sent_ok"); pStatusChar->notify(); }
+#endif
     }
 };
 
