@@ -5,34 +5,7 @@ import Combine
 // KeyboardGWの接続状態を管理するクラス
 class KeyboardGWManager: NSObject, ObservableObject {
     // シングルトンインスタンス
-    static let sha        // Debug: log the exact JSON payload being sent so we can verify on Xcode console
-        print("🔤 Sending JSON payload: \(jsonString)")
-        print("🔤 JSON length: \(jsonString.count) bytes")
-        
-        let data = jsonString.data(using: .utf8)!
-        print("🔤 Data length: \(data.count) bytes")
-        
-        // Check MTU to ensure single packet transmission
-        let mtu = peripheral.maximumWriteValueLength(for: .withResponse)
-        print("🔤 MTU for withResponse: \(mtu) bytes")
-        
-        if data.count > mtu {
-            print("⚠️ Payload (\(data.count) bytes) exceeds MTU (\(mtu) bytes) - may fragment")
-            // Try with withoutResponse for larger MTU
-            let mtuWithoutResponse = peripheral.maximumWriteValueLength(for: .withoutResponse)
-            print("🔤 MTU for withoutResponse: \(mtuWithoutResponse) bytes")
-            if data.count <= mtuWithoutResponse {
-                print("✅ Using withoutResponse to avoid fragmentation")
-                peripheral.writeValue(data, for: characteristic, type: .withoutResponse)
-            } else {
-                print("❌ Payload too large even for withoutResponse")
-                return
-            }
-        } else {
-            peripheral.writeValue(data, for: characteristic, type: .withResponse)
-        }
-        
-        print("📤 ショートカット送信：\(keys.joined(separator: "+"))")KeyboardGWManager()
+    static let shared = KeyboardGWManager()
     
     // MARK: - Published Properties
     @Published var isConnected: Bool = false
@@ -206,11 +179,34 @@ class KeyboardGWManager: NSObject, ObservableObject {
             return
         }
 
-                // Debug: log the exact JSON payload being sent so we can verify on Xcode console
-                print("🔤 Sending JSON payload: \(jsonString)")
+        // Debug: log the exact JSON payload being sent so we can verify on Xcode console
+        print("🔤 Sending JSON payload: \(jsonString)")
+        print("🔤 JSON length: \(jsonString.count) bytes")
         
         let data = jsonString.data(using: .utf8)!
-        peripheral.writeValue(data, for: characteristic, type: .withResponse)
+        print("🔤 Data length: \(data.count) bytes")
+        
+        // Check MTU to ensure single packet transmission
+        let mtu = peripheral.maximumWriteValueLength(for: .withResponse)
+        print("🔤 MTU for withResponse: \(mtu) bytes")
+        
+        if data.count > mtu {
+            print("⚠️ Payload (\(data.count) bytes) exceeds MTU (\(mtu) bytes) - may fragment")
+            // Try with withoutResponse for larger MTU
+            let mtuWithoutResponse = peripheral.maximumWriteValueLength(for: .withoutResponse)
+            print("🔤 MTU for withoutResponse: \(mtuWithoutResponse) bytes")
+            if data.count <= mtuWithoutResponse {
+                print("✅ Using withoutResponse to avoid fragmentation")
+                peripheral.writeValue(data, for: characteristic, type: .withoutResponse)
+            } else {
+                print("❌ Payload too large even for withoutResponse")
+                return
+            }
+        } else {
+            print("***\(data)***")
+            peripheral.writeValue(data, for: characteristic, type: .withResponse)
+        }
+        
         print("📤 ショートカット送信：\(keys.joined(separator: "+"))")
     }
     
