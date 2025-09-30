@@ -178,6 +178,9 @@ class KeyboardGWManager: NSObject, ObservableObject {
             print("❌ JSONデータの作成に失敗")
             return
         }
+
+                // Debug: log the exact JSON payload being sent so we can verify on Xcode console
+                print("🔤 Sending JSON payload: \(jsonString)")
         
         let data = jsonString.data(using: .utf8)!
         peripheral.writeValue(data, for: characteristic, type: .withResponse)

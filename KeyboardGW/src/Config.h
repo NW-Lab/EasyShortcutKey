@@ -9,3 +9,15 @@
 #define PAIRING_CHAR_UUID   "12345678-1234-1234-1234-123456789ABF"
 
 #define DEBUG_SERIAL_BAUD 115200
+
+// LED settings (M5AtomS3)
+#define LED_PIN 35
+#define LED_COUNT 1
+
+// LED color definitions (0xRRGGBB)
+#define LED_OFF 0x000000
+#define LED_BLUE 0x0000FF
+#define LED_GREEN 0x00FF00
+#define LED_RED 0xFF0000
+#define LED_WHITE 0xFFFFFF
+#define LED_YELLOW 0xFFFF00

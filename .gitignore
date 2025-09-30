@@ -1,55 +1,24 @@
-# OS
-.DS_Store
-Thumbs.db
-
-# VS Code
+## Editor metadata
 .vscode/
 
-# PlatformIO build artifacts
+## PlatformIO build artifacts
 .pio/
-.pioenvs/
-.pio/build/
-.pio/libdeps/
-/.pio
+**/.pio/
+KeyboardGW/.pio/
 
-# PlatformIO project environments
-/.venv
+## PlatformIO project files (user-specific)
+*.pyc
+/.vscode/*
 
-# Arduino/other build folders
-build/
+## SDK / build outputs
+KeyboardGW/firmware/*.bin
+KeyboardGW.old/firmware/*.bin
+KeyboardGW/sdkconfig*
 
-# TinyUSB / binary outputs
-*.bin
-*.elf
-*.hex
-
-# Node
-node_modules/
-
-# Python
-__pycache__/
-*.py[cod]
-
-# Logs, temp
+## Temporary/config files
 *.log
 *.tmp
+
+## Backup files
+*~
 *.swp
-
-# IDEs
-.idea/
-
-# Images/binaries (don't diff)
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.ico
-*.afdesign
-
-# Secrets / local env
-.env
-credentials.json
-*.secret
-
-# Ignore exported built HTML if present
-*/index.built.html
