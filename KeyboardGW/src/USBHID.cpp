@@ -137,8 +137,21 @@ void USBHIDClass::writeShortcut(const char** keys, size_t count) {
     } else if (strcasecmp(key, "shift") == 0) {
       modifiers |= 0x02; // Left Shift
     } else {
-      // Regular key - convert to usage code
-      if (strlen(key) == 1) {
+      // Check for special key names first
+      if (strcasecmp(key, "space") == 0) {
+        keyUsages[keyIndex++] = 0x2C; // Space key
+      } else if (strcasecmp(key, "enter") == 0 || strcasecmp(key, "return") == 0) {
+        keyUsages[keyIndex++] = 0x28; // Enter key
+      } else if (strcasecmp(key, "tab") == 0) {
+        keyUsages[keyIndex++] = 0x2B; // Tab key
+      } else if (strcasecmp(key, "backspace") == 0) {
+        keyUsages[keyIndex++] = 0x2A; // Backspace key
+      } else if (strcasecmp(key, "delete") == 0) {
+        keyUsages[keyIndex++] = 0x4C; // Delete key
+      } else if (strcasecmp(key, "escape") == 0 || strcasecmp(key, "esc") == 0) {
+        keyUsages[keyIndex++] = 0x29; // Escape key
+      } else if (strlen(key) == 1) {
+        // Regular single character key - convert to usage code
         uint8_t usage = 0;
         uint8_t mod = 0;
         // Convert to lowercase for consistent handling
