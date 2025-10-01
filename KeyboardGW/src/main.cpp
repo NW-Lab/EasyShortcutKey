@@ -79,9 +79,14 @@ public:
 
 #if DEBUG_TYPE_RAW
         // Type comprehensive debug info via USB HID for Notepad inspection
-        typeDebugString("\nDEBUG_RX_START\n");
-        typeDebugString("LEN" + String(value.length()) + "\n");
-        typeDebugString("HEX" + bytesToHex(value) + "\n");
+        // Use only hex digits (0-9, a-f) to avoid keyboard layout issues
+        typeDebugString("\n");
+        typeDebugString("dbg0len");
+        typeDebugString(String(value.length()));
+        typeDebugString("\n");
+        typeDebugString("dbg0hex");
+        typeDebugString(bytesToHex(value));
+        typeDebugString("\n");
 #endif
         
         // Check if this might be a fragment (timeout-based fragment detection)
@@ -119,15 +124,17 @@ public:
             Serial.println(completePayload.substr(0, 100).c_str());
 
 #if DEBUG_TYPE_RAW
-            typeDebugString("JSON_ERROR\n");
-            typeDebugString("PAYLOAD_HEX" + bytesToHex(completePayload.substr(0, 50)) + "\n");
+            typeDebugString("dbg1err\n");
+            typeDebugString("dbg1hex");
+            typeDebugString(bytesToHex(completePayload.substr(0, 50)));
+            typeDebugString("\n");
 #endif
             
             // If single fragment failed, wait for more fragments
             if (!isFragment && value.length() > 20) {
                 Serial.println("Parse failed but payload looks incomplete - waiting for fragments");
 #if DEBUG_TYPE_RAW
-                typeDebugString("WAIT_FRAGMENTS\n");
+                typeDebugString("dbg2wait\n");
 #endif
                 if (pStatusChar) { pStatusChar->setValue("waiting_fragments"); pStatusChar->notify(); }
                 return;
@@ -149,8 +156,10 @@ public:
         Serial.println("JSON parsed successfully");
 
 #if DEBUG_TYPE_RAW
-        typeDebugString("JSON_OK\n");
-        typeDebugString("JSON_HEX" + bytesToHex(completePayload) + "\n");
+        typeDebugString("dbg3ok\n");
+        typeDebugString("dbg3hex");
+        typeDebugString(bytesToHex(completePayload));
+        typeDebugString("\n");
 #endif
         
         if (pStatusChar) {
@@ -171,7 +180,9 @@ public:
         Serial.println(keys.size());
 
 #if DEBUG_TYPE_RAW
-        typeDebugString("KEYS" + String(keys.size()) + "\n");
+        typeDebugString("dbg4keycnt");
+        typeDebugString(String(keys.size()));
+        typeDebugString("\n");
 #endif
         
         std::vector<String> keyStrings;
@@ -181,14 +192,18 @@ public:
             Serial.print("Key: ");
             Serial.println(keyStrings.back().c_str());
 #if DEBUG_TYPE_RAW
-            typeDebugString("K" + String(keyStrings.size()-1) + "HEX" + bytesToHex(keyStrings.back().c_str()) + "\n");
+            typeDebugString("dbg4k");
+            typeDebugString(String(keyStrings.size()-1));
+            typeDebugString("hex");
+            typeDebugString(bytesToHex(keyStrings.back().c_str()));
+            typeDebugString("\n");
 #endif
         }
 
 #if DEBUG_TYPE_RAW
-        typeDebugString("DEBUG_RX_END\n\n");
+        typeDebugString("dbg9end\n\n");
         // Don't actually send keys in debug mode - just show what would be sent
-        typeDebugString("KEYS_NOT_SENT_DEBUG_MODE\n\n");
+        typeDebugString("dbgnokeys\n\n");
         LEDIndicator::blink(LED_WHITE, 80);
         if (pStatusChar) { pStatusChar->setValue("debug_complete"); pStatusChar->notify(); }
 #else

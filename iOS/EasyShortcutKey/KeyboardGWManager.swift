@@ -203,7 +203,11 @@ class KeyboardGWManager: NSObject, ObservableObject {
                 return
             }
         } else {
-            print("***\(data)***")
+            // Debug: print data as hex for verification
+            let hexString = data.map { String(format: "%02x", $0) }.joined()
+            print("📤 Sending data (\(data.count) bytes):")
+            print("   JSON: \(jsonString)")
+            print("   HEX: \(hexString)")
             peripheral.writeValue(data, for: characteristic, type: .withResponse)
         }
         
