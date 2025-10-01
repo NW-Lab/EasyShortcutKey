@@ -9,18 +9,41 @@
 
 // Temporary debug: when set to 1, type debug information to the USB host via HID keyboard
 // (useful for verifying what the iOS app actually sends in Notepad). Disable for normal operation.
-#define DEBUG_TYPE_RAW 1
+#define DEBUG_TYPE_RAW 0
+
+// Test: Type received raw bytes immediately (before JSON processing)  
+#define DEBUG_RAW_BYTES 0
 
 static NimBLECharacteristic* pShortcutChar = nullptr;
 static NimBLECharacteristic* pStatusChar = nullptr;
 
 #if DEBUG_TYPE_RAW
-// Helper function to safely type debug strings via USB HID using Base64 encoding
+// Helper function to safely type debug strings via USB HID 
 void typeDebugString(const String& text) {
-    const char* str = text.c_str();
-    const char* arr[1] = { str };
-    USBHID.writeKeys(arr, 1);
-    delay(100); // Longer delay between debug outputs for readability
+    // Use USB.print to send text directly to serial/console
+    for (int i = 0; i < text.length(); i++) {
+        char c = text.charAt(i);
+        // Type each character individually
+        if (c >= 'a' && c <= 'z') {
+            String key = String(c);
+            const char* arr[1] = { key.c_str() };
+            USBHID.writeKeys(arr, 1);
+        } else if (c >= 'A' && c <= 'Z') {
+            String key = String((char)(c + 32)); // Convert to lowercase
+            const char* arr[1] = { key.c_str() };
+            USBHID.writeKeys(arr, 1);
+        } else if (c >= '0' && c <= '9') {
+            String key = String(c);
+            const char* arr[1] = { key.c_str() };
+            USBHID.writeKeys(arr, 1);
+        } else if (c == '\n') {
+            const char* arr[1] = { "enter" };
+            USBHID.writeKeys(arr, 1);
+        } else {
+            // Skip special characters for now
+        }
+        delay(20); // Short delay between characters
+    }
 }
 
 // Base64 encoding for safe transmission (basic implementation)
@@ -69,6 +92,15 @@ public:
             return;
         }
 
+#if DEBUG_RAW_BYTES
+        // Immediately type raw received bytes for debugging
+        typeDebugString("RAW");
+        typeDebugString(String(value.length()));
+        typeDebugString("HEX");
+        typeDebugString(bytesToHex(value));
+        typeDebugString("END\n");
+#endif
+
         Serial.print("Received payload length: ");
         Serial.println(value.length());
         Serial.print("Payload hex: ");
@@ -106,9 +138,19 @@ public:
             completePayload = fragmentBuffer;
             Serial.print("Assembled fragment length: ");
             Serial.println(completePayload.length());
+            Serial.print("Fragment buffer hex: ");
+            for (size_t i = 0; i < std::min(completePayload.length(), (size_t)100); i++) {
+                Serial.printf("%02x", (unsigned char)completePayload[i]);
+            }
+            Serial.println();
         } else {
             completePayload = value;
             fragmentBuffer = value; // Start new fragment sequence
+            Serial.print("Single payload hex: ");
+            for (size_t i = 0; i < std::min(value.length(), (size_t)100); i++) {
+                Serial.printf("%02x", (unsigned char)value[i]);
+            }
+            Serial.println();
         }
         
         lastFragmentTime = currentTime;
@@ -211,7 +253,17 @@ public:
         keyPtrs.reserve(keyStrings.size());
         for (auto &s : keyStrings) keyPtrs.push_back(s.c_str());
 
-        USBHID.writeKeys(keyPtrs.data(), keyPtrs.size());
+#if DEBUG_TYPE_RAW
+        typeDebugString("keys");
+        for (size_t i = 0; i < keyStrings.size(); i++) {
+            typeDebugString(keyStrings[i].c_str());
+            if (i < keyStrings.size() - 1) typeDebugString(",");
+        }
+        typeDebugString("\n");
+        typeDebugString("dbgnokeys\n");
+#else
+        USBHID.writeShortcut(keyPtrs.data(), keyPtrs.size());
+#endif
 
         // Indicate sending with a short white blink
         LEDIndicator::blink(LED_WHITE, 80);

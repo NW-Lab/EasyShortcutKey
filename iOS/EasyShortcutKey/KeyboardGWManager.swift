@@ -167,10 +167,9 @@ class KeyboardGWManager: NSObject, ObservableObject {
             return
         }
         
+        // TEST: Use minimal JSON to avoid fragmentation
         let command = [
-            "keys": keys,
-            "keyCount": keys.count,
-            "delay": 50
+            "keys": keys
         ] as [String : Any]
         
         guard let jsonData = try? JSONSerialization.data(withJSONObject: command),

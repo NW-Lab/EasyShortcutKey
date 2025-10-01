@@ -115,6 +115,71 @@ void USBHIDClass::writeKeys(const char** keys, size_t count) {
   }
 }
 
+void USBHIDClass::writeShortcut(const char** keys, size_t count) {
+  if (!tud_hid_ready()) return;
+
+  uint8_t modifiers = 0;
+  uint8_t keyUsages[6] = {0}; // HID supports up to 6 simultaneous keys
+  size_t keyIndex = 0;
+
+  // Parse keys and build modifier + key combination
+  for (size_t i = 0; i < count && keyIndex < 6; ++i) {
+    const char* key = keys[i];
+    if (!key) continue;
+
+    // Check for modifier keys (case insensitive)
+    if (strcasecmp(key, "cmd") == 0 || strcasecmp(key, "gui") == 0 || strcasecmp(key, "win") == 0) {
+      modifiers |= 0x08; // Left GUI (Cmd/Win)
+    } else if (strcasecmp(key, "ctrl") == 0 || strcasecmp(key, "control") == 0) {
+      modifiers |= 0x01; // Left Ctrl
+    } else if (strcasecmp(key, "alt") == 0 || strcasecmp(key, "option") == 0) {
+      modifiers |= 0x04; // Left Alt
+    } else if (strcasecmp(key, "shift") == 0) {
+      modifiers |= 0x02; // Left Shift
+    } else {
+      // Regular key - convert to usage code
+      if (strlen(key) == 1) {
+        uint8_t usage = 0;
+        uint8_t mod = 0;
+        // Convert to lowercase for consistent handling
+        char lowercaseKey = tolower(key[0]);
+        if (asciiToUsage(lowercaseKey, &usage, &mod)) {
+          keyUsages[keyIndex++] = usage;
+          // Don't add individual key modifiers for shortcuts - use only explicit modifiers
+          // modifiers |= mod; 
+        }
+      }
+    }
+  }
+
+  // Debug: print what we're about to send
+  Serial.print("Sending shortcut - Modifiers: 0x");
+  Serial.print(modifiers, HEX);
+  Serial.print(", Keys: ");
+  for (int i = 0; i < 6; i++) {
+    if (keyUsages[i] != 0) {
+      Serial.print("0x");
+      Serial.print(keyUsages[i], HEX);
+      Serial.print(" ");
+    }
+  }
+  Serial.println();
+
+  // Send the complete shortcut as one key combination
+  KeyboardReport rpt;
+  memset(&rpt, 0, sizeof(rpt));
+  rpt.modifiers = modifiers;
+  memcpy(rpt.keys, keyUsages, sizeof(keyUsages));
+  
+  // Press all keys
+  tud_hid_report(0, &rpt, sizeof(rpt));
+  delay(50); // Hold for a bit
+  
+  // Release all keys
+  memset(&rpt, 0, sizeof(rpt));
+  tud_hid_report(0, &rpt, sizeof(rpt));
+}
+
 #else
 
 void USBHIDClass::begin() {
@@ -123,6 +188,10 @@ void USBHIDClass::begin() {
 
 void USBHIDClass::writeKeys(const char** keys, size_t count) {
   // Fallback: do nothing (Serial may be unavailable per user).
+}
+
+void USBHIDClass::writeShortcut(const char** keys, size_t count) {
+  // Fallback: do nothing (USB HID disabled).
 }
 
 #endif
