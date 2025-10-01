@@ -48,19 +48,9 @@
           "id": "3427ecbb-ccbf-4b4e-a7ea-80ac8006e044"
         },
         {
-          "action": "ウィンドウ切り替え",
-          "keys": [
-            "Cmd",
-            "`"
-          ],
-          "description": "同じアプリケーション内のウィンドウを切り替える",
-          "order": 2,
-          "id": "5ed43af2-ca04-4c0c-933c-fcca47ee0564"
-        },
-        {
           "action": "Mission Control",
           "keys": [
-            "F3"
+            "Ctrl","Up"
           ],
           "description": "Mission Controlを開く",
           "order": 3,

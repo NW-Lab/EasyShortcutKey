@@ -128,7 +128,7 @@ void USBHIDClass::writeShortcut(const char** keys, size_t count) {
     if (!key) continue;
 
     // Check for modifier keys (case insensitive)
-    if (strcasecmp(key, "cmd") == 0 || strcasecmp(key, "gui") == 0 || strcasecmp(key, "win") == 0) {
+    if (strcasecmp(key, "cmd") == 0 || strcasecmp(key, "command") == 0 || strcasecmp(key, "gui") == 0 || strcasecmp(key, "win") == 0) {
       modifiers |= 0x08; // Left GUI (Cmd/Win)
     } else if (strcasecmp(key, "ctrl") == 0 || strcasecmp(key, "control") == 0) {
       modifiers |= 0x01; // Left Ctrl
@@ -150,6 +150,42 @@ void USBHIDClass::writeShortcut(const char** keys, size_t count) {
         keyUsages[keyIndex++] = 0x4C; // Delete key
       } else if (strcasecmp(key, "escape") == 0 || strcasecmp(key, "esc") == 0) {
         keyUsages[keyIndex++] = 0x29; // Escape key
+      
+      // Function keys F1-F12
+      } else if (strcasecmp(key, "f1") == 0) {
+        keyUsages[keyIndex++] = 0x3A; // F1
+      } else if (strcasecmp(key, "f2") == 0) {
+        keyUsages[keyIndex++] = 0x3B; // F2
+      } else if (strcasecmp(key, "f3") == 0) {
+        keyUsages[keyIndex++] = 0x3C; // F3 (Mission Control)
+      } else if (strcasecmp(key, "f4") == 0) {
+        keyUsages[keyIndex++] = 0x3D; // F4
+      } else if (strcasecmp(key, "f5") == 0) {
+        keyUsages[keyIndex++] = 0x3E; // F5
+      } else if (strcasecmp(key, "f6") == 0) {
+        keyUsages[keyIndex++] = 0x3F; // F6
+      } else if (strcasecmp(key, "f7") == 0) {
+        keyUsages[keyIndex++] = 0x40; // F7
+      } else if (strcasecmp(key, "f8") == 0) {
+        keyUsages[keyIndex++] = 0x41; // F8
+      } else if (strcasecmp(key, "f9") == 0) {
+        keyUsages[keyIndex++] = 0x42; // F9
+      } else if (strcasecmp(key, "f10") == 0) {
+        keyUsages[keyIndex++] = 0x43; // F10
+      } else if (strcasecmp(key, "f11") == 0) {
+        keyUsages[keyIndex++] = 0x44; // F11
+      } else if (strcasecmp(key, "f12") == 0) {
+        keyUsages[keyIndex++] = 0x45; // F12
+      
+      // Arrow keys (English and symbol versions)
+      } else if (strcasecmp(key, "up") == 0 || strcmp(key, "↑") == 0) {
+        keyUsages[keyIndex++] = 0x52; // Up Arrow
+      } else if (strcasecmp(key, "down") == 0 || strcmp(key, "↓") == 0) {
+        keyUsages[keyIndex++] = 0x51; // Down Arrow
+      } else if (strcasecmp(key, "left") == 0 || strcmp(key, "←") == 0) {
+        keyUsages[keyIndex++] = 0x50; // Left Arrow
+      } else if (strcasecmp(key, "right") == 0 || strcmp(key, "→") == 0) {
+        keyUsages[keyIndex++] = 0x4F; // Right Arrow
       } else if (strlen(key) == 1) {
         // Regular single character key - convert to usage code
         uint8_t usage = 0;

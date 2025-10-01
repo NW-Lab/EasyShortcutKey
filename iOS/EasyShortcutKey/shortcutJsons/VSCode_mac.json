@@ -409,6 +409,14 @@
           "description": "ファイルを保存する",
           "order": 7,
           "id": "f5ebd22e-83e3-4155-bd0f-f563efe4e535"
+        },
+        {
+          "action": "Preview",
+          "steps":[{"keys": ["Cmd","K"]},
+            {"keys":["V"]}
+          ],
+          "description": "Previewを開く",
+          "order": 8
         }
       ],
       "id": "0596b4fc-9696-45a1-9f63-2be40480d71f"

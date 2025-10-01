@@ -48,20 +48,8 @@
           "id": "6f28cd9e-fecd-42c1-b318-8c413e1106ca"
         },
         {
-          "action": "Switch Windows",
-          "keys": [
-            "Cmd",
-            "`"
-          ],
-          "description": "Switch between windows of same application",
-          "order": 2,
-          "id": "1bbe2be1-fd33-44e4-a28c-e7f3edc0d6c8"
-        },
-        {
           "action": "Mission Control",
-          "keys": [
-            "F3"
-          ],
+          "keys": ["Ctrl","Up"],
           "description": "Open Mission Control",
           "order": 3,
           "id": "23938816-5bff-4a33-bf40-0721bcc6d868"
