@@ -320,7 +320,7 @@
           "order": 4,
           "id": "ef9e055b-e26d-444c-b556-e40604f07e2f"
         },
-        {
+        { 
           "action": "Zen Mode",
           "steps": [ { "keys": ["Cmd", "K"]},  { "keys": ["Z"] } ],
           "description": "集中モード（Zen Mode）に切り替える",
