@@ -322,7 +322,11 @@
         },
         {
           "action": "Zen Mode",
-          "steps": [ { "keys": ["Cmd", "K"]},  { "keys": ["Z"] } ],
+          "keys": [
+            "Cmd",
+            "K",
+            "Z"
+          ],
           "description": "Toggle Zen Mode (distraction-free mode)",
           "order": 5,
           "id": "388e4824-2efe-4e9a-8bc0-0a263b4acfa5"
