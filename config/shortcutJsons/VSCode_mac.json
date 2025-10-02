@@ -406,6 +406,18 @@
           "order": 7,
           "id": "f5ebd22e-83e3-4155-bd0f-f563efe4e535"
         }
+        ,
+        {
+          "action": "Markdown プレビュー",
+          "keys": [
+            "Cmd",
+            "Shift",
+            "V"
+          ],
+          "description": "Markdown ファイルのプレビューを表示/切り替え",
+          "order": 8,
+          "id": "md-preview-mac-001"
+        }
       ],
       "id": "0596b4fc-9696-45a1-9f63-2be40480d71f"
     }

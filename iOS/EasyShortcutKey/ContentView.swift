@@ -319,35 +319,17 @@ struct ContentView: View {
                             print("🔑 Displaying keys for \(item.action): \(keys)")
                         }
                 } else if let steps = item.steps {
-                    // Multi-step shortcut: play button runs all steps with 0.5s interval
-                    VStack(alignment: .trailing, spacing: 6) {
-                        HStack(spacing: 8) {
-                            Button(action: {
-                                runSteps(steps)
-                            }) {
-                                Image(systemName: "play.fill")
-                                    .font(.caption)
-                                    .padding(6)
-                                    .background(Color.accentColor.opacity(0.18))
-                                    .foregroundColor(.accentColor)
-                                    .cornerRadius(6)
-                            }
-                            .buttonStyle(BorderlessButtonStyle())
-
-                            // show a compact preview of the first step
-                            if let firstKeys = steps.first?.keys {
-                                Text(firstKeys.joined(separator: " + "))
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-
+                    // Multi-step shortcut: tap the whole area to run all steps with 0.5s interval
+                    Button(action: {
+                        runSteps(steps)
+                    }) {
                         VStack(alignment: .trailing, spacing: 2) {
                             ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
                                 stepView(step: step, index: index + 1)
                             }
                         }
                     }
+                    .buttonStyle(PlainButtonStyle())
                     .onAppear {
                         print("🎯 Displaying steps for \(item.action): \(steps.count) steps")
                     }
@@ -411,6 +393,7 @@ struct ContentView: View {
                     Text(keys.joined(separator: " + "))
                         // ステップ内のキーも少し大きめに調整
                         .font(.caption)
+                        .frame(minWidth: 60)  // 最小幅を設定して見た目を統一
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
                         // 緑のキー表示もダークモード時に背景を少し濃くして視認性を確保

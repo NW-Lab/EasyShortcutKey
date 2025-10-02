@@ -321,11 +321,7 @@
         },
         {
           "action": "Zen Mode",
-          "keys": [
-            "Ctrl",
-            "K",
-            "Z"
-          ],
+          "steps": [ { "keys": ["Ctrl", "K"]}, { "keys": ["Z"] } ],
           "description": "Toggle Zen Mode (distraction-free mode)",
           "order": 5,
           "id": "fa82d0f8-1af8-447a-a6db-2ad776663257"
@@ -407,6 +403,18 @@
           "description": "Save file",
           "order": 7,
           "id": "03880015-11ef-418a-b276-ed8646e05071"
+        }
+        ,
+        {
+          "action": "Markdown Preview",
+          "keys": [
+            "Ctrl",
+            "Shift",
+            "V"
+          ],
+          "description": "Toggle Markdown preview",
+          "order": 8,
+          "id": "md-preview-win-en-001"
         }
       ],
       "id": "30f03871-7e9d-48dc-b4ae-46eb40daa3ed"

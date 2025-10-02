@@ -410,6 +410,18 @@
           "order": 7,
           "id": "fc7f6ab0-4f21-476f-8eef-9c3e8b743077"
         }
+        ,
+        {
+          "action": "Markdown Preview",
+          "keys": [
+            "Cmd",
+            "Shift",
+            "V"
+          ],
+          "description": "Toggle Markdown preview",
+          "order": 8,
+          "id": "md-preview-mac-en-001"
+        }
       ],
       "id": "17c6f6ff-6d92-4ef4-bee2-fd2c853f4d45"
     }
