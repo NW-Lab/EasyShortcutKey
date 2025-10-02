@@ -164,3 +164,26 @@
 ---
 
 詳細なペアリング手順とFAQは [`Manual/Pairing.html`](Manual/Pairing.html) をご覧ください。
+
+## JSON 設定: `steps` の使い方（例）
+
+複数段階でキーを送るショートカットは `steps` を使って定義できます。iOS版では `steps` を実行する際、デフォルトで各ステップの送信を約 0.5 秒間隔で行います（この間隔は将来的に設定可能にする予定です）。
+
+例 — VS Code の Zen Mode（Cmd+K, その後 Z）:
+
+```json
+{
+   "action": "Zen Mode",
+   "steps": [
+      { "keys": ["Cmd", "K"], "description": "Open command chord" },
+      { "keys": ["Z"], "description": "Toggle Zen Mode" }
+   ],
+   "description": "集中モード（Zen Mode）に切り替える",
+   "order": 5,
+   "id": "74b45151-bdbf-4a24-937f-ad1836c915b5"
+}
+```
+
+注意:
+- `steps` 内の各 `keys` は既存の `keys` と同じ表記ルールを使います（修飾子は `Cmd`/`Cmd` 等）。
+- KeyboardGW が接続されていない場合、iOS アプリは代わりにステップ表現をクリップボードにコピーします（UI フィードバックは表示されません）。

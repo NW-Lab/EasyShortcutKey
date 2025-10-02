@@ -81,7 +81,13 @@
                   },
                   "steps": {
                     "type": "array",
-                    "description": "Optional multi-step instructions for this shortcut",
+                    "description": "Optional multi-step instructions for this shortcut. Each element is a step object (type 'keys' is common). Example: press Cmd+K then Z",
+                    "examples": [
+                      [
+                        { "keys": ["Cmd", "K"] },
+                        { "keys": ["Z"] }
+                      ]
+                    ],
                     "items": {
                       "type": "object",
                       "properties": {

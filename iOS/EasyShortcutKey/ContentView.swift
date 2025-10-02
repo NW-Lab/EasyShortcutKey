@@ -316,16 +316,64 @@ struct ContentView: View {
                     // Simple key combination
                     keysButton(keys: keys)
                 } else if let steps = item.steps {
-                    // Multi-step shortcut
-                    VStack(alignment: .trailing, spacing: 2) {
-                        ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
-                            stepView(step: step, index: index + 1)
+                    // Multi-step shortcut: play button runs all steps with 0.5s interval
+                    VStack(alignment: .trailing, spacing: 6) {
+                        HStack(spacing: 8) {
+                            Button(action: {
+                                runSteps(steps)
+                            }) {
+                                Image(systemName: "play.fill")
+                                    .font(.caption)
+                                    .padding(6)
+                                    .background(Color.accentColor.opacity(0.18))
+                                    .foregroundColor(.accentColor)
+                                    .cornerRadius(6)
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+
+                            // show a compact preview of the first step
+                            if let firstKeys = steps.first?.keys {
+                                Text(firstKeys.joined(separator: " + "))
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
                         }
+
+                        VStack(alignment: .trailing, spacing: 2) {
+                            ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
+                                stepView(step: step, index: index + 1)
+                            }
+                        }
+                    }
+                 }
+             }
+         }
+         .padding(.vertical, 2)
+     }
+    
+    // Execute multiple steps in sequence with ~0.5s interval
+    private func runSteps(_ steps: [ShortcutStep]) {
+        guard steps.count > 0 else { return }
+
+        if keyboardGWManager.isConnected {
+            for (i, step) in steps.enumerated() {
+                if let keys = step.keys {
+                    let delay = Double(i) * 0.5
+                    DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                        print("📤 runSteps: sending step \(i+1)/\(steps.count): \(keys)")
+                        keyboardGWManager.sendShortcut(keys: keys)
                     }
                 }
             }
+        } else {
+            // If not connected, copy a human-readable representation to clipboard (no UI feedback)
+            let repr = steps.map { s in
+                if let k = s.keys { return k.joined(separator: " + ") }
+                if let a = s.action { return a }
+                return s.description ?? ""
+            }.joined(separator: " then ")
+            copyToClipboard(repr, showFeedback: false)
         }
-        .padding(.vertical, 2)
     }
     
     private func keysButton(keys: [String]) -> some View {
@@ -385,13 +433,19 @@ struct ContentView: View {
     }
     
     private func copyToClipboard(_ text: String) {
+        copyToClipboard(text, showFeedback: true)
+    }
+    
+    private func copyToClipboard(_ text: String, showFeedback: Bool) {
         UIPasteboard.general.string = text
         copiedText = text
-        
+
+        guard showFeedback else { return }
+
         withAnimation(.easeInOut(duration: 0.3)) {
             showCopyFeedback = true
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             withAnimation(.easeInOut(duration: 0.3)) {
                 showCopyFeedback = false
@@ -401,26 +455,17 @@ struct ContentView: View {
     
     // ショートカットアクションの処理
     private func handleShortcutAction(keys: [String]) {
-        if keyboardGWManager.isConnected {
-            // KeyboardGWが接続されていればキーを送信
-            keyboardGWManager.sendShortcut(keys: keys)
-            
-            // 視覚的フィードバック（送信成功）
-            withAnimation(.easeInOut(duration: 0.2)) {
-                showCopyFeedback = true
-                copiedText = "送信: \(keys.joined(separator: " + "))"
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    showCopyFeedback = false
-                }
-            }
-        } else {
-            // KeyboardGWが接続されていなければクリップボードにコピー
-            copyToClipboard(keys.joined(separator: " + "))
-        }
-    }
+         if keyboardGWManager.isConnected {
+             // KeyboardGWが接続されていればキーを送信
+             keyboardGWManager.sendShortcut(keys: keys)
+             
+             // per user preference: do not show the copy/feedback overlay when sending shortcuts
+         } else {
+             // KeyboardGWが接続されていなければクリップボードにコピー
+             // copy but do not show the overlay feedback
+             copyToClipboard(keys.joined(separator: " + "), showFeedback: false)
+         }
+     }
     
     @Environment(\.modelContext) private var modelContext
 
