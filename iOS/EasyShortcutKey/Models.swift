@@ -14,6 +14,17 @@ struct ShortcutStep: Codable, Identifiable {
     private enum CodingKeys: String, CodingKey {
         case type, keys, action, description, duration
     }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // If type is not provided, default to "keys"
+        self.type = try container.decodeIfPresent(String.self, forKey: .type) ?? "keys"
+        self.keys = try container.decodeIfPresent([String].self, forKey: .keys)
+        self.action = try container.decodeIfPresent(String.self, forKey: .action)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.duration = try container.decodeIfPresent(Int.self, forKey: .duration)
+    }
 }
 
 // MARK: - Main Models
