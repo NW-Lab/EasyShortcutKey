@@ -4,20 +4,20 @@ on:
   pull_request:
     paths:
       - 'config/**.json'
-      - 'config/ShotycutJsons_en/**.json'
+  - 'config/shortcutJsons_en/**.json'
       - 'scripts/**'
   pull_request_target:
     types: [opened, synchronize]
     paths:
       - 'config/**.json'
-      - 'config/ShotycutJsons_en/**.json'
+  - 'config/shortcutJsons_en/**.json'
       - 'scripts/**'
   push:
     branches:
       - main
     paths:
       - 'config/**.json'
-      - 'config/ShotycutJsons_en/**.json'
+  - 'config/shortcutJsons_en/**.json'
       - 'scripts/**'
 
 permissions:
@@ -40,7 +40,7 @@ jobs:
         run: |
           set -e
           python3 scripts/assign_ids.py --dir config/shortcutJsons --apply || true
-          python3 scripts/assign_ids.py --dir config/ShotycutJsons_en --apply || true
+          python3 scripts/assign_ids.py --dir config/shortcutJsons_en --apply || true
           if ! git diff --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -56,7 +56,7 @@ jobs:
         run: |
           set -e
           python3 scripts/assign_ids.py --dir config/shortcutJsons --apply || true
-          python3 scripts/assign_ids.py --dir config/ShotycutJsons_en --apply || true
+          python3 scripts/assign_ids.py --dir config/shortcutJsons_en --apply || true
           if ! git diff --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -75,7 +75,7 @@ jobs:
           git fetch origin pull/${{ github.event.number }}/head:pr-${{ github.event.number }}
           git checkout pr-${{ github.event.number }}
           python3 scripts/assign_ids.py --dir config/shortcutJsons --apply || true
-          python3 scripts/assign_ids.py --dir config/ShotycutJsons_en --apply || true
+          python3 scripts/assign_ids.py --dir config/shortcutJsons_en --apply || true
 
       - name: Dry-run assign IDs (report)
         run: |
@@ -85,7 +85,7 @@ jobs:
             git checkout pr-${{ github.event.number }}
           fi
           python3 scripts/assign_ids.py --dir config/shortcutJsons --dry-run || true
-          python3 scripts/assign_ids.py --dir config/ShotycutJsons_en --dry-run || true
+          python3 scripts/assign_ids.py --dir config/shortcutJsons_en --dry-run || true
 
       - name: Validate IDs
         run: |
@@ -95,7 +95,7 @@ jobs:
             git checkout pr-${{ github.event.number }}
           fi
           python3 scripts/validate_ids.py --dir config/shortcutJsons || exit 1
-          python3 scripts/validate_ids.py --dir config/ShotycutJsons_en || exit 1
+          python3 scripts/validate_ids.py --dir config/shortcutJsons_en || exit 1
 
       - name: Compare IDs vs base (PR only)
         if: github.event_name == 'pull_request'
@@ -119,10 +119,10 @@ jobs:
           mkdir -p iOS/EasyShortcutKey/shortcutJsons
           cp -a config/shortcutJsons/. iOS/EasyShortcutKey/shortcutJsons/
           
-          # Mirror config/ShotycutJsons_en -> iOS/EasyShortcutKey/shortcutJsons_en
+          # Mirror config/shortcutJsons_en -> iOS/EasyShortcutKey/shortcutJsons_en
           rm -rf iOS/EasyShortcutKey/shortcutJsons_en
           mkdir -p iOS/EasyShortcutKey/shortcutJsons_en
-          cp -a config/ShotycutJsons_en/. iOS/EasyShortcutKey/shortcutJsons_en/
+          cp -a config/shortcutJsons_en/. iOS/EasyShortcutKey/shortcutJsons_en/
           
           if ! git diff --quiet; then
             git config user.name "github-actions[bot]"
@@ -147,10 +147,10 @@ jobs:
           mkdir -p iOS/EasyShortcutKey/shortcutJsons
           cp -a config/shortcutJsons/. iOS/EasyShortcutKey/shortcutJsons/
           
-          # Mirror config/ShotycutJsons_en -> iOS/EasyShortcutKey/shortcutJsons_en
+          # Mirror config/shortcutJsons_en -> iOS/EasyShortcutKey/shortcutJsons_en
           rm -rf iOS/EasyShortcutKey/shortcutJsons_en
           mkdir -p iOS/EasyShortcutKey/shortcutJsons_en
-          cp -a config/ShotycutJsons_en/. iOS/EasyShortcutKey/shortcutJsons_en/
+          cp -a config/shortcutJsons_en/. iOS/EasyShortcutKey/shortcutJsons_en/
           
           if ! git diff --quiet; then
             git config user.name "github-actions[bot]"
@@ -168,7 +168,7 @@ jobs:
               --base main \
               --head "$SYNC_BRANCH" \
               --title "chore: sync shortcutJsons to iOS (from fork PR #${{ github.event.number }})" \
-              --body "Auto-generated from fork PR #${{ github.event.number }}. This PR syncs changes from config/shortcutJsons and config/ShotycutJsons_en to iOS/EasyShortcutKey/shortcutJsons and iOS/EasyShortcutKey/shortcutJsons_en." \
+              --body "Auto-generated from fork PR #${{ github.event.number }}. This PR syncs changes from config/shortcutJsons and config/shortcutJsons_en to iOS/EasyShortcutKey/shortcutJsons and iOS/EasyShortcutKey/shortcutJsons_en." \
               || echo "PR creation failed or already exists"
           else
             echo "No changes to sync from fork PR"
@@ -189,8 +189,8 @@ jobs:
           echo "config/shortcutJsons:"
           ls -la config/shortcutJsons/ || echo "Directory not found"
           echo ""
-          echo "config/ShotycutJsons_en:"
-          ls -la config/ShotycutJsons_en/ || echo "Directory not found"
+          echo "config/shortcutJsons_en:"
+          ls -la config/shortcutJsons_en/ || echo "Directory not found"
           echo ""
           echo "iOS/EasyShortcutKey/shortcutJsons:"
           ls -la iOS/EasyShortcutKey/shortcutJsons/ || echo "Directory not found"
@@ -210,10 +210,10 @@ jobs:
           mkdir -p iOS/EasyShortcutKey/shortcutJsons
           cp -a config/shortcutJsons/. iOS/EasyShortcutKey/shortcutJsons/
           
-          # Mirror config/ShotycutJsons_en -> iOS/EasyShortcutKey/shortcutJsons_en
+          # Mirror config/shortcutJsons_en -> iOS/EasyShortcutKey/shortcutJsons_en
           rm -rf iOS/EasyShortcutKey/shortcutJsons_en
           mkdir -p iOS/EasyShortcutKey/shortcutJsons_en
-          cp -a config/ShotycutJsons_en/. iOS/EasyShortcutKey/shortcutJsons_en/
+          cp -a config/shortcutJsons_en/. iOS/EasyShortcutKey/shortcutJsons_en/
           
           if ! git diff --quiet; then
             git config user.name "github-actions[bot]"
