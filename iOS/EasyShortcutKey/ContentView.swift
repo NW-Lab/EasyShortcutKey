@@ -314,9 +314,11 @@ struct ContentView: View {
             VStack(alignment: .trailing, spacing: 4) {
                 if let keys = item.keys {
                     // Simple key combination
+                    print("🔑 Displaying keys for \(item.action): \(keys)")
                     keysButton(keys: keys)
                 } else if let steps = item.steps {
                     // Multi-step shortcut: play button runs all steps with 0.5s interval
+                    print("🎯 Displaying steps for \(item.action): \(steps.count) steps")
                     VStack(alignment: .trailing, spacing: 6) {
                         HStack(spacing: 8) {
                             Button(action: {
