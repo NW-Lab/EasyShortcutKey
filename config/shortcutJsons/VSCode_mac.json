@@ -323,7 +323,7 @@
         { 
           "action": "Zen Mode",
           "steps": [ { "keys": ["Cmd", "K"]},  { "keys": ["Z"] } ],
-          "description": "集中モード（Zen Mode）に切り替える",
+          "description": "集中モード（Zen Mode）に切り替える - 2段階ショートカット",
           "order": 5,
           "id": "74b45151-bdbf-4a24-937f-ad1836c915b5"
         }
