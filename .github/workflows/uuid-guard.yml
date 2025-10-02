@@ -4,20 +4,20 @@ on:
   pull_request:
     paths:
       - 'config/**.json'
-  - 'config/shortcutJsons_en/**.json'
+      - 'config/shortcutJsons_en/**.json'
       - 'scripts/**'
   pull_request_target:
     types: [opened, synchronize]
     paths:
       - 'config/**.json'
-  - 'config/shortcutJsons_en/**.json'
+      - 'config/shortcutJsons_en/**.json'
       - 'scripts/**'
   push:
     branches:
       - main
     paths:
       - 'config/**.json'
-  - 'config/shortcutJsons_en/**.json'
+      - 'config/shortcutJsons_en/**.json'
       - 'scripts/**'
 
 permissions:
