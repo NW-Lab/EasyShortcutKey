@@ -22,3 +22,62 @@ KeyboardGW/sdkconfig*
 ## Backup files
 *~
 *.swp
+
+## ResidentWin (.NET / C# プロジェクト)
+# Visual Studio / Visual Studio Code
+ResidentWin/.vs/
+ResidentWin/**/.vs/
+ResidentWin/**/.vscode/
+ResidentWin/**/*.user
+ResidentWin/**/*.suo
+ResidentWin/**/*.userosscache
+ResidentWin/**/*.sln.docstates
+
+# ビルド成果物
+ResidentWin/**/[Dd]ebug/
+ResidentWin/**/[Dd]ebugPublic/
+ResidentWin/**/[Rr]elease/
+ResidentWin/**/[Rr]eleases/
+ResidentWin/**/x64/
+ResidentWin/**/x86/
+ResidentWin/**/[Ww][Ii][Nn]32/
+ResidentWin/**/[Aa][Rr][Mm]/
+ResidentWin/**/[Aa][Rr][Mm]64/
+ResidentWin/**/bld/
+ResidentWin/**/[Bb]in/
+ResidentWin/**/[Oo]bj/
+ResidentWin/**/[Ll]og/
+ResidentWin/**/[Ll]ogs/
+
+# NuGet パッケージ
+ResidentWin/**/*.nupkg
+ResidentWin/**/*.snupkg
+ResidentWin/**/packages/
+ResidentWin/**/*.nuget.props
+ResidentWin/**/*.nuget.targets
+ResidentWin/**/project.lock.json
+ResidentWin/**/project.fragment.lock.json
+ResidentWin/**/artifacts/
+
+# Visual Studio cache files
+ResidentWin/**/*.cachefile
+ResidentWin/**/*.VC.db
+ResidentWin/**/*.VC.VC.opendb
+
+# Publish output
+ResidentWin/**/publish/
+ResidentWin/**/*.pubxml
+ResidentWin/**/*.publishproj
+
+# ユーザー設定・ログ
+ResidentWin/**/config.json
+ResidentWin/**/*.log
+
+# 一時ファイル
+ResidentWin/**/*.tmp
+ResidentWin/**/*.temp
+ResidentWin/**/~$*
+
+# バックアップ
+ResidentWin/**/*.bak
+ResidentWin/**/*.old

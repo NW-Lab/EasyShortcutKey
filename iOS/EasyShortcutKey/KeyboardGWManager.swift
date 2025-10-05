@@ -303,27 +303,34 @@ extension KeyboardGWManager: CBCentralManagerDelegate {
         print("   UUID: \(peripheral.identifier)")
         print("   広告データ: \(advertisementData)")
         
-        // KeyboardGW関連のデバイスかチェック
-        let name = peripheral.name ?? ""
-        let isKeyboardGW = name.contains("EasyShortcutKey") || name.contains("KeyboardGW") || name.contains("shortcut")
+        // 広告データからService UUIDsを取得
+        let serviceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] ?? []
+        print("   広告に含まれるService UUIDs: \(serviceUUIDs)")
         
-        if isKeyboardGW {
-            print("   ✅ KeyboardGW関連デバイスを発見！")
+        // 目的のService UUIDを含んでいるかチェック
+        let hasTargetServiceUUID = serviceUUIDs.contains(serviceUUID)
+        
+        if hasTargetServiceUUID {
+            print("   ✅ 目的のService UUID (\(serviceUUID)) を検出！")
+        }
+        
+        // 旧来の名前ベースのチェック（後方互換性のため残す）
+        let name = peripheral.name ?? ""
+        let isKeyboardGWByName = name.contains("EasyShortcutKey") || name.contains("KeyboardGW") || name.contains("shortcut")
+        
+        if isKeyboardGWByName {
+            print("   ✅ デバイス名でKeyboardGWを検出")
         }
         
         // メインスレッドでUI更新
         DispatchQueue.main.async {
-            // 全デバイス検索モードかどうかをチェック
-            let isFullScanMode = self.connectionStatus.contains("全デバイス検索中")
-            
-            if isFullScanMode {
-                // 全デバイススキャンモードの場合は全て追加
+            // Service UUIDが一致する、または名前で判定できる場合は追加
+            // ※ Service UUID優先、名前チェックは後方互換性のため
+            if hasTargetServiceUUID || isKeyboardGWByName {
                 self.discoveredDevices.append(peripheral)
-                print("   📱 全デバイススキャンでデバイスを追加")
-            } else if isKeyboardGW {
-                // 通常スキャンでもKeyboardGWは追加（名前ベースフィルタリング）
-                self.discoveredDevices.append(peripheral)
-                print("   📱 通常スキャンでKeyboardGWデバイスを追加")
+                print("   📱 デバイスをリストに追加: \(peripheral.name ?? "Unknown")")
+            } else {
+                print("   ⚠️ Service UUIDも名前も一致しないためスキップ")
             }
         }
     }

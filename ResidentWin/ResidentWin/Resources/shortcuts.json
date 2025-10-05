@@ -1,0 +1,49 @@
+{
+  "shortcuts": [
+    {
+      "id": "copy",
+      "name": "コピー",
+      "keys": ["ctrl", "c"],
+      "description": "選択したテキストをコピー",
+      "category": "Edit",
+      "application": "General",
+      "platform": "Windows"
+    },
+    {
+      "id": "paste",
+      "name": "貼り付け",
+      "keys": ["ctrl", "v"],
+      "description": "クリップボードの内容を貼り付け",
+      "category": "Edit",
+      "application": "General",
+      "platform": "Windows"
+    },
+    {
+      "id": "save",
+      "name": "保存",
+      "keys": ["ctrl", "s"],
+      "description": "ファイルを保存",
+      "category": "File",
+      "application": "General",
+      "platform": "Windows"
+    },
+    {
+      "id": "copilot",
+      "name": "Copilot起動",
+      "keys": ["copilot"],
+      "description": "Windows Copilotを起動",
+      "category": "System",
+      "application": "Windows",
+      "platform": "Windows"
+    },
+    {
+      "id": "vscode_command_palette",
+      "name": "コマンドパレット",
+      "keys": ["ctrl", "shift", "p"],
+      "description": "VSCodeのコマンドパレットを開く",
+      "category": "Navigation",
+      "application": "VSCode",
+      "platform": "Windows"
+    }
+  ]
+}
