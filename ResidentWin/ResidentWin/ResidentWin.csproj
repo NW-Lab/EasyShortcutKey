@@ -9,10 +9,31 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Branding -->
+    <AssemblyTitle>KeyboardGW</AssemblyTitle>
+    <AssemblyName>KeyboardGW</AssemblyName>
+    <RootNamespace>KeyboardGW</RootNamespace>
+    <Product>KeyboardGW</Product>
+    <PackageId>KeyboardGW</PackageId>
+    <Company>EasyShortcutKey</Company>
+    <Description>KeyboardGW Windows BLE Shortcut Bridge</Description>
+  <!-- Temporarily disabled icon to unblock build; will restore after valid ICO generation -->
+  <!-- <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon> -->
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Resources\AppIcon.ico" Condition="Exists('Resources\\AppIcon.ico')" />
+  </ItemGroup>
+
+  <Target Name="GenerateAppIcon" BeforeTargets="BeforeBuild" Condition="!Exists('Resources\AppIcon.ico')">
+    <Message Text="App icon missing - invoking tools/make_icon.ps1" Importance="high" />
+    <!-- From project dir, PNG is at ..\..\iOS\EasyShortcutKey\Assets.xcassets\AppIcon.appiconset\EasyShortcutKey.png -->
+    <Exec Command="powershell -ExecutionPolicy Bypass -NoProfile -File ..\tools\make_icon.ps1 -Source ..\..\iOS\EasyShortcutKey\Assets.xcassets\AppIcon.appiconset\EasyShortcutKey.png -Out ..\ResidentWin\Resources\AppIcon.ico" ContinueOnError="true" />
+    <Message Text="If icon generation failed, you can run tools/make_icon.ps1 manually." Importance="low" />
+  </Target>
 
 </Project>

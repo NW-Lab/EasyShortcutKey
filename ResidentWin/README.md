@@ -1,20 +1,20 @@
-# ResidentWin - Windows版 KeyboardGW
+# KeyboardGW (Windows版)
 
 ## 概要
 
-Windows上で常駐してBLE GATT Serverとして動作し、iPhoneのEasyShortcutKeyアプリからショートカットキーを受信してキーボード入力をエミュレートするアプリケーションです。
+Windows上で常駐して BLE GATT Server として動作し、iPhone の EasyShortcutKey アプリからショートカットキーを受信してキーボード入力をエミュレートするアプリケーションです。
 
 AtomS3ハードウェア版のKeyboardGWと同じ機能をWindows PCで実現します。
 
 ## システム構成
 
 ```
-iPhone —[BLE]→ ResidentWin (Windows常駐アプリ) —[仮想キーボード入力]→ Windows アプリケーション
+iPhone —[BLE]→ KeyboardGW (Windows版 常駐アプリ) —[仮想キーボード入力]→ Windows アプリケーション
 ```
 
-### KeyboardGW(ハードウェア版)との違い
+### ハードウェア版との違い
 
-| 項目 | KeyboardGW | ResidentWin |
+| 項目 | KeyboardGW (ハードウェア) | KeyboardGW (Windows版) |
 |------|-----------|-------------|
 | 実装環境 | ESP32-S3 (PlatformIO) | Windows (C#/.NET) |
 | 通信 | USB HID + BLE | BLE |
@@ -24,25 +24,16 @@ iPhone —[BLE]→ ResidentWin (Windows常駐アプリ) —[仮想キーボー�
 
 ## 技術スタック
 
-### 推奨実装: C# + .NET Framework/Core
+### 採用技術
 
-- **言語**: C# 
-- **フレームワーク**: .NET 6.0 以上 (クロスプラットフォーム対応)
-- **BLE通信**: Windows.Devices.Bluetooth API
-- **キーボード入力**: Win32 API (SendInput) via P/Invoke
-- **UI**: WPF または Windows Forms (システムトレイアプリ)
-- **IDE**: Visual Studio 2022 Community 以上
+- C# / .NET 9.0 (Windows専用ビルド)
+- BLE Peripheral: Windows.Devices.Bluetooth (GattServiceProvider)
+- キー入力: Win32 `SendInput`
+- UI / 常駐: WPF + NotifyIcon (WinForms)
+- ログ: 独自シンプルロガー (%APPDATA%\KeyboardGW\Logs)
+- 配布: self‑contained 単一 EXE + ZIP
 
-### 代替実装案
-
-1. **Python**
-   - BLE: `bleak`
-   - キーボード: `pynput` または `pyautogui`
-   - UI: `pystray` (システムトレイ)
-   
-2. **C++**
-   - BLE: WinRT API (C++/WinRT)
-   - キーボード: Win32 API 直接呼び出し
+> 参考: 以前検討していた Python / C++ 代替案は現行スコープでは優先度低のため削除。
 
 ## 実装済み機能
 
@@ -77,21 +68,22 @@ Service UUID: 12345678-1234-1234-1234-123456789ABC
 
 ### 3. 常駐アプリケーション機能
 
-- ✅ システムトレイアイコン表示
-- ✅ 右クリックメニュー
-  - デバイス名表示
-  - 終了
-- ⏳ Windows起動時の自動起動 (TODO)
-- ⏳ トースト通知 (TODO)
+- ✅ システムトレイアイコン表示（接続状態色: Gray/Blue/Green/Yellow/Red）
+- ✅ 右クリックメニュー（開始 / 停止 / デバイス名表示 / 設定(未実装) / 終了）
+- ✅ トースト通知（起動・接続状態変更・エラー）
+- ✅ Windows起動時の自動起動 (トレイメニューで切替可能)
 
 ### 4. 設定・管理機能
 
-- ✅ ログ出力 (デバッグモード)
-- ✅ 設定ファイル管理
-- ⏳ ペアリング済みデバイス管理 (TODO)
-- ⏳ ショートカット設定読み込み (`shortcuts.json`) (TODO)
+- ✅ ログ出力（起動ごとクリア / Debug 詳細切替は将来拡張）
+- ✅ 設定ファイル（`%APPDATA%/KeyboardGW/config.json`）
+- ⏳ ペアリング済みデバイス MAC ホワイトリスト
+- ⏳ ショートカット設定外部 JSON 連携
 
-## ファイル構成 (予定)
+## ファイル構成
+
+```
+KeyboardGW (Windows版) 物理フォルダ名はリポジトリ都合で `ResidentWin/` のままです（後方互換のため）：
 
 ```
 ResidentWin/
@@ -149,22 +141,35 @@ dotnet build
 
 ```powershell
 cd ResidentWin/ResidentWin/bin/Debug/net9.0-windows10.0.19041.0
-.\ResidentWin.exe
+.\KeyboardGW.exe   # (旧 ResidentWin.exe → AssemblyName 変更後)
 ```
 
-### パブリッシュ (配布用)
+### パッケージ (配布用 ZIP)
+
+命名ポリシー: `KeyboardGW-Win-x64.zip`
+
+PowerShell スクリプトを用意しています (初回はアイコン自動生成):
+
+```powershell
+cd ResidentWin
+./build_package.ps1
+```
+
+出力: `ResidentWin/dist/KeyboardGW-Win-x64.zip`
+
+手動でやる場合:
 
 ```powershell
 dotnet publish ResidentWin/ResidentWin/ResidentWin.csproj `
-  --configuration Release `
-  --runtime win-x64 `
-  --self-contained true `
-  --output ./publish
+   -c Release -r win-x64 --self-contained true `
+   -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true `
+   -o dist/publish
+Compress-Archive -Path dist/publish/* -DestinationPath dist/KeyboardGW-Win-x64.zip -Force
 ```
 
 ## 使い方
 
-1. **ResidentWin.exeを起動**
+1. **KeyboardGW.exe を起動**
    - タスクトレイにアイコンが表示されます
    - 自動的にBLEアドバタイズが開始されます
 
@@ -179,6 +184,71 @@ dotnet publish ResidentWin/ResidentWin/ResidentWin.csproj `
 4. **ショートカットキー送信**
    - iPhoneアプリからショートカットキーを送信
    - Windows PCで実際のキーボード入力として実行されます
+
+## 自動起動 (Windowsログオン時)
+
+アプリ内で対応済み。トレイアイコン右クリック → 「Windowsログオン時に自動起動を有効化 / 無効化」で切替。設定は `%APPDATA%/KeyboardGW/config.json` の `StartWithWindows` に保存され、スタートアップフォルダへ `KeyboardGW.lnk` を作成/削除します。
+
+以下は手動で制御したい場合の代替手段です（通常は不要）。
+
+### 方法1: スタートアップフォルダにショートカット (一番簡単 / 推奨)
+1. エクスプローラのアドレスバーに `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup` と入力して開く
+2. `KeyboardGW.exe` を右ドラッグ→「ショートカットをここに作成」
+3. 完了 (次回ログオンから起動)
+
+PowerShell で自動作成する例:
+```powershell
+$exe = "C:\\Path\\To\\KeyboardGW.exe"   # 実際の配置に書き換え
+$startup = [Environment]::GetFolderPath('Startup')
+$wsh = New-Object -ComObject WScript.Shell
+$lnk = $wsh.CreateShortcut((Join-Path $startup 'KeyboardGW.lnk'))
+$lnk.TargetPath = $exe
+$lnk.WorkingDirectory = Split-Path $exe
+$lnk.WindowStyle = 7   # Minimized
+$lnk.Save()
+```
+
+### 方法2: レジストリ Run キー (シンプル / 非管理者領域)
+ユーザーごと (HKCU) に登録:
+```powershell
+$exe = 'C:\\Path\\To\\KeyboardGW.exe'
+New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name 'KeyboardGW' -Value '"' + $exe + '"' -PropertyType String -Force
+```
+削除する場合:
+```powershell
+Remove-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name 'KeyboardGW' -ErrorAction SilentlyContinue
+```
+注意: UAC 管理者権限での実行が必須な場所 (例: Program Files 配下) に置いた EXE を Run キーで起動すると「昇格されずに失敗」することがあるので、可能ならユーザー書き込み可能なフォルダに配置。
+
+### 方法3: タスクスケジューラ (遅延起動 / 最小化 / 高権限が必要な場合)
+1. 「タスク スケジューラ」を開く
+2. 「タスクの作成」→ 名前: `KeyboardGW AutoStart`
+3. トリガー: 「ログオン時」
+4. 操作: プログラム開始 → `KeyboardGW.exe`
+5. (任意) 全般タブで「最上の特権で実行する」チェック (管理者権限でショートカット送出が必要なケース)
+6. 保存
+
+PowerShell で登録する例 (標準権限):
+```powershell
+$exe = 'C:\\Path\\To\\KeyboardGW.exe'
+$action = New-ScheduledTaskAction -Execute $exe
+$trigger = New-ScheduledTaskTrigger -AtLogOn
+Register-ScheduledTask -TaskName 'KeyboardGW AutoStart' -Action $action -Trigger $trigger -Description 'Auto start KeyboardGW at logon'
+```
+削除:
+```powershell
+Unregister-ScheduledTask -TaskName 'KeyboardGW AutoStart' -Confirm:$false
+```
+
+### どの方法を選ぶべき？
+| 要件 | 推奨手段 |
+|------|----------|
+| とにかく簡単 | スタートアップフォルダ |
+| レジストリで一元管理したい | Run キー |
+| 管理者権限で起動 / 遅延起動したい | タスクスケジューラ |
+
+### 実装方式メモ
+内部実装: `AutoStartupManager` が `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup` に `KeyboardGW.lnk` を生成/削除。失敗時はログに記録されるので `KeyboardGW.log` を確認。
 
 ## テスト・デバッグ
 
@@ -200,24 +270,23 @@ IsPeripheralRoleSupported: True  ← これがFalseの場合は非対応
 
 ログは以下に出力されます:
 ```
-%LOCALAPPDATA%\ResidentWin\logs\ResidentWin.log
+%APPDATA%\KeyboardGW\Logs\KeyboardGW.log
 ```
 
 ## セキュリティ考慮事項
 
 ### 管理者権限
 
-一部のアプリケーション (管理者として実行されているもの) にキー入力を送るには、ResidentWin自体も管理者権限で実行する必要がある。
+一部のアプリケーション (管理者として実行されているもの) にキー入力を送るには、KeyboardGW (Windows版) 自体も管理者権限で実行する必要があります。
 
 **対応方法**:
 - アプリケーションマニフェストで `requireAdministrator` を設定
 - または、ユーザーに右クリック → "管理者として実行" を案内
 
-### BLEセキュリティ
+### BLEセキュリティ（今後強化予定）
 
-- ペアリング済みデバイスのみ接続許可
-- MACアドレスのホワイトリスト管理
-- タイムアウト処理
+- 現状: 平文 / オープン（UUID を知るクライアントから Write 可能）
+- 予定: ペアリング済み MAC のみ受付 / 単純ハンドシェイク / アイドルタイムアウト
 
 ### キー入力のセキュリティ
 
@@ -267,12 +336,12 @@ PCの名前変更方法:
 
 - Bluetoothがオンになっているか確認
 - 他のBLEデバイスとの競合がないか確認
-- ResidentWin.exeを管理者権限で実行してみる
+- KeyboardGW.exe を管理者権限で実行してみる
 
 ### キーボード入力が効かない
 
 - 対象のアプリケーションがアクティブになっているか確認
-- 管理者権限で実行されているアプリの場合、ResidentWinも管理者権限が必要
+- 管理者権限で実行されているアプリの場合、KeyboardGW (Windows版) も管理者権限が必要
 - 一部のゲームやセキュリティソフトはキーボードエミュレーションをブロックする場合があります
 
 ## 参考資料
@@ -304,7 +373,8 @@ PCの名前変更方法:
 - [x] モデルクラス実装 (`ShortcutCommand.cs`, `ConnectionState.cs`)
 - [x] ユーティリティ実装 (`Logger.cs`, `ConfigManager.cs`)
 - [x] アプリケーション統合 (`App.xaml.cs`)
-- [x] ビルド成功確認
+- [x] ビルド/パブリッシュ/ZIP 生成
+- [x] アプリアイコン (.ico) 生成スクリプト
 
 ### 📝 実装済みファイル
 
@@ -328,34 +398,32 @@ ResidentWin/ResidentWin/
 │       ├── Logger.cs                ✅ ログ管理
 │       └── ConfigManager.cs         ✅ 設定管理
 └── Resources/
-    └── shortcuts.json               ✅ サンプルショートカット
+   └── shortcuts.json               ✅ サンプルショートカット
 ```
 
 ### 🔧 TODO
 
-- [ ] iPhoneアプリとの疎通確認
-- [ ] 設定画面UI作成 (`SettingsWindow.xaml`)
-- [ ] 自動起動設定機能 (`AutoStartup.cs`)
-- [ ] ペアリング管理機能の強化
-- [ ] エラーハンドリングの改善
-- [ ] インストーラー作成
-- [ ] アイコンファイル作成 (`.ico`)
-- [ ] ユーザードキュメント作成
+- [ ] 設定画面 UI (`SettingsWindow.xaml`)
+- [x] 自動起動設定 (スタートアップショートカット + トレイメニュー)
+- [ ] BLE 簡易セキュリティ (MAC フィルタ / タイムアウト)
+- [ ] 外部ショートカット設定のロード
+- [ ] インストーラー (MSIX / WiX / winget manifest)
+- [ ] ログレベル切替 & 詳細オプション
 
 ### 🐛 既知の問題
 
 - DPI設定の警告 (WFO0003) - 機能には影響なし、後で修正可能
-- BLE GATT Serverの実機テストが未実施
+- なし（基本機能動作確認済み）
 
 ### 🚀 次のステップ
 
-1. **実機テスト**: iPhoneアプリと接続してBLE通信をテスト
-2. **キー入力テスト**: 各種アプリケーションでショートカットが正しく動作するか確認
-3. **設定画面**: WPFで設定ウィンドウを作成
-4. **自動起動**: Windows起動時の自動起動機能を実装
-5. **リリース準備**: インストーラーとドキュメントの整備
+1. 設定画面の実装
+2. （完了）自動起動機能実装済み → 追加で Registry / Task Scheduler を選べる拡張は任意
+3. 簡易セキュリティ（MAC ホワイトリスト + タイムアウト）
+4. 外部ショートカットファイルロード & ホットリロード
+5. 配布: インストーラー + winget / Scoop 登録
 
 ---
 
-**Last Updated**: 2025-10-05
-**Version**: 0.1.0 (Initial Implementation)
+**Last Updated**: 2025-10-07
+**Version**: 0.1.0 (Initial Implementation / Renamed user-facing brand to KeyboardGW)

@@ -13,16 +13,16 @@ iPhone/iPad、ブラウザ、そしてWindows PCで、ショートカットキ�
 - **🌐 ブラウザ版**: 設定ファイルを埋め込んだスタンドアロンHTML
 - **📝 統一設定**: JSON形式で全プラットフォーム共通の設定管理
 
-## 🚀 Version 3.0 - Windows常駐版リリース!
+## 🚀 Version 3.0 - KeyboardGW (Windows版) リリース!
 
-**新機能: Windows版KeyboardGW (ResidentWin)**
+**新機能: KeyboardGW (Windows版) 常駐アプリ**
 
-ハードウェア不要！Windows PC上で常駐するソフトウェア版KeyboardGWが登場！
+ハードウェア不要！Windows PC 上で BLE Peripheral として動作し、そのままキーボード入力をエミュレートする純ソフトウェア実装が登場！
 
 ```
 📱 iPhone/iPad (iOSアプリ)
     ↓ Bluetooth Low Energy
-💻 Windows PC (ResidentWin) ← NEW!
+💻 Windows PC (KeyboardGW Windows版) ← NEW!
     ↓ キーボードエミュレーション
 ⌨️ 実際のキー入力
 ```
@@ -39,9 +39,9 @@ iPhone/iPad、ブラウザ、そしてWindows PCで、ショートカットキ�
 
 ## 📦 プラットフォーム
 
-### 💻 ResidentWin - Windows常駐版 (NEW!)
+### 💻 KeyboardGW (Windows版) (NEW!)
 
-Windows PCで常駐し、iPhoneからBLE経由でショートカットキーを受信してキーボード入力を実行します。
+Windows PC で常駐し、iPhone から BLE 経由でショートカットキーを受信してキーボード入力を実行します。
 
 **特徴:**
 - ✅ ハードウェア不要
@@ -123,11 +123,11 @@ EasyShortcutKey/
 
 ### Windows版を使う場合
 
-1. **ResidentWinをビルド・実行**
+1. **KeyboardGW (Windows版) をビルド・実行**
    ```powershell
    cd ResidentWin/ResidentWin
    dotnet build
-   .\bin\Debug\net9.0-windows10.0.19041.0\ResidentWin.exe
+   .\bin\Debug\net9.0-windows10.0.19041.0\KeyboardGW.exe
    ```
 
 2. **iOSアプリから接続**

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using ResidentWin.BLE;
@@ -20,6 +21,7 @@ public partial class App : Application
     private BLEManager? _bleManager;
     private KeyboardEmulator? _keyboardEmulator;
     private AppConfig? _config;
+    private bool _autoStartupInitDone = false;
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -27,8 +29,15 @@ public partial class App : Application
 
         // ログ初期化
         Logger.Info("========================================");
-        Logger.Info("ResidentWin Starting...");
+    Logger.Info($"{Branding.AppDisplayName} Starting...");
         Logger.Info("========================================");
+
+    // 実行中アセンブリ診断情報
+    var asm = Assembly.GetExecutingAssembly();
+    var ver = asm.GetName().Version?.ToString() ?? "(no version)";
+    var loc = asm.Location;
+    Logger.Info($"App Assembly Version: {ver}");
+    Logger.Info($"Executable Path: {loc}");
 
         // 古いログをクリーンアップ (7日以上前)
         Logger.ClearOldLogs(7);
@@ -60,17 +69,19 @@ public partial class App : Application
             _trayIcon = new TrayIconManager();
             _trayIcon.StartBLERequested += OnStartBLERequested;
             _trayIcon.StopBLERequested += OnStopBLERequested;
-            _trayIcon.SettingsRequested += OnSettingsRequested;
             _trayIcon.ExitRequested += OnExitRequested;
+            _trayIcon.AutoStartupToggleRequested += OnAutoStartupToggleRequested;
+            _trayIcon.NotificationToggleRequested += OnNotificationToggleRequested;
             Logger.Info("TrayIcon initialized");
 
             // 通知
             if (_config.ShowNotifications)
             {
                 _trayIcon.ShowNotification(
-                    "ResidentWin",
-                    "KeyboardGWが起動しました",
-                    ToolTipIcon.Info
+                    Branding.AppDisplayName,
+                    "KeyboardGW 起動",
+                    ToolTipIcon.Info,
+                    1000
                 );
             }
 
@@ -79,6 +90,12 @@ public partial class App : Application
             {
                 Task.Run(async () => await StartBLEAsync());
             }
+
+            // 自動起動設定同期 (StartWithWindows -> Startup ショートカット)
+            AutoStartupManager.Ensure(_config.StartWithWindows);
+            _trayIcon.UpdateAutoStartupMenu(_config.StartWithWindows);
+            _trayIcon.UpdateNotificationMenu(_config.ShowNotifications);
+            _autoStartupInitDone = true;
 
             Logger.Info("Application started successfully");
         }
@@ -100,12 +117,22 @@ public partial class App : Application
         Logger.Info("Application exiting...");
 
         // BLE停止
-        _bleManager?.Stop();
+        if (_bleManager != null)
+        {
+            try
+            {
+                // 可能なら終了通知を飛ばしてから少し待機
+                var t = _bleManager.SendShutdownNoticeAsync();
+                t.Wait(300); // 短時間だけ同期待ち（UI凍結許容レベル）
+            }
+            catch { }
+            _bleManager.Stop();
+        }
 
         // トレイアイコン削除
         _trayIcon?.Dispose();
 
-        Logger.Info("Application exited");
+            Logger.Info("Application exited");
         base.OnExit(e);
     }
 
@@ -119,31 +146,39 @@ public partial class App : Application
         _bleManager?.Stop();
         
         if (_config?.ShowNotifications == true)
-        {
-            _trayIcon?.ShowNotification(
-                "BLE停止",
-                "BLE接続を停止しました",
-                ToolTipIcon.Info
-            );
-        }
+            _trayIcon?.ShowNotification("BLE停止", "停止しました", ToolTipIcon.Info, 1000);
     }
 
-    private void OnSettingsRequested(object? sender, EventArgs e)
-    {
-        // TODO: 設定画面を表示
-        Logger.Info("Settings window requested (not implemented yet)");
-        System.Windows.MessageBox.Show(
-            "設定画面は未実装です",
-            "設定",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information
-        );
-    }
+    // 設定機能は削除済み
 
     private void OnExitRequested(object? sender, EventArgs e)
     {
         Logger.Info("Exit requested by user");
         Shutdown();
+    }
+
+    private void OnAutoStartupToggleRequested(object? sender, EventArgs e)
+    {
+        if (_config == null) return;
+        var next = !_config.StartWithWindows;
+        _config.StartWithWindows = next;
+        ConfigManager.Save(_config);
+        AutoStartupManager.Ensure(next);
+        _trayIcon?.UpdateAutoStartupMenu(next);
+        Logger.Info($"Auto-start state changed: {(next ? "Enabled" : "Disabled")}");
+        if (_config.ShowNotifications && _autoStartupInitDone)
+            _trayIcon?.ShowNotification("自動起動", next ? "有効" : "無効", ToolTipIcon.Info, 1000);
+    }
+
+    private void OnNotificationToggleRequested(object? sender, EventArgs e)
+    {
+        if (_config == null) return;
+        _config.ShowNotifications = !_config.ShowNotifications;
+        ConfigManager.Save(_config);
+        _trayIcon?.UpdateNotificationMenu(_config.ShowNotifications);
+        Logger.Info($"Notifications toggled: {(_config.ShowNotifications ? "ON" : "OFF")}");
+        if (_config.ShowNotifications)
+            _trayIcon?.ShowNotification("通知", "ON", ToolTipIcon.Info, 1000);
     }
 
     private void OnConnectionStateChanged(object? sender, ConnectionStateChangedEventArgs e)
@@ -153,21 +188,7 @@ public partial class App : Application
         {
             _trayIcon?.UpdateIcon(e.State);
 
-            if (_config?.ShowNotifications == true)
-            {
-                var icon = e.State switch
-                {
-                    ConnectionState.Connected => ToolTipIcon.Info,
-                    ConnectionState.Error => ToolTipIcon.Error,
-                    _ => ToolTipIcon.Info
-                };
-
-                _trayIcon?.ShowNotification(
-                    "接続状態変更",
-                    e.Message ?? e.State.ToString(),
-                    icon
-                );
-            }
+            // 接続状態変更のバルーン通知はユーザー要望で抑制
         });
     }
 
@@ -201,21 +222,11 @@ public partial class App : Application
         if (success)
         {
             if (_config?.ShowNotifications == true)
-            {
-                _trayIcon?.ShowNotification(
-                    "BLE起動",
-                    "BLE接続を開始しました。iPhoneから接続してください。",
-                    ToolTipIcon.Info
-                );
-            }
+                _trayIcon?.ShowNotification("BLE起動", "開始", ToolTipIcon.Info, 1000);
         }
         else
         {
-            _trayIcon?.ShowNotification(
-                "エラー",
-                "BLE接続の開始に失敗しました",
-                ToolTipIcon.Error
-            );
+            _trayIcon?.ShowNotification("BLEエラー", "開始失敗", ToolTipIcon.Error, 1000);
         }
     }
 }

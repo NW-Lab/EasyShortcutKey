@@ -107,19 +107,23 @@ namespace ResidentWin.Keyboard
                 {
                     expandedKeys.AddRange(KeyMapping.ExpandSpecialKey(key));
                 }
+                Logger.Debug($"Expanded keys: [{string.Join(",", expandedKeys)}]");
 
                 // 修飾キーと通常キーを分離
                 var modifiers = expandedKeys
                     .Where(k => KeyMapping.IsModifierKey(k))
-                    .Select(k => KeyMapping.GetVirtualKeyCode(k))
-                    .Where(vk => vk != 0)
+                    .Select(k => new { key = k, vk = KeyMapping.GetVirtualKeyCode(k) })
+                    .Where(x => x.vk != 0)
                     .ToList();
 
                 var normalKeys = expandedKeys
                     .Where(k => !KeyMapping.IsModifierKey(k))
-                    .Select(k => KeyMapping.GetVirtualKeyCode(k))
-                    .Where(vk => vk != 0)
+                    .Select(k => new { key = k, vk = KeyMapping.GetVirtualKeyCode(k) })
+                    .Where(x => x.vk != 0)
                     .ToList();
+
+                Logger.Debug($"Modifier VKs: [{string.Join(",", modifiers.Select(m => m.key+"=0x"+m.vk.ToString("X2")))}]");
+                Logger.Debug($"Normal VKs:   [{string.Join(",", normalKeys.Select(n => n.key+"=0x"+n.vk.ToString("X2")))}]");
 
                 if (modifiers.Count == 0 && normalKeys.Count == 0)
                 {
@@ -128,7 +132,7 @@ namespace ResidentWin.Keyboard
                 }
 
                 // キー入力を実行
-                PressKeys(modifiers, normalKeys);
+                PressKeys(modifiers.Select(m=>m.vk).ToList(), normalKeys.Select(n=>n.vk).ToList());
 
                 Logger.Info($"Shortcut executed successfully: {command.Name}");
                 return true;
