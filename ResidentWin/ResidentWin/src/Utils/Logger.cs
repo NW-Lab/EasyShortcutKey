@@ -10,13 +10,14 @@ namespace ResidentWin.Utils
     {
         private static readonly string LogDirectory = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "ResidentWin",
+            "KeyboardGW",
             "Logs"
         );
 
+        // 毎回同じログファイルを作り直す（起動時に内容をクリア）
         private static readonly string LogFilePath = Path.Combine(
             LogDirectory,
-            $"ResidentWin_{DateTime.Now:yyyyMMdd}.log"
+            "KeyboardGW.log"
         );
 
         public enum LogLevel
@@ -33,6 +34,20 @@ namespace ResidentWin.Utils
             if (!Directory.Exists(LogDirectory))
             {
                 Directory.CreateDirectory(LogDirectory);
+            }
+
+            // 既存ログを起動ごと初期化（容量肥大対策）
+            try
+            {
+                if (File.Exists(LogFilePath))
+                {
+                    // 中身だけ空にする（ハンドル競合回避のため再作成ではなく truncate）
+                    File.WriteAllText(LogFilePath, string.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to reset log file: {ex.Message}");
             }
         }
 
@@ -80,7 +95,7 @@ namespace ResidentWin.Utils
         {
             try
             {
-                var files = Directory.GetFiles(LogDirectory, "ResidentWin_*.log");
+                var files = Directory.GetFiles(LogDirectory, "KeyboardGW_*.log");
                 var cutoffDate = DateTime.Now.AddDays(-daysToKeep);
 
                 foreach (var file in files)

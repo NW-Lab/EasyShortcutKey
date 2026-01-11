@@ -2,6 +2,9 @@ using System;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Storage.Streams;
@@ -29,6 +32,19 @@ namespace ResidentWin.BLE
 
         private ConnectionState _connectionState = ConnectionState.Disconnected;
         private bool _isRunning = false;
+    private DateTime _lastActivityUtc = DateTime.UtcNow;
+    private System.Threading.Timer? _idleTimer;
+    private readonly TimeSpan _idleTimeout = TimeSpan.FromSeconds(25); // iOS が生きていれば何かしら来る想定
+    private readonly TimeSpan _idleCheckInterval = TimeSpan.FromSeconds(5);
+    private bool _shuttingDown = false;
+
+        // JSONオプション（大小文字無視 + コメント/末尾カンマ耐性）
+        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            ReadCommentHandling = JsonCommentHandling.Skip,
+            AllowTrailingCommas = true
+        };
 
         /// <summary>
         /// 接続状態が変化したときのイベント
@@ -65,7 +81,10 @@ namespace ResidentWin.BLE
                 // AtomS3版と同じく暗号化なし (Plain) で動作
                 var shortcutCharParams = new GattLocalCharacteristicParameters
                 {
-                    CharacteristicProperties = GattCharacteristicProperties.Write | 
+                    // iOS側は payload サイズによって .withResponse / .withoutResponse を切替えるため
+                    // WriteWithoutResponse も許可しておく。
+                    CharacteristicProperties = GattCharacteristicProperties.Write |
+                                              GattCharacteristicProperties.WriteWithoutResponse |
                                               GattCharacteristicProperties.Notify,
                     WriteProtectionLevel = GattProtectionLevel.Plain,
                     UserDescription = "Shortcut Command"
@@ -84,6 +103,7 @@ namespace ResidentWin.BLE
 
                 _shortcutCharacteristic = shortcutCharResult.Characteristic;
                 _shortcutCharacteristic.WriteRequested += OnShortcutWriteRequested;
+                _shortcutCharacteristic.SubscribedClientsChanged += OnSubscribedClientsChanged;
 
                 // Status Characteristic (READ, NOTIFY)
                 // AtomS3版と同じく暗号化なし (Plain) で動作
@@ -108,6 +128,7 @@ namespace ResidentWin.BLE
 
                 _statusCharacteristic = statusCharResult.Characteristic;
                 _statusCharacteristic.ReadRequested += OnStatusReadRequested;
+                _statusCharacteristic.SubscribedClientsChanged += OnSubscribedClientsChanged;
 
                 // アドバタイズパラメータを設定
                 var advParameters = new GattServiceProviderAdvertisingParameters
@@ -122,12 +143,15 @@ namespace ResidentWin.BLE
                 // アドバタイズ開始
                 _serviceProvider.StartAdvertising(advParameters);
                 
-                Logger.Info($"BLE advertising started with device name: {DeviceName}");
+                Logger.Info($"BLE advertising started (device name: {DeviceName})");
 
                 _isRunning = true;
+                _lastActivityUtc = DateTime.UtcNow;
+                _idleTimer = new System.Threading.Timer(CheckIdle, null, _idleCheckInterval, _idleCheckInterval);
                 UpdateConnectionState(ConnectionState.Waiting, "BLE advertising started");
 
                 Logger.Info("BLE GATT Server started successfully");
+                Logger.Debug("BLEManager version stamp: v1-fallback-fix");
                 return true;
             }
             catch (Exception ex)
@@ -144,7 +168,7 @@ namespace ResidentWin.BLE
         private void OnAdvertisementStatusChanged(GattServiceProvider sender, GattServiceProviderAdvertisementStatusChangedEventArgs args)
         {
             var status = args.Status;
-            Logger.Info($"Advertisement status changed: {status}, Error: {args.Error}");
+            Logger.Debug($"Advertisement status changed: {status}, Error: {args.Error}");
 
             if (status == GattServiceProviderAdvertisementStatus.Started)
             {
@@ -176,8 +200,20 @@ namespace ResidentWin.BLE
                     _serviceProvider = null;
                 }
 
-                _shortcutCharacteristic = null;
-                _statusCharacteristic = null;
+                if (_shortcutCharacteristic != null)
+                {
+                    _shortcutCharacteristic.WriteRequested -= OnShortcutWriteRequested;
+                    _shortcutCharacteristic.SubscribedClientsChanged -= OnSubscribedClientsChanged;
+                    _shortcutCharacteristic = null;
+                }
+                if (_statusCharacteristic != null)
+                {
+                    _statusCharacteristic.ReadRequested -= OnStatusReadRequested;
+                    _statusCharacteristic.SubscribedClientsChanged -= OnSubscribedClientsChanged;
+                    _statusCharacteristic = null;
+                }
+                _idleTimer?.Dispose();
+                _idleTimer = null;
                 _isRunning = false;
 
                 UpdateConnectionState(ConnectionState.Disconnected, "BLE server stopped");
@@ -190,6 +226,99 @@ namespace ResidentWin.BLE
         }
 
         /// <summary>
+        /// クライアントが Notify を有効/無効にした際に呼ばれる。
+        /// (iOS 側が CCCD 書き込み→サブスクライブした瞬間を接続成立扱いにする)
+        /// </summary>
+        private void OnSubscribedClientsChanged(GattLocalCharacteristic sender, object args)
+        {
+            try
+            {
+                var count = sender.SubscribedClients?.Count ?? 0;
+                Logger.Debug($"SubscribedClientsChanged: characteristic={sender.Uuid} subscribedCount={count}");
+
+                RecordActivity("subscribe");
+
+                if (count > 0 && _connectionState != ConnectionState.Connected)
+                {
+                    UpdateConnectionState(ConnectionState.Connected, "Client subscribed notifications");
+                }
+                else if (count == 0 && _connectionState == ConnectionState.Connected)
+                {
+                    // すべてのクライアントが退いた場合は切断扱い (軽量ロジック)
+                    UpdateConnectionState(ConnectionState.Disconnected, "All clients unsubscribed");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning($"Error in OnSubscribedClientsChanged: {ex.Message}");
+            }
+        }
+
+        private void RecordActivity(string source)
+        {
+            _lastActivityUtc = DateTime.UtcNow;
+            Logger.Debug($"Activity: {source}");
+        }
+
+        private void CheckIdle(object? state)
+        {
+            if (_shuttingDown) return;
+            try
+            {
+                // サブスクライバ監視: イベント飛ばない環境がある場合にポーリングで補正
+                if (_connectionState != ConnectionState.Connected)
+                {
+                    var scCount = _shortcutCharacteristic?.SubscribedClients?.Count ?? 0;
+                    var stCount = _statusCharacteristic?.SubscribedClients?.Count ?? 0;
+                    if (scCount + stCount > 0)
+                    {
+                        Logger.Info($"Subscribed client detected by polling (shortcut={scCount}, status={stCount}) -> mark Connected");
+                        UpdateConnectionState(ConnectionState.Connected, "Client subscription detected by poll");
+                        RecordActivity("poll-detected-subscribe");
+                    }
+                }
+
+                var idle = DateTime.UtcNow - _lastActivityUtc;
+                if (_connectionState == ConnectionState.Connected && idle > _idleTimeout)
+                {
+                    Logger.Info($"Idle timeout ({idle.TotalSeconds:F0}s) -> marking disconnected");
+                    UpdateConnectionState(ConnectionState.Disconnected, "Idle timeout");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning($"Idle check error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// アプリ終了前にステータスを通知（iOS側が受け取れば即座に『切断』扱いできる）
+        /// </summary>
+        public async Task SendShutdownNoticeAsync()
+        {
+            try
+            {
+                if (!_isRunning || _statusCharacteristic == null) return;
+                _shuttingDown = true;
+                var payload = new
+                {
+                    state = "ShuttingDown",
+                    message = "server_exiting",
+                    timestamp = DateTime.UtcNow.ToString("o")
+                };
+                var json = JsonSerializer.Serialize(payload);
+                var writer = new DataWriter();
+                writer.WriteString(json);
+                await _statusCharacteristic.NotifyValueAsync(writer.DetachBuffer());
+                Logger.Info("Sent shutdown notice via status notify");
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning($"Failed to send shutdown notice: {ex.Message}");
+            }
+        }
+
+        /// <summary>
         /// ショートカット受信時の処理
         /// </summary>
         private async void OnShortcutWriteRequested(
@@ -198,6 +327,7 @@ namespace ResidentWin.BLE
         {
             try
             {
+                Logger.Debug("[BLE] Shortcut write handler enter (v1-fallback-fix+diagnostic)");
                 var deferral = args.GetDeferral();
 
                 var request = await args.GetRequestAsync();
@@ -214,18 +344,69 @@ namespace ResidentWin.BLE
                 reader.ReadBytes(bytes);
 
                 var json = Encoding.UTF8.GetString(bytes);
-                Logger.Debug($"Received shortcut JSON: {json}");
+                var hex = string.Join("", bytes.Select(b => b.ToString("X2")));
+                Logger.Debug($"[BLE] Payload len={bytes.Length} HEX={hex}");
+                Logger.Debug($"[BLE] Raw='{json}'");
 
-                // JSONをデシリアライズ
-                var command = JsonSerializer.Deserialize<ShortcutCommand>(json);
+                // JSONをデシリアライズ（大小文字無視）
+                ShortcutCommand? command = null;
+                try
+                {
+                    command = JsonSerializer.Deserialize<ShortcutCommand>(json, _jsonOptions);
+                }
+                catch (Exception jex)
+                {
+                    Logger.Error("JSON primary deserialization failed", jex);
+                }
+
+                // クライアントが実際にCharacteristicへアクセス=論理的に接続状態とみなす
+                if (_connectionState != ConnectionState.Connected)
+                {
+                    UpdateConnectionState(ConnectionState.Connected, "Client activity (write)");
+                }
+
+                // Fallback: commandがnull もしくは Keys未取得の場合は手動抽出
+                if (command == null || (command.Keys == null || command.Keys.Count == 0))
+                {
+                    try
+                    {
+                        using var doc = JsonDocument.Parse(json);
+                        List<string>? found = TryExtractKeysRecursive(doc.RootElement);
+                        if (found != null && found.Count > 0)
+                        {
+                            if (command == null) command = new ShortcutCommand();
+                            command.Keys = found;
+                            Logger.Debug($"[BLE] Fallback extracted keys (recursive): [{string.Join(",", found)}]");
+                        }
+                        else
+                        {
+                            Logger.Debug("[BLE] Recursive fallback could not find a non-empty 'keys' string array");
+                        }
+                    }
+                    catch (Exception fallbackEx)
+                    {
+                        Logger.Warning($"Fallback key extraction failed: {fallbackEx.Message}");
+                    }
+                }
 
                 if (command != null)
                 {
+                    if (command.Keys == null || command.Keys.Count == 0)
+                    {
+                        Logger.Warning("ShortcutCommand parsed but Keys is null/empty"); // keep warning (real issue)
+                    }
                     // イベントを発火
                     ShortcutReceived?.Invoke(this, command);
                     
                     // 成功レスポンス
-                    request.Respond();
+                    try
+                    {
+                        request.Respond();
+                    }
+                    catch (Exception respEx)
+                    {
+                        Logger.Warning($"Failed to respond to write request: {respEx.Message}");
+                    }
                 }
                 else
                 {
@@ -239,6 +420,41 @@ namespace ResidentWin.BLE
             {
                 Logger.Error("Error handling shortcut write request", ex);
             }
+        }
+
+        /// <summary>
+        /// 再帰的に 'keys' (大小文字無視) 配列(string要素) を探す
+        /// </summary>
+        private static List<string>? TryExtractKeysRecursive(JsonElement element)
+        {
+            switch (element.ValueKind)
+            {
+                case JsonValueKind.Object:
+                    foreach (var prop in element.EnumerateObject())
+                    {
+                        if (string.Equals(prop.Name, "keys", StringComparison.OrdinalIgnoreCase) && prop.Value.ValueKind == JsonValueKind.Array)
+                        {
+                            var list = prop.Value.EnumerateArray()
+                                .Where(e => e.ValueKind == JsonValueKind.String)
+                                .Select(e => e.GetString())
+                                .Where(s => !string.IsNullOrWhiteSpace(s))
+                                .ToList();
+                            if (list.Count > 0) return list!;
+                        }
+                        // 再帰探索
+                        var deeper = TryExtractKeysRecursive(prop.Value);
+                        if (deeper != null && deeper.Count > 0) return deeper;
+                    }
+                    break;
+                case JsonValueKind.Array:
+                    foreach (var item in element.EnumerateArray())
+                    {
+                        var deeper = TryExtractKeysRecursive(item);
+                        if (deeper != null && deeper.Count > 0) return deeper;
+                    }
+                    break;
+            }
+            return null;
         }
 
         /// <summary>
@@ -265,6 +481,12 @@ namespace ResidentWin.BLE
                     state = _connectionState.ToString(),
                     timestamp = DateTime.Now.ToString("o")
                 };
+
+                // ステータス読み取りが来た段階でも接続成立と見なす (iOS側がReadしてくるケース用)
+                if (_connectionState != ConnectionState.Connected)
+                {
+                    UpdateConnectionState(ConnectionState.Connected, "Client activity (read)");
+                }
 
                 var json = JsonSerializer.Serialize(status);
                 var writer = new DataWriter();
@@ -318,7 +540,7 @@ namespace ResidentWin.BLE
             if (_connectionState != newState)
             {
                 _connectionState = newState;
-                Logger.Info($"Connection state changed: {newState} - {message}");
+                Logger.Debug($"Connection state changed: {newState} - {message}");
                 ConnectionStateChanged?.Invoke(this, new ConnectionStateChangedEventArgs(newState, message));
             }
         }

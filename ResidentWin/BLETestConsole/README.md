@@ -1,6 +1,6 @@
-# BLE GATT Server テスト用
+# KeyboardGW (Windows版) BLE テストコンソール
 
-このプログラムは、Windows BLE GATT Serverの動作確認用です。
+KeyboardGW (Windows版) が動作する環境で Bluetooth アダプタが BLE Peripheral (GATT Server) を正しくサポートしているか、最小限の API で検証するためのコンソールツールです。問題があった場合はまずここで原因切り分け。
 
 ## 実行方法
 
@@ -11,11 +11,11 @@ dotnet run
 
 ## 確認項目
 
-1. Bluetoothアダプタの有無
-2. Peripheral Roleのサポート状況
-3. GATT Service Providerの作成
-4. Characteristicの作成
-5. Advertisementの開始
+1. Bluetooth アダプタ存在確認
+2. Peripheral Role サポート可否
+3. GattServiceProvider 作成結果
+4. Characteristic 生成結果
+5. Advertisement 開始結果 (エラー/Success)
 
 ## トラブルシューティング
 
@@ -24,13 +24,13 @@ dotnet run
 - 外付けBluetoothアダプタを接続してください
 
 ### "Peripheral Role is NOT supported"
-- このBluetoothアダプタはBLE Peripheral機能をサポートしていません
-- **これが最も多い原因です**
-- BLE 4.0以上かつPeripheral対応のアダプタが必要
+- Bluetooth アダプタが GATT Server をサポートしていません
+- **最も多い失敗要因**
+- 対応デバイス例: Intel AX200/AX201/AX210, 一部 Realtek チップ
 
 ### "Access Denied"
-- アプリケーションに必要な権限がありません
-- Bluetooth権限が必要です
+- Bluetooth スタック初期化に失敗 / OS 側拒否
+- Windows 再起動 or 他のアプリが BLE を占有していないか確認
 
 ### "RadioNotAvailable"
 - Bluetoothがオフになっています
@@ -38,5 +38,6 @@ dotnet run
 
 ---
 
-**重要**: Windows 10/11の多くのBluetoothアダプタは、BLE Peripheral (GATT Server) をサポートしていません。
-Intel Wireless Bluetooth など、一部のチップセットのみがサポートしています。
+---
+
+**重要**: 一般的な低価格 USB ドングルは Peripheral Role を持たないことが多いです。`IsPeripheralRoleSupported: False` の場合はハード的制約なのでアダプタ交換を検討してください。

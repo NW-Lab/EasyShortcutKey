@@ -37,7 +37,7 @@ namespace ResidentWin.Utils
         /// <summary>
         /// トースト通知を表示するか
         /// </summary>
-        public bool ShowNotifications { get; set; } = true;
+    public bool ShowNotifications { get; set; } = false; // デフォルトOFF (デバッグ用にユーザーが有効化)
 
         /// <summary>
         /// キー入力の遅延 (ミリ秒)
@@ -49,7 +49,7 @@ namespace ResidentWin.Utils
     {
         private static readonly string ConfigDirectory = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "ResidentWin"
+            "KeyboardGW"
         );
 
         private static readonly string ConfigFilePath = Path.Combine(

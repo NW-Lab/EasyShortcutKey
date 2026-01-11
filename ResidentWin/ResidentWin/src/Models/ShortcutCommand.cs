@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace ResidentWin.Models
 {
@@ -21,7 +22,11 @@ namespace ResidentWin.Models
         /// <summary>
         /// 押すキーのリスト (例: ["ctrl", "c"])
         /// </summary>
-        public List<string>? Keys { get; set; }
+    // iOSクライアントは現状 `{ "keys": ["cmd","c"] }` のように小文字で送ってくるため
+    // デフォルトの System.Text.Json (オプション未指定) では大文字小文字が区別されマッピングされない。
+    // ここで JsonPropertyName("keys") を指定し受信できるようにする。
+    [JsonPropertyName("keys")]
+    public List<string>? Keys { get; set; }
 
         /// <summary>
         /// ショートカットの説明
